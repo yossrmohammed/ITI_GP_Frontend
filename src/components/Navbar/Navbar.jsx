@@ -30,7 +30,7 @@ function Navbar() {
     
 
 <a className="btn btn-outline mx-2">Login</a>
-<a className="btn btn-outline btn-primary mx-2">Register</a>
+<a className="btn btn-outline btn-info mx-2">Register</a>
 
 <label className="swap swap-rotate mx-3">
   <input type="checkbox" value="halloween" className="theme-controller" />

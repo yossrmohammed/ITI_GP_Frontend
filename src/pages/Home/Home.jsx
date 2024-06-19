@@ -6,8 +6,6 @@ import ServiceCard from "../../components/ServiceCard/ServiceCard"
 export default function Home() {
   return (
     <>
-    <Navbar/>
-
     <Carousel/>
 
     <h1 className="text-center text-3xl font-bold my-2">Our Services</h1>
@@ -33,9 +31,6 @@ export default function Home() {
     />
     </div>
 
-
-
-    <Footer/>
     </>
   )
 }
