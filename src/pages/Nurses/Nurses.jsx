@@ -1,12 +1,25 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import MedicalCard from "../../components/MedicalCard/MedicalCard";
 import Filters from "../../components/Filters/Filters";
 import Skeleton from "../../components/Skeleton";
-
+import axios from "axios";
 
 function Nurses() {
 
-    const [loading,setLoading] = useState(false);
+    const [loading,setLoading] = useState(true);
+    const [currPage,setCurrPage] = useState(1);
+    const [nurses,setNurses] = useState([]);
+
+    useEffect(()=> {
+        axios.get('http://localhost:8000/api/nurses')
+        .then(res => {
+            console.log(res.data)
+            setNurses(res.data.data);
+            setLoading(false)
+        })
+        .catch(err => console.log(err));
+
+    },[currPage])
 
     return (
     <>
@@ -36,16 +49,22 @@ function Nurses() {
                 work_end='2:00 PM'
                 online='1'
                 />
-
-                <MedicalCard
-                proffession='Doctor'
-                name='John Doe'
-                />
                 
-                <MedicalCard
-                proffession='Doctor'
-                name='John Doe'
+                {nurses.map( (el) => {
+                    return <MedicalCard
+                key={el.id}
+                id={el.id}
+                proffession='Nurse'
+                name={el.user?.name}
+                city={el.city}
+                fees={el.clinic_fees}
+                work_days={el.work_days}
+                work_start={el.clinic_work_start}
+                work_end={el.clinic_work_end}
+                online={el.online}
                 />
+                })}
+
             </div>
         </div>
     </div>
