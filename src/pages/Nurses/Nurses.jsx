@@ -4,7 +4,7 @@ import Filters from "../../components/Filters/Filters";
 import Skeleton from "../../components/Skeleton";
 
 
-function Doctors() {
+function Nurses() {
 
     const [loading,setLoading] = useState(false);
 
@@ -16,17 +16,17 @@ function Doctors() {
         
         <div className="grid grid-rows-2 grid-flow-col gap-4">
             <div className="row-span-3">
-                <Filters proffession='Doctor'/>
+                <Filters/>
         </div>
 
 
             <div className="container row-span-2 col-span-2">
 
 
-                {loading && <> <Skeleton/> <Skeleton/> <Skeleton/></>}
+                {loading && <> <Skeleton/> <Skeleton/> <Skeleton/> <Skeleton/> <Skeleton/> </>}
 
                 <MedicalCard
-                proffession='Doctor'
+                proffession='Nurse'
                 name='John Doe'
                 specialization='Bones'
                 city='Cairo'
@@ -64,4 +64,4 @@ function Doctors() {
   )
 }
 
-export default Doctors
+export default Nurses
