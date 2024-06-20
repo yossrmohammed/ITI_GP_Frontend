@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import InputField  from "../../components/InputField/InputField";
 import SelectField  from "../../components/SelectField/SelectField";
 import FileInput from "../../components/FileInput/FileInput";
+import { useDispatch } from 'react-redux';
+import  {register}  from "../../store/auth/authActions.js";
 
 const RegistrationForm = () => {
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -60,7 +64,8 @@ const RegistrationForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log(formData);
+        const { role } = formData;
+       dispatch(register(formData, role));
     } else {
       console.error('Form has errors. Cannot submit.');
     }
