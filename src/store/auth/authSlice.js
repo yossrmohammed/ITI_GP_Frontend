@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const initialState = {
   user: null,
-  error: null,
+  error: {},
   loading: false,
 };
 
@@ -14,7 +14,7 @@ const authSlice = createSlice({
   reducers: {
     registerStart(state) {
       state.loading = true;
-      state.error = null;
+      state.error = {};
     },
     registerSuccess(state, action) {
       state.loading = false;
@@ -22,11 +22,12 @@ const authSlice = createSlice({
     },
     registerFailure(state, action) {
       state.loading = false;
-      state.error = action.payload;
+      const { field, message } = action.payload;
+      state.error[field] = message; // Set error for specific field
     },
     loginStart(state) {
       state.loading = true;
-      state.error = null;
+      state.error = {};
     },
     loginSuccess(state, action) {
       state.loading = false;
@@ -36,21 +37,21 @@ const authSlice = createSlice({
     },
     loginFailure(state, action) {
       state.loading = false;
-      state.error = action.payload;
+      const { field, message } = action.payload;
+      state.error[field] = message; // Set error for specific field
     },
     clearError(state) {
-      state.error = null;
+      state.error = {};
     },
     logout(state) {
       state.user = null;
-      state.error = null;
-     
+      state.error = {}
       removeCookie('token');
     },
 
     fetchUserStart(state) {
       state.loading = true;
-      state.error = null;
+      state.error = {}
     },
     fetchUserSuccess(state, action) {
       state.loading = false;

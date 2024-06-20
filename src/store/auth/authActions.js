@@ -20,14 +20,8 @@ export const register = (formData, role, setFormErrors) => async (dispatch) => {
     }
     dispatch(registerSuccess(response.data)); 
   } catch (error) {
-    if (error.response && error.response.data && error.response.data.errors) {
-      const { email } = error.response.data.errors;
-      if (email && email.length > 0) {
-        setFormErrors({ ...setFormErrors, email: email[0] });
-      }
-    } else {
-      dispatch(registerFailure(error.message));
-    }
+      dispatch(registerFailure({ field:'register', message: error.message })); // Fallback for general error
+
   }
 };
 
@@ -38,27 +32,19 @@ export const loginUser = (formData, setFormErrors) => async (dispatch) => {
     const response = await login(formData);
     dispatch(loginSuccess(response.data));
   } catch (error) {
-    if (error.response && error.response.data && error.response.data.errors) {
-      const { email } = error.response.data.errors;
-      if (email && email.length > 0) {
-        setFormErrors({ ...setFormErrors, email: email[0] });
-      }
-    } else {
-      dispatch(loginFailure(error.message));
-    }
+    dispatch(registerFailure({ field:'login', message: error.message }));
   }
 };
 
 export const fetchUserData = () => async (dispatch) => {
   dispatch(fetchUserStart());
   try{
-
     const response =await getUserData();
     console.log(response.data);
     dispatch(fetchUserSuccess(response.data));
    
-
   } catch (error) {
-    dispatch(fetchUserFailure(error.message));
+    console.log(error?.message);
+    dispatch(fetchUserFailure(error?.message));
   }
 };

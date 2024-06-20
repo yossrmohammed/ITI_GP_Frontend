@@ -5,9 +5,13 @@ import FileInput from "../../components/FileInput/FileInput";
 import { useSelector, useDispatch } from 'react-redux';
 import { register } from "../../store/auth/authActions";
 import {selectError} from "../../store/auth/authSlice"
+import { useNavigate } from 'react-router-dom';
+
 const RegistrationForm = () => {
   const dispatch = useDispatch();
-  const Error = useSelector(selectError);
+  const errors = useSelector(selectError);
+  let navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -65,44 +69,12 @@ const RegistrationForm = () => {
     e.preventDefault();
     if (validateForm()) {
       const { role } = formData;
-      dispatch(register(formData, role));
-    } else {
-      console.error('Form has errors. Cannot submit.');
-    }
+      const x= await dispatch(register(formData, role));
+        if (errors.register) {
+            navigate('/login', { replace: true }); 
+          }
+    } 
   };
-  useEffect(() => {
-    if (Error === null) {
-      setFormData({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        phone: '',
-        role: 'doctor',
-        history: '',
-        gender: '',
-        birthDate: '',
-        image: null,
-        university: '',
-        qualifications: '',
-        city: '',
-        fees: '',
-        workStart: '',
-        workEnd: '',
-        workDays: [],
-      });
-      setFormErrors({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        phone: '',
-        gender: '',
-        history: '',
-        birthDate: '',
-      });
-    }
-  }, [Error]);
 
   const validateForm = () => {
     let valid = true;
@@ -265,7 +237,7 @@ const RegistrationForm = () => {
               {formData.role === 'doctor' && (
                 <div className="flex flex-col gap-3">
                   <FileInput
-                    onChange={(e) => setFormData({ ...formData, image: e.target.files[0] })}
+                    onChange={(e) => setFormData({...formData, image: e.target.files[0]})}
                   />
                   
                 </div>
@@ -280,6 +252,9 @@ const RegistrationForm = () => {
               <button className="btn btn-outline btn-info w-[200px] m-auto text-white" type="submit">
                 Sign Up
               </button>
+              {errors.register && (
+              <p className="text-sm  m-auto text-red-500">{errors.register}</p>
+            )}
             </div>
           </div>
           <span className="block text-center mt-4">

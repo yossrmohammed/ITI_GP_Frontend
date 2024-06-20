@@ -3,18 +3,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import { loginUser } from "../../store/auth/authActions";
 import {selectError} from "../../store/auth/authSlice"
 import {selectUser} from "../../store/auth/authSlice"
+import { useNavigate } from 'react-router-dom';
+
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const Error = useSelector(selectError);
+  const errors = useSelector(selectError);
   const user = useSelector(selectUser);
+  let navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-    useEffect(()=>{
-        console.log(user);
-    },[user])
 
   const [formErrors, setFormErrors] = useState({
     email: '',
@@ -29,12 +29,13 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      dispatch(loginUser(formData)); // Dispatch login action
-    } else {
-      console.error('Form has errors. Cannot submit.');
-    }
+        const x = await dispatch(loginUser(formData));
+        if (errors.login) {
+            navigate('/', { replace: true }); 
+          }
+    } 
   };
-
+ 
   const validateForm = () => {
     let valid = true;
     const errors = {};
@@ -103,6 +104,15 @@ const LoginForm = () => {
           <button className="btn btn-block btn-neutral" type="submit">
             Login
           </button>
+          {errors?.login && (
+            <div className="flex justify-center items-center h-full">
+            {errors.login === "Request failed with status code 401" ? (
+              <p className="text-sm text-red-500">Password or Email incorrect</p>
+            ) : (
+              <p className="text-sm text-red-500">{errors.login}</p>
+            )}
+          </div>
+        )}
         </form>
         <div className="text-center mt-4">
           <span className="block">
