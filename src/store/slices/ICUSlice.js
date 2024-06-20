@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../axios";
 
-export const getICUs = createAsyncThunk("ICUs/getICUs", async () => {
-    const response = await axiosInstance.get("/intensive-care-units");
+export const getICUs = createAsyncThunk("ICUs/getICUs", async (address) => {
+    const response = await axiosInstance.get("/icus", {
+        params: { address }
+    });
     return response.data.data;
 });
-
 
 const ICUSlice = createSlice({
     name: "ICUs",
