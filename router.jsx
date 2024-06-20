@@ -4,6 +4,7 @@ import Navbar from "./src/components/Navbar/Navbar";
 import Footer from "./src/components/Footer/Footer";
 import Doctors from "./src/pages/Doctors/Doctors";
 import ICUs from "./src/pages/ICUs/ICUs";
+import Nurses from "./src/pages/Nurses/Nurses";
 
 function Styled() 
 {
@@ -32,7 +33,11 @@ export const router = createBrowserRouter([
             {
                 path: '/icu',
                 element: <ICUs/>
-            }
+            },
+            {
+                path: '/nurses',
+                element: <Nurses/>
+            },
         ]
     },
     {
