@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 function Navbar() {
 
   return (
@@ -22,7 +23,10 @@ function Navbar() {
   </div>
 
   <div className="navbar-end">
- <a href="#" className="font-bold">Book ICU</a>
+    <Link to={"/icu"} className="font-bold">
+    Book ICU
+    </Link>
+ 
 <div className="avatar mx-3">
   <div className="w-12 rounded-full">
     <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
