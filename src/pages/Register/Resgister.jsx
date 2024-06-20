@@ -3,7 +3,7 @@ import InputField  from "../../components/InputField/InputField";
 import SelectField  from "../../components/SelectField/SelectField";
 import FileInput from "../../components/FileInput/FileInput";
 import { useDispatch } from 'react-redux';
-import  {register}  from "../../store/auth/authActions.js";
+import  {register}  from "../../store/auth/authActions";
 
 const RegistrationForm = () => {
   const dispatch = useDispatch();
@@ -143,7 +143,7 @@ const RegistrationForm = () => {
             Create Account
           </h1>
           <div className="w-full mt-5 sm:mt-8">
-            <div className="mx-auto w-full sm:max-w-md md:max-w-lg flex flex-col gap-5">
+            <div className="mx-auto w-full sm:max-w-md md:max-w-lg flex flex-col gap-5 ">
               <InputField
                 type="text"
                 placeholder="Enter Your Name"
@@ -185,7 +185,6 @@ const RegistrationForm = () => {
                 error={formErrors.phone}
               />
               <div className="flex items-center gap-2">
-                <label className="text-base label-text">Role</label>
                 <SelectField
                   options={[
                     { label: 'Doctor', value: 'doctor' },
@@ -244,7 +243,7 @@ const RegistrationForm = () => {
                   />
                 </div>
               )}
-              <button className="btn btn-outline btn-info max-w-[200px] text-white" type="submit">
+              <button className="btn btn-outline btn-info w-[200px] m-auto text-white" type="submit">
                 Sign Up
               </button>
             </div>
