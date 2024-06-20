@@ -27,4 +27,14 @@ export const nurseRegister = async (formData) => {
   } catch (error) {
     throw new Error(error.response.data.message || error.message);
   }
+
+};
+
+export const login = async (formData) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/login`, formData);
+    return response;
+  } catch (error) {
+    throw new Error(error.response.data.message || error.message);
+  }
 };

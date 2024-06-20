@@ -103,6 +103,7 @@ const RegistrationForm = () => {
       });
     }
   }, [Error]);
+
   const validateForm = () => {
     let valid = true;
     const errors = {};
@@ -265,6 +266,7 @@ const RegistrationForm = () => {
                   <FileInput
                     onChange={(e) => setFormData({ ...formData, image: e.target.files[0] })}
                   />
+                  
                 </div>
               )}
               {formData.role === 'nurse' && (
