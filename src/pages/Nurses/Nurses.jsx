@@ -9,9 +9,22 @@ function Nurses() {
     const [loading,setLoading] = useState(true);
     const [currPage,setCurrPage] = useState(1);
     const [nurses,setNurses] = useState([]);
+    const [filters, setFilters] = useState({
+    city: '',
+    specialization: '',
+    available: '',
+    fees: ''
+    });
 
     useEffect(()=> {
-        axios.get('http://localhost:8000/api/nurses')
+        const obj = {};
+
+        if (filters.city) obj['city'] = filters.city;
+        if (filters.fees) obj['fees'] = filters.fees;
+
+        axios.get('http://localhost:8000/api/nurses',
+            { params: obj }
+        )
         .then(res => {
             console.log(res.data)
             setNurses(res.data.data);
@@ -19,7 +32,14 @@ function Nurses() {
         })
         .catch(err => console.log(err));
 
-    },[currPage])
+    },[filters])
+    
+    const handleFilterChange = (newFilters) => {
+        setFilters((prevFilters) => ({
+        ...prevFilters,
+        ...newFilters
+    }));
+    };
 
     return (
     <>
@@ -29,7 +49,7 @@ function Nurses() {
         
         <div className="grid grid-rows-2 grid-flow-col gap-4">
             <div className="row-span-3">
-                <Filters/>
+                <Filters onFilterChange={ handleFilterChange }/>
         </div>
 
 
@@ -37,18 +57,6 @@ function Nurses() {
 
 
                 {loading && <> <Skeleton/> <Skeleton/> <Skeleton/> <Skeleton/> <Skeleton/> </>}
-
-                <MedicalCard
-                proffession='Nurse'
-                name='John Doe'
-                specialization='Bones'
-                city='Cairo'
-                fees='500'
-                work_days='Sun,Mon'
-                work_start='8:00 AM'
-                work_end='2:00 PM'
-                online='1'
-                />
                 
                 {nurses.map( (el) => {
                     return <MedicalCard
@@ -57,10 +65,10 @@ function Nurses() {
                 proffession='Nurse'
                 name={el.user?.name}
                 city={el.city}
-                fees={el.clinic_fees}
+                fees={el.fees}
                 work_days={el.work_days}
-                work_start={el.clinic_work_start}
-                work_end={el.clinic_work_end}
+                work_start={el.work_start}
+                work_end={el.work_end}
                 online={el.online}
                 />
                 })}

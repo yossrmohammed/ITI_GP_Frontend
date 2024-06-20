@@ -22,7 +22,7 @@ function Doctors() {
         if (filters.city) obj['city'] = filters.city;
         if (filters.specialization) obj['specialization'] = filters.specialization;
         if (filters.fees) obj['fees'] = filters.fees;
-        console.log(obj)
+
         axios.get('http://localhost:8000/api/doctors',
             { params: obj }
         )
