@@ -1,15 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { loginUser } from "../../store/auth/authActions";
 import {selectError} from "../../store/auth/authSlice"
+import {selectUser} from "../../store/auth/authSlice"
 const LoginForm = () => {
   const dispatch = useDispatch();
   const Error = useSelector(selectError);
+  const user = useSelector(selectUser);
 
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+    useEffect(()=>{
+        console.log(user);
+    },[user])
 
   const [formErrors, setFormErrors] = useState({
     email: '',

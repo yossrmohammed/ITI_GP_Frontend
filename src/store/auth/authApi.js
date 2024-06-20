@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { setCookie, getCookie, removeCookie } from '../../cookies';
 const BASE_URL = 'http://127.0.0.1:8000/api';
 
 export const doctorRegister = async (formData) => {
@@ -36,5 +36,25 @@ export const login = async (formData) => {
     return response;
   } catch (error) {
     throw new Error(error.response.data.message || error.message);
+  }
+};
+
+export const getUserData = async () => {
+  try {
+    const token = getCookie('token');
+    if (!token) {
+      throw new Error('No token found');
+    }
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const response = await axios.get(`${BASE_URL}/user`, config);
+    console.log("here");
+    console.log(response);
+    return response;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || error.message);
   }
 };

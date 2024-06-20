@@ -1,4 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { setCookie, getCookie, removeCookie } from '../../cookies'; 
+import axios from 'axios';
 
 const initialState = {
   user: null,
@@ -28,7 +30,9 @@ const authSlice = createSlice({
     },
     loginSuccess(state, action) {
       state.loading = false;
-      state.user = action.payload.user;
+      state.user = action.payload.user; 
+     
+      setCookie('token', action.payload.token, 7); 
     },
     loginFailure(state, action) {
       state.loading = false;
@@ -36,6 +40,25 @@ const authSlice = createSlice({
     },
     clearError(state) {
       state.error = null;
+    },
+    logout(state) {
+      state.user = null;
+      state.error = null;
+     
+      removeCookie('token');
+    },
+
+    fetchUserStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    fetchUserSuccess(state, action) {
+      state.loading = false;
+      state.user = action.payload.user;
+    },
+    fetchUserFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
     },
   },
 });
@@ -48,7 +71,14 @@ export const {
   loginSuccess,
   loginFailure,
   clearError,
+  logout,
+  fetchUserStart,
+  fetchUserSuccess,
+  fetchUserFailure,
 } = authSlice.actions;
 
+export const selectUser = (state) => state.auth.user;
 export const selectError = (state) => state.auth.error;
 export default authSlice.reducer;
+
+
