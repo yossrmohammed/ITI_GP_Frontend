@@ -46,7 +46,7 @@ function Filters(props) {
     </div>
 
     {/* spaciality */}
-    { props.profession === 'Doctor' &&
+    { props.proffession === 'Doctor' &&
       <div>
     <div className="form-control">
       <label htmlFor="specialty" className="label">
