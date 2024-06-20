@@ -24,7 +24,7 @@ export default function ICUs() {
     const [toastMessage, setToastMessage] = useState('');
 
     useEffect(() => {
-        dispatch(getICUs({ address }));
+        dispatch(getICUs(address));
     }, [dispatch, address]);
 
     useEffect(() => {
