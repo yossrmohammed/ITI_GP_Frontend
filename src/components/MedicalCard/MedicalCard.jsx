@@ -26,7 +26,7 @@ function DoctorCard(props) {
 
             <div className="my-2">
               
-              { props.profession === 'Doctor' &&
+              { props.proffession === 'Doctor' &&
               <p>
               <FontAwesomeIcon className="mr-3 text-xl text-blue-600" icon={faUserDoctor} />
               <span className="font-bold">Specialization: </span>
