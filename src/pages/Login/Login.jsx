@@ -30,7 +30,7 @@ const LoginForm = () => {
     e.preventDefault();
     if (validateForm()) {
         const x = await dispatch(loginUser(formData));
-        if (errors.login) {
+        if (!errors.login) {
             navigate('/', { replace: true }); 
           }
     } 
