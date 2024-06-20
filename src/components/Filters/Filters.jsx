@@ -1,16 +1,18 @@
 import { medicalSpecialties } from '../../data/specalities';
 import { egyptianCities } from '../../data/egyptCities';
 
-function Filters() {
+function Filters(props) {
     console.log(medicalSpecialties);
   return (
     
-    <div className="col-3 d-none d-lg-block">
+    <div className="m-auto mt-5 w-3/4 text-center">
     
-    <div className="mt-3 border-2 rounded-xl py-3 px-10">
-    <h5 className="mx-3 fw-bold">Filters</h5>
+    <div className="mt-3 border-4 rounded-xl py-3 px-10">
+    <p className="font-bold text-2xl">Filters</p>
 
-    <p className="mx-3 my-3">Availability</p>
+    <label htmlFor="city" className="label">
+        <span className="label-text font-bold text-lg">Availability</span>
+    </label>
     <div className="">
 
     <div className="form-control">
@@ -34,7 +36,7 @@ function Filters() {
     {/* city */}
     <div className="form-control">
         <label htmlFor="city" className="label">
-            <span className="label-text">Select City</span>
+            <span className="label-text font-bold text-lg">Select City</span>
         </label>
         <select id="city" className="select select-bordered w-full max-w-xs">
             {egyptianCities.map(city => (
@@ -44,10 +46,11 @@ function Filters() {
     </div>
 
     {/* spaciality */}
-    <div>
+    { props.profession === 'Doctor' &&
+      <div>
     <div className="form-control">
       <label htmlFor="specialty" className="label">
-        <span className="label-text">Select Specialty</span>
+        <span className="label-text font-bold text-lg">Select Specialty</span>
       </label>
       <select id="specialty" className="select select-bordered w-full max-w-xs">
         {Object.entries(medicalSpecialties).map(([category, specialties]) => (
@@ -60,13 +63,11 @@ function Filters() {
       </select>
     </div>    
     </div>
-
-    <p className="mx-3 fw-bold my-3">Fees</p>
-
+    }
 
     <label className="form-control w-full max-w-xs">
         <div className="label">
-            <span className="label-text">What is your name?</span>
+            <span className="label-text font-bold text-lg">Fees</span>
         </div>
         <input type="number" placeholder="Type here" className="input input-bordered w-full max-w-xs" />
         <div className="label">
