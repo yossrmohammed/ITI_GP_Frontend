@@ -58,10 +58,12 @@ const LoginForm = () => {
     setFormErrors(errors);
     return valid;
   };
-
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-800">
-      <div className="w-full p-6 bg-white border-t-4 border-gray-600 rounded-md shadow-lg lg:max-w-md">
+    <div
+      className="relative flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-800 bg-cover bg-center"
+      style={{ backgroundImage: "url('https://res.cloudinary.com/deqwn8wr6/image/upload/v1718903130/medicine-blue-background-flat-lay_1_ufoakp.jpg')" }}
+    >
+      <div className="w-full p-6 bg-white border-t-4 border-gray-600 rounded-md rounded-[20px] shadow-lg lg:max-w-xl">
         <h1 className="text-3xl font-semibold text-center text-gray-700">
           Login
         </h1>
