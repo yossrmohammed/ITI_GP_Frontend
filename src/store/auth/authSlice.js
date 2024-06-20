@@ -29,4 +29,5 @@ const authSlice = createSlice({
 });
 
 export const { registerStart, registerSuccess, registerFailure, clearError } = authSlice.actions;
+export const selectError = (state) => state.auth.error;
 export default authSlice.reducer;

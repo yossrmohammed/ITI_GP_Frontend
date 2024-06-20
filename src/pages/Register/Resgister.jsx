@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import InputField  from "../../components/InputField/InputField";
-import SelectField  from "../../components/SelectField/SelectField";
+import React, { useState, useEffect } from 'react';
+import InputField from "../../components/InputField/InputField";
+import SelectField from "../../components/SelectField/SelectField";
 import FileInput from "../../components/FileInput/FileInput";
-import { useDispatch } from 'react-redux';
-import  {register}  from "../../store/auth/authActions";
-
+import { useSelector, useDispatch } from 'react-redux';
+import { register } from "../../store/auth/authActions";
+import {selectError} from "../../store/auth/authSlice"
 const RegistrationForm = () => {
   const dispatch = useDispatch();
-
+  const Error = useSelector(selectError);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -61,16 +61,48 @@ const RegistrationForm = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-        const { role } = formData;
-       dispatch(register(formData, role));
+      const { role } = formData;
+      dispatch(register(formData, role));
     } else {
       console.error('Form has errors. Cannot submit.');
     }
   };
-
+  useEffect(() => {
+    if (Error === null) {
+      setFormData({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        phone: '',
+        role: 'doctor',
+        history: '',
+        gender: '',
+        birthDate: '',
+        image: null,
+        university: '',
+        qualifications: '',
+        city: '',
+        fees: '',
+        workStart: '',
+        workEnd: '',
+        workDays: [],
+      });
+      setFormErrors({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        phone: '',
+        gender: '',
+        history: '',
+        birthDate: '',
+      });
+    }
+  }, [Error]);
   const validateForm = () => {
     let valid = true;
     const errors = {};
@@ -143,7 +175,7 @@ const RegistrationForm = () => {
             Create Account
           </h1>
           <div className="w-full mt-5 sm:mt-8">
-            <div className="mx-auto w-full sm:max-w-md md:max-w-lg flex flex-col gap-5 ">
+            <div className="mx-auto w-full sm:max-w-md md:max-w-lg flex flex-col gap-5">
               <InputField
                 type="text"
                 placeholder="Enter Your Name"
@@ -153,7 +185,7 @@ const RegistrationForm = () => {
                 error={formErrors.name}
               />
               <InputField
-                type="email"
+                type="text"
                 placeholder="Enter Your Email"
                 name="email"
                 value={formData.email}
@@ -194,7 +226,7 @@ const RegistrationForm = () => {
                   name="role"
                   value={formData.role}
                   onChange={handleChange}
-                  error={null} 
+                  error={null}
                 />
               </div>
               {formData.role === 'patient' && (
@@ -212,7 +244,6 @@ const RegistrationForm = () => {
                       { label: 'Select Gender', value: '' },
                       { label: 'Male', value: 'm' },
                       { label: 'Female', value: 'f' },
-                      { label: 'Other', value: 'o' },
                     ]}
                     name="gender"
                     value={formData.gender}
@@ -229,14 +260,14 @@ const RegistrationForm = () => {
                   />
                 </div>
               )}
-              { formData.role === 'doctor' && (
+              {formData.role === 'doctor' && (
                 <div className="flex flex-col gap-3">
                   <FileInput
                     onChange={(e) => setFormData({ ...formData, image: e.target.files[0] })}
                   />
                 </div>
               )}
-              {formData.role === 'nurse'  && (
+              {formData.role === 'nurse' && (
                 <div className="flex flex-col gap-3">
                   <FileInput
                     onChange={(e) => setFormData({ ...formData, image: e.target.files[0] })}
@@ -252,7 +283,7 @@ const RegistrationForm = () => {
             Already have an account?{' '}
             <a href="#" className="text-blue-600 hover:text-blue-800 hover:underline">
               Login
-            </a>
+              </a>
           </span>
         </form>
       </div>
@@ -261,4 +292,3 @@ const RegistrationForm = () => {
 };
 
 export default RegistrationForm;
-

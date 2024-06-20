@@ -1,5 +1,5 @@
 const InputField = ({ type, placeholder, name, value, onChange, error }) => {
-  const isSpecialError = error === 'Password must be at least 6 characters long' || error === 'Email not valid' || error ==="Passwords do not match";
+  const isSpecialError = error === 'Password must be at least 6 characters long' || error === 'Email is invalid' || error ==="Passwords do not match"||error ==="Phone must be exactly 11 digits"||error=="The email has already been taken.";
 
   return (
     <div className="relative flex items-center w-full max-w-xs m-auto">

@@ -12,7 +12,11 @@ const SelectField = ({ options, name, value, onChange, error }) => (
           </option>
         ))}
       </select>
-      {error && <span className="text-xs text-red-500">{error}</span>}
+      {error  && (
+        <div className="tooltip tooltip-open tooltip-right absolute left-full ml-2" data-tip={error}>
+          <button className="btn btn-error btn-sm">!</button>
+        </div>
+      )}
     </>
   );
 

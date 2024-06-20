@@ -1,7 +1,7 @@
 import { registerStart, registerSuccess, registerFailure } from './authSlice';
-import { doctorRegister, patientRegister, nurseRegister } from './authApi'
+import { doctorRegister, patientRegister, nurseRegister } from './authApi';
 
-export const register = (formData, role) => async (dispatch) => {
+export const register = (formData, role, setFormErrors) => async (dispatch) => {
   dispatch(registerStart());
   try {
     let response;
@@ -18,8 +18,17 @@ export const register = (formData, role) => async (dispatch) => {
       default:
         throw new Error('Invalid role');
     }
+    
+    
     dispatch(registerSuccess(response.data)); 
   } catch (error) {
-    dispatch(registerFailure(error.message));
+    if (error.response && error.response.data && error.response.data.errors) {
+      const { email } = error.response.data.errors;
+      if (email && email.length > 0) {
+        setFormErrors({ ...setFormErrors, email: email[0] });
+      }
+    } else {
+      dispatch(registerFailure(error.message));
+    }
   }
 };
