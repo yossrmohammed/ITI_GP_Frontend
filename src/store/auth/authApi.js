@@ -3,9 +3,10 @@ import { setCookie, getCookie, removeCookie } from '../../cookies';
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const doctorRegister = async (formData) => {
-  try {
-    console.log(formData);
-    const response = await axios.post(`${BASE_URL}/DoctorRegister`, formData);
+  try {;
+    const response = await axios.post(`${BASE_URL}/DoctorRegister`, formData,{headers: {
+      'Content-Type': 'multipart/form-data',
+   }});
     
     return response;
   } catch (error) {
@@ -24,7 +25,9 @@ export const patientRegister = async (formData) => {
 
 export const nurseRegister = async (formData) => {
   try {
-    const response = await axios.post(`${BASE_URL}/NurseRegister`, formData);
+    const response = await axios.post(`${BASE_URL}/NurseRegister`, formData,{headers: {
+      'Content-Type': 'multipart/form-data',
+    }});
     return response;
   } catch (error) {
     throw new Error(error.response.data.message || error.message);

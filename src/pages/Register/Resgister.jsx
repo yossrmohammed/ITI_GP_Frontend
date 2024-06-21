@@ -4,7 +4,7 @@ import SelectField from "../../components/SelectField/SelectField";
 import FileInput from "../../components/FileInput/FileInput";
 import { useSelector, useDispatch } from 'react-redux';
 import { register } from "../../store/auth/authActions";
-import {selectError} from "../../store/auth/authSlice"
+import { selectError } from "../../store/auth/authSlice";
 import { useNavigate } from 'react-router-dom';
 
 const RegistrationForm = () => {
@@ -21,7 +21,7 @@ const RegistrationForm = () => {
     role: 'doctor',
     history: '',
     gender: '',
-    birthDate: '',
+    birth_date: '',
     image: null,
     university: '',
     qualifications: '',
@@ -40,7 +40,8 @@ const RegistrationForm = () => {
     phone: '',
     gender: '',
     history: '',
-    birthDate: '',
+    birth_date: '',
+    image: '',
   });
 
   const handleChange = (e) => {
@@ -60,6 +61,7 @@ const RegistrationForm = () => {
       }
     } else if (type === 'file') {
       setFormData({ ...formData, [name]: e.target.files[0] });
+   
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -69,11 +71,16 @@ const RegistrationForm = () => {
     e.preventDefault();
     if (validateForm()) {
       const { role } = formData;
-      const x= await dispatch(register(formData, role));
-        if (errors.register) {
-            navigate('/login', { replace: true }); 
-          }
-    } 
+      try {
+       
+        await dispatch(register(formData, role));
+
+        navigate('/login', { replace: true });
+        
+      } catch (error) {
+        //
+      }
+    }
   };
 
   const validateForm = () => {
@@ -123,8 +130,16 @@ const RegistrationForm = () => {
         errors.gender = 'Gender is required';
         valid = false;
       }
-      if (!formData.birthDate) {
-        errors.birthDate = 'Birth date is required';
+      if (!formData.birth_date) {
+        errors.birth_date = 'Birth date is required';
+        valid = false;
+      }
+    }
+
+    if (formData.role !== 'patient' && formData.image) {
+      const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+      if (!validImageTypes.includes(formData.image.type)) {
+        errors.image = 'The image field must be a file of type: jpeg, png, jpg, gif.';
         valid = false;
       }
     }
@@ -132,11 +147,12 @@ const RegistrationForm = () => {
     setFormErrors(errors);
     return valid;
   };
+
   return (
-    <div className="flex justify-center  items-center min-h-screen bg-gray-100 dark:bg-gray-800 transition-colors duration-500 px-5 py-5"
-    style={{ backgroundImage: "url('https://res.cloudinary.com/deqwn8wr6/image/upload/v1718903949/medical-bandages-pills-with-copy-space_1_nn3p9e.jpg')" }}
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-800 transition-colors duration-500 px-5 py-5"
+      style={{ backgroundImage: "url('https://res.cloudinary.com/deqwn8wr6/image/upload/v1718903949/medical-bandages-pills-with-copy-space_1_nn3p9e.jpg')" }}
     >
-      <div className="xl:max-w-7xl bg-base-100 dark:bg-gray-900  rounded-[30px] drop-shadow-xl border border-gray-300 w-full rounded-md flex justify-between items-stretch px-5 xl:px-5 py-5">
+      <div className="xl:max-w-7xl bg-base-100 dark:bg-gray-900 rounded-[30px] drop-shadow-xl border border-gray-300 w-full rounded-md flex justify-between items-stretch px-5 xl:px-5 py-5">
         <div className="sm:w-[60%] lg:w-[50%] bg-cover bg-center items-center justify-center hidden md:flex">
           <img
             src="https://res.cloudinary.com/deqwn8wr6/image/upload/v1718819173/3353d97349c275c2b20fa5a395e8038d_hkghxv.png"
@@ -227,41 +243,48 @@ const RegistrationForm = () => {
                   <InputField
                     type="date"
                     placeholder="Enter Birth Date"
-                    name="birthDate"
-                    value={formData.birthDate}
+                    name="birth_date"
+                    value={formData.birth_date}
                     onChange={handleChange}
-                    error={formErrors.birthDate}
+                    error={formErrors.birth_date}
                   />
                 </div>
               )}
               {formData.role === 'doctor' && (
                 <div className="flex flex-col gap-3">
                   <FileInput
-                    onChange={(e) => setFormData({...formData, image: e.target.files[0]})}
+                    onChange={handleChange}
+                    error={formErrors.image}
                   />
-                  
+                  {formErrors.image && (
+                    <p className="text-sm text-red-500">{formErrors.image}</p>
+                  )}
                 </div>
               )}
               {formData.role === 'nurse' && (
                 <div className="flex flex-col gap-3">
                   <FileInput
-                    onChange={(e) => setFormData({ ...formData, image: e.target.files[0] })}
+                    onChange={handleChange}
+                    error={formErrors.image}
                   />
+                  {formErrors.image && (
+                    <p className="text-sm text-red-500">{formErrors.image}</p>
+                  )}
                 </div>
               )}
               <button className="btn btn-outline btn-info w-[200px] m-auto text-white" type="submit">
                 Sign Up
               </button>
               {errors.register && (
-              <p className="text-sm  m-auto text-red-500">{errors.register}</p>
-            )}
+                <p className="text-sm m-auto text-red-500">{errors.register}</p>
+              )}
             </div>
           </div>
           <span className="block text-center mt-4">
             Already have an account?{' '}
             <a href="#" className="text-blue-600 hover:text-blue-800 hover:underline">
               Login
-              </a>
+            </a>
           </span>
         </form>
       </div>

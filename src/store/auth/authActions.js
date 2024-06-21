@@ -21,7 +21,7 @@ export const register = (formData, role, setFormErrors) => async (dispatch) => {
     dispatch(registerSuccess(response.data)); 
   } catch (error) {
       dispatch(registerFailure({ field:'register', message: error.message })); // Fallback for general error
-
+     throw error;
   }
 };
 
