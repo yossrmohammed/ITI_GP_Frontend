@@ -72,6 +72,7 @@ const Verify = () => {
           src="https://res.cloudinary.com/deqwn8wr6/image/upload/v1718963096/84885fe6d4810d4fd1ff4bebb55584a2_zyh4sc.png" 
           alt="Decorative" 
           style={imageStyle} 
+          
         />
         <div style={formStyle}>
           <h1 style={headingStyle}>Verify Your Email</h1>
