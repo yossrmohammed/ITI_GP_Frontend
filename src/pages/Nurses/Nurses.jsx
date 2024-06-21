@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import MedicalCard from "../../components/MedicalCard/MedicalCard";
 import Filters from "../../components/Filters/Filters";
 import Skeleton from "../../components/Skeleton";
-import axios from "axios";
+import { axiosInstance } from '../../axios';
 
 function Nurses() {
 
@@ -22,7 +22,7 @@ function Nurses() {
         if (filters.city) obj['city'] = filters.city;
         if (filters.fees) obj['fees'] = filters.fees;
 
-        axios.get('http://localhost:8000/api/nurses',
+        axiosInstance.get('/nurses',
             { params: obj }
         )
         .then(res => {

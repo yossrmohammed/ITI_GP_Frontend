@@ -4,6 +4,7 @@ import Navbar from "./src/components/Navbar/Navbar";
 import Footer from "./src/components/Footer/Footer";
 import Doctors from "./src/pages/Doctors/Doctors";
 import Nurses from "./src/pages/Nurses/Nurses";
+import MedicPage from "./src/pages/MedicPage/MedicPage";
 
 function Styled() 
 {
@@ -27,12 +28,16 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/doctors',
-                element: <Doctors/>
+                element: <Doctors/>,
             },
             {
                 path: '/nurses',
-                element: <Nurses/>
+                element: <Nurses/>,
             },
+            {
+                path: '/user/:role/:id',
+                element: <MedicPage/>,
+            }
         ]
     },
     {

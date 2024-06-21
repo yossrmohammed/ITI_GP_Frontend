@@ -3,7 +3,7 @@ import MedicalCard from "../../components/MedicalCard/MedicalCard";
 import Filters from "../../components/Filters/Filters";
 import Skeleton from "../../components/Skeleton";
 import { axiosInstance } from '../../axios';
-import axios from "axios";
+
 function Doctors() {
 
     const [loading,setLoading] = useState(true);
@@ -23,11 +23,10 @@ function Doctors() {
         if (filters.specialization) obj['specialization'] = filters.specialization;
         if (filters.fees) obj['fees'] = filters.fees;
 
-        axios.get('http://localhost:8000/api/doctors',
+        axiosInstance.get('/doctors',
             { params: obj }
         )
         .then(res => {
-            console.log(res.data)
             setDoctors(res.data.data);
             setLoading(false)
         })
@@ -62,7 +61,7 @@ function Doctors() {
 
                 {doctors.map( (el) => {
                     return <MedicalCard
-                key={el.id}
+                key={el.user.id}
                 id={el.id}
                 proffession='Doctor'
                 name={el.user?.name}
