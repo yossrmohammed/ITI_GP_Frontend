@@ -17,28 +17,34 @@ const headerClass = "text-lg font-semibold card-title";
         </div>
         <div className="card-body lg:w-2/3">
 
-          <h2 className={`card-title text-2xl font-bold mb-4`}>Dr. {props.name}</h2>
+          <h2 className={`card-title text-2xl font-bold mb-4`}>{props.role === 'doctor' ? 'Dr:' : 'Nurse:'} {props.name}</h2>
 
           <Rating rate='4'/>
           <div>
-            <h3 className={headerClass}>Qualifications: <span className="font-normal">{props.qualifications} </span></h3>
+            <h3 className={headerClass}>Qualifications: </h3>
+            <p className="font-normal">{props.qualifications} </p>
           </div>
 
           <div className="mt-4">
             <h3 className={headerClass}>Education: <span className="font-normal">{props.university} </span></h3>
           </div>
-
-          <div className="mt-4">
+          {
+            props.role === 'doctor' &&
+            <div className="mt-4">
             <h3 className={headerClass}>Specialization: <span className="font-normal">{props.specialization} </span></h3>
           </div>
+          }
 
           <div className="mt-4">
             <h3 className={headerClass}>Fees: <span className="font-normal">{props.fees} EGP</span></h3>
           </div>
 
-          <div className="mt-4">
+          {
+            props.role === 'doctor' &&
+            <div className="mt-4">
             <h3 className={headerClass}>Clinic Address: <span className="font-normal">{props.address}</span></h3>
           </div>
+          }
 
           <div className="mt-4">
             <h3 className={headerClass}>Email: <span className="font-normal">{props.email}</span></h3>
