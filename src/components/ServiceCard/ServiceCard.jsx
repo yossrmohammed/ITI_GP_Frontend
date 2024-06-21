@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 function ServiceCard(props) {
   return (
     <div className="card w-60 bg-base-100">
