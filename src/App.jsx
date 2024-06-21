@@ -11,7 +11,7 @@ function App() {
   const token = getCookie('token');
   useEffect(() => {
      if(token){
-    //  dispatch(fetchUserData());
+     dispatch(fetchUserData());
      }
   }, [dispatch]);
 
