@@ -4,11 +4,15 @@ import { router } from '../router'
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchUserData } from './store/auth/authActions';
+import { setCookie, getCookie, removeCookie } from './cookies';
+
 function App() {
   const dispatch = useDispatch();
-
+  const token = getCookie('token');
   useEffect(() => {
-    dispatch(fetchUserData());
+     if(token){
+    //  dispatch(fetchUserData());
+     }
   }, [dispatch]);
 
   return (

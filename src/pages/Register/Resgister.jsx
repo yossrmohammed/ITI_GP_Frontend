@@ -136,7 +136,7 @@ const RegistrationForm = () => {
     <div className="flex justify-center  items-center min-h-screen bg-gray-100 dark:bg-gray-800 transition-colors duration-500 px-5 py-5"
     style={{ backgroundImage: "url('https://res.cloudinary.com/deqwn8wr6/image/upload/v1718903949/medical-bandages-pills-with-copy-space_1_nn3p9e.jpg')" }}
     >
-      <div className="xl:max-w-7xl bg-white dark:bg-gray-900  rounded-[30px] drop-shadow-xl border border-gray-300 w-full rounded-md flex justify-between items-stretch px-5 xl:px-5 py-5">
+      <div className="xl:max-w-7xl bg-base-100 dark:bg-gray-900  rounded-[30px] drop-shadow-xl border border-gray-300 w-full rounded-md flex justify-between items-stretch px-5 xl:px-5 py-5">
         <div className="sm:w-[60%] lg:w-[50%] bg-cover bg-center items-center justify-center hidden md:flex">
           <img
             src="https://res.cloudinary.com/deqwn8wr6/image/upload/v1718819173/3353d97349c275c2b20fa5a395e8038d_hkghxv.png"

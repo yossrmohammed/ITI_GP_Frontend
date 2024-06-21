@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { loginUser } from "../../store/auth/authActions";
+import { loginUser,verify,forgetPsswordUser } from "../../store/auth/authActions";
 import {selectError} from "../../store/auth/authSlice"
 import {selectUser} from "../../store/auth/authSlice"
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom'
+import Swal from 'sweetalert2';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
   const errors = useSelector(selectError);
   const user = useSelector(selectUser);
   let navigate = useNavigate();
+  const location = useLocation();
 
   const [formData, setFormData] = useState({
     email: '',
@@ -28,14 +31,70 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const searchParams = new URLSearchParams(location.search);
+    const verifyParam = searchParams.get('verify');
     if (validateForm()) {
-        const x = await dispatch(loginUser(formData));
-        if (!errors.login) {
-            navigate('/', { replace: true }); 
-          }
-    } 
+        if (verifyParam === 'true') {
+            try{
+                let x =  await dispatch(loginUser(formData));
+                const reponse =await dispatch(verify(formData));
+                if(reponse.data.message="Email verified successfull"){
+                    setAlert({
+                        show: true,
+                        type: 'success',
+                        message: 'Email verified successfully.',
+                      });
+                    navigate('/', { replace: true });
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Failed to verify email, please try again',
+                      });
+                }
+                navigate('/', { replace: true }); 
+             }catch(error){
+                 //
+                
+             }
+        }else{
+                try{
+                   let x=  await dispatch(loginUser(formData));
+                    navigate('/', { replace: true }); 
+                 
+                }catch(error){
+                    //
+                   
+                }
+        }
+    }
+   
   };
- 
+  const handleForgotPasswordClick = async() => {
+    if(/\S+@\S+\.\S+/.test(formData.email)){
+        try{
+            const x = await dispatch(forgetPsswordUser({email:formData.email}));
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Reset email link send.',
+              });
+        }catch(error){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Failed to send the reset link, try again',
+              });
+        }
+    }else{
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Please provide valid email to send reset link to it!',
+          });
+    }
+    
+  };
   const validateForm = () => {
     let valid = true;
     const errors = {};
@@ -64,7 +123,7 @@ const LoginForm = () => {
       className="relative flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-800 bg-cover bg-center"
       style={{ backgroundImage: "url('https://res.cloudinary.com/deqwn8wr6/image/upload/v1718903130/medicine-blue-background-flat-lay_1_ufoakp.jpg')" }}
     >
-      <div className="w-full p-6 bg-white border-t-4 border-gray-600 rounded-md rounded-[20px] shadow-lg lg:max-w-xl">
+      <div className="w-full p-6 bg-base-100 border-t-4 border-gray-600 rounded-md rounded-[20px] shadow-lg lg:max-w-xl">
         <h1 className="text-3xl font-semibold text-center text-gray-700">
           Login
         </h1>
@@ -116,6 +175,15 @@ const LoginForm = () => {
         </form>
         <div className="text-center mt-4">
           <span className="block">
+            <a
+              href="#"
+              className="text-blue-600 hover:text-blue-800 hover:underline"
+              onClick={handleForgotPasswordClick}
+            >
+              Forgot Password?
+            </a>
+          </span>
+          <span className="block mt-2">
             Don't have an account?{' '}
             <a
               href="#"

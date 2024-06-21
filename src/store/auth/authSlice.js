@@ -61,6 +61,10 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    verifyFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -76,6 +80,7 @@ export const {
   fetchUserStart,
   fetchUserSuccess,
   fetchUserFailure,
+  verifyFailure,
 } = authSlice.actions;
 
 export const selectUser = (state) => state.auth.user;
