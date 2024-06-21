@@ -7,6 +7,7 @@ import Footer from "./src/components/Footer/Footer";
 import Doctors from "./src/pages/Doctors/Doctors";
 import ICUs from "./src/pages/ICUs/ICUs";
 import Nurses from "./src/pages/Nurses/Nurses";
+import MedicPage from "./src/pages/MedicPage/MedicPage";
 import Verify from "./src/pages/Verify/Verify";
 import ResetPassword from "./src/pages/ResetPassword/ResetPassword";
 
@@ -32,7 +33,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/doctors',
-                element: <Doctors/>
+                element: <Doctors/>,
             },
             {
                 path: '/icu',
@@ -40,7 +41,11 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/nurses',
-                element: <Nurses/>
+                element: <Nurses/>,
+            },
+            {
+                path: '/user/:role/:id',
+                element: <MedicPage/>,
             },
             {
                 path: '/register',
