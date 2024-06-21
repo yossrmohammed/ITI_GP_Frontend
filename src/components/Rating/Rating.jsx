@@ -5,11 +5,11 @@ function Rating(props) {
         {
             if (props.rate -1 == i)
                 {
-                    arr.push(<input type="radio" name="rating-2" className="mask mask-star-2 bg-orange-400" checked />)
+                    arr.push(<input type="radio" name="rating-2" className="mask mask-star-2 bg-orange-400" checked disabled/>)
                 }
             else 
             {
-                arr.push(<input type="radio" name="rating-2" className="mask mask-star-2 bg-orange-400"  />)
+                arr.push(<input type="radio" name="rating-2" className="mask mask-star-2 bg-orange-400"  disabled/>)
             }
         }
   return (
