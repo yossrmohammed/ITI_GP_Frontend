@@ -8,6 +8,7 @@ function Nurses() {
 
     const [loading,setLoading] = useState(true);
     const [currPage,setCurrPage] = useState(1);
+    const [totalPages,setTotalPages] = useState(1);
     const [nurses,setNurses] = useState([]);
     const [filters, setFilters] = useState({
     city: '',
@@ -21,6 +22,7 @@ function Nurses() {
 
         if (filters.city) obj['city'] = filters.city;
         if (filters.fees) obj['fees'] = filters.fees;
+        obj.page = currPage;
 
         axiosInstance.get('/nurses',
             { params: obj }
@@ -28,11 +30,12 @@ function Nurses() {
         .then(res => {
             console.log(res.data)
             setNurses(res.data.data);
+            setTotalPages(res.data.last_page);
             setLoading(false)
         })
         .catch(err => console.log(err));
 
-    },[filters])
+    },[filters,currPage])
     
     const handleFilterChange = (newFilters) => {
         setFilters((prevFilters) => ({
@@ -40,6 +43,10 @@ function Nurses() {
         ...newFilters
     }));
     };
+
+    const handlePageChange = (page) => {
+        setCurrPage(page);
+    }
 
     return (
     <>
@@ -78,16 +85,33 @@ function Nurses() {
     </div>
 
     <div className="text-center">
-    <div className="join my-5">
-        <button className="join-item btn">«</button>
-        <button className="join-item btn btn-md">1</button>
-        <button className="join-item btn btn-md btn-active">2</button>
-        <button className="join-item btn btn-md">3</button>
-        <button className="join-item btn btn-md">4</button>
-        <button className="join-item btn">»</button>
-    </div>
-    </div>
-    </>
+            <div className="join my-5">
+            <button
+                className="join-item btn"
+                onClick={() => handlePageChange(currPage - 1)}
+                disabled={currPage === 1}
+            >
+                «
+            </button>
+            {[...Array(totalPages).keys()].map((page) => (
+                <button
+                key={page + 1}
+                className={`join-item btn btn-md ${currPage === page + 1 ? 'btn-active' : ''}`}
+                onClick={() => handlePageChange(page + 1)}
+                >
+                {page + 1}
+                </button>
+            ))}
+            <button
+                className="join-item btn"
+                onClick={() => handlePageChange(currPage + 1)}
+                disabled={currPage === totalPages}
+            >
+                »
+            </button>
+            </div>
+        </div>
+        </>
   )
 }
 

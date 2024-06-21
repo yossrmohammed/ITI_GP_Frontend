@@ -82,6 +82,7 @@ function Filters(props) {
             <span className="label-text font-bold text-lg">Select City</span>
         </label>
         <select id="city" className="select select-bordered w-full max-w-xs" value={city} onChange={handleCityChange}>
+            <option value="null" selected>Choose city</option>
             {egyptianCities.map(city => (
             <option key={city} value={city}>{city}</option>
             ))}
