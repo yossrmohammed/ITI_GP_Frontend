@@ -39,10 +39,10 @@ const LoginForm = () => {
                 let x =  await dispatch(loginUser(formData));
                 const reponse =await dispatch(verify(formData));
                 if(reponse.data.message="Email verified successfull"){
-                    setAlert({
-                        show: true,
-                        type: 'success',
-                        message: 'Email verified successfully.',
+                  Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Email verified successfully.',
                       });
                     navigate('/', { replace: true });
                 }else{
@@ -70,6 +70,10 @@ const LoginForm = () => {
     }
    
   };
+  const handleSignUpClick = ()=>{
+    navigate('/register', { replace: true }); 
+  }
+
   const handleForgotPasswordClick = async() => {
     if(/\S+@\S+\.\S+/.test(formData.email)){
         try{
@@ -177,7 +181,7 @@ const LoginForm = () => {
           <span className="block">
             <a
               href="#"
-              className="text-blue-600 hover:text-blue-800 hover:underline"
+              className="text-blue-600 hover:text-blue-800 no-underline"
               onClick={handleForgotPasswordClick}
             >
               Forgot Password?
@@ -187,7 +191,8 @@ const LoginForm = () => {
             Don't have an account?{' '}
             <a
               href="#"
-              className="text-blue-600 hover:text-blue-800 hover:underline"
+              className="text-blue-600 hover:text-blue-800 no-underline"
+              onClick={handleSignUpClick}
             >
               Sign Up
             </a>
