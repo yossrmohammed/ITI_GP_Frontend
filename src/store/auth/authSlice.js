@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { setCookie, getCookie, removeCookie } from '../../cookies'; 
-import axios from 'axios';
+import { setCookie, removeCookie } from '../../cookies'; 
 
 const initialState = {
   user: null,
