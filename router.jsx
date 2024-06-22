@@ -10,6 +10,7 @@ import Nurses from "./src/pages/Nurses/Nurses";
 import MedicPage from "./src/pages/MedicPage/MedicPage";
 import Verify from "./src/pages/Verify/Verify";
 import ResetPassword from "./src/pages/ResetPassword/ResetPassword";
+import PatientProfile from "./src/pages/Patient/PatientProfile";
 
 function Styled() 
 {
@@ -59,11 +60,14 @@ export const router = createBrowserRouter([
                 path: '/verify',
                 element: <Verify/>
             },
-            ,
             {
                 path: '/reset',
                 element: <ResetPassword/>
             },
+            {
+                path: '/patientprofile',
+                element: <PatientProfile/>
+            }
         ]
     },
     {
