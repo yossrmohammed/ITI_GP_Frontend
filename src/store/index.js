@@ -8,7 +8,7 @@ export default configureStore({
     reducer: {
         ICUs: ICUSlice,
         applications: ApplicationSlice,
-        auth: authReducer,,
+        auth: authReducer,
         hospitals: HospitalSlice
 
 
