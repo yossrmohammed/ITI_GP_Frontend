@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-const PayPal = () => {
+const PayPal = ({ amount, description, patientId, doctorId, nurseId }) => {
   const paypal = useRef();
 
   useEffect(() => {
@@ -13,10 +13,10 @@ const PayPal = () => {
             return actions.order.create({
               purchase_units: [
                 {
-                  description: "Cool looking table",
+                  description:  description || "Payment description",
                   amount: {
                     currency_code: "CAD",
-                    value: 5000.0,
+                    value:  parseFloat(amount) || 4000,
                   },
                 },
               ],
