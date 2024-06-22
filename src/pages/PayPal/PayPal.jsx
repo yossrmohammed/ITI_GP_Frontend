@@ -62,13 +62,18 @@ const PayPal = () => {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
-        backgroundImage: `url('https://res.cloudinary.com/deqwn8wr6/image/upload/v1719063005/wristwatch-cellphone-credit-card-blue-surface-online-shopping_1_otjflv.jpg')`,
+        backgroundImage: `url('https://res.cloudinary.com/deqwn8wr6/image/upload/v1719070142/desk-concept-cyber-monday_rtge4c.jpg')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
     >
     
-      <div ref={paypal}></div>
+    <div 
+       style={{
+        width:'25%', 
+       //marginLeft:'25%'       
+      }}
+      ref={paypal}></div>
    
     </div>
   );
