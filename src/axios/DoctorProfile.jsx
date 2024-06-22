@@ -5,7 +5,7 @@ export const getDoctorById = (doctorId) => {
 };
 export const updateDoctorById = (doctorId, updatedDoctorData) => {
   console.log("From updateDoctorById Axios", updatedDoctorData);
-  return axiosInstance.patch(`doctors/${doctorId}`, updatedDoctorData, {
+  return axiosInstance.post(`doctors/${doctorId}`, updatedDoctorData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

@@ -6,6 +6,7 @@ import * as Yup from "yup";
 
 import TextInput from '/src/components/Form/TextInput.jsx';
 import NumberInput from '/src/components/Form/NumberInput.jsx';
+import TimeInput from '/src/components/Form/TimeInput.jsx';
 
 
 function DoctorProfile() {
@@ -73,11 +74,36 @@ function DoctorProfile() {
           .email("Invalid email address"),
         address: Yup.string()
           .required("Address is required")
-        
-        
       }),
       onSubmit:(values)=>{
         console.log("Submit===>",values)
+        const formData = new FormData();
+        formData.append("name", values.name); 
+        formData.append("email", values.email);
+        formData.append("phone", values.phone);
+        formData.append("university", values.university);
+        formData.append("qualifications", values.qualifications);
+        formData.append("city", values.city);
+        formData.append("address", values.address);
+        formData.append("clinic_fees", values.clinic_fees);
+        formData.append("home_fees", values.home_fees);
+        formData.append("online", values.online);
+        formData.append("specialization", values.specialization);
+        formData.append("visit", values.visit);
+        formData.append("clinic_work_start", values.clinic_work_start);
+        formData.append("clinic_work_end", values.clinic_work_end);
+        formData.append("home_work_start", values.home_work_start);
+        formData.append("home_work_end", values.home_work_end);
+        formData.append("work_days", values.work_days);
+        formData.append("_method", "patch");
+
+        updateDoctorById(doctorId, formData)
+        .then(response => {
+          console.log("update doctor response : ",response)
+        })
+        .catch(error => {
+          console.log("error : ",error)
+        });
       }
     })
 
@@ -124,8 +150,6 @@ function DoctorProfile() {
               <span className="loading loading-dots loading-lg"></span>
           </div>
         </>
-
-        // return <div>Loading...</div>;
       }
     
       if (error) {
@@ -140,8 +164,8 @@ function DoctorProfile() {
     <>
     
 
-    <div className="px-10">
-    <div>
+    <div className="">
+    <div className="" style={{backgroundColor:"red"}}>
       {/* --------------------------------Form---------------------------------------- */}
       <form onSubmit={formik.handleSubmit}>
           {/* -------------------------- Name -------------------------- */}
@@ -180,16 +204,38 @@ function DoctorProfile() {
               error={formik.errors.address}
               placeholder="address"
             />
-          {/* -------------------------- Clinic Fees -------------------------- */}
-          <NumberInput
-            label="Clinic Fees"
-            name="clinic_fees"
-            value={formik.values.clinic_fees}
-            onChange={formik.handleChange}
-            error={formik.errors.clinic_fees}
-            placeholder="clinic fees"
-          />
-          {/* -------------------------- Home Visite -------------------------- */}
+          {/* -------------------------- Clinic Fields -------------------------- */}
+          {/* Horizontal Container */}
+          <div className="flex flex-wrap mb-6">
+            <NumberInput
+              label="Clinic Fees"
+              name="clinic_fees"
+              value={formik.values.clinic_fees}
+              onChange={formik.handleChange}
+              error={formik.errors.clinic_fees}
+              placeholder="clinic fees"
+              className="w-full md:w-1/3 px-2"
+            />
+            <TimeInput
+              label="Clinic Work Start"
+              name="clinic_work_start"
+              value={formik.values.clinic_work_start}
+              onChange={formik.handleChange}
+              error={formik.errors.clinic_work_start}
+              placeholder="clinic work start"
+              className="w-full md:w-1/3 px-2"
+            />
+            <TimeInput
+              label="Clinic Work End"
+              name="clinic_work_end"
+              value={formik.values.clinic_work_end}
+              onChange={formik.handleChange}
+              error={formik.errors.clinic_work_end}
+              placeholder="clinic work end"
+              className="w-full md:w-1/3 px-2"
+            />
+          </div>
+      {/* ---------------------- Home Visite --------------------------  */}
           <div className="md:flex md:items-center mb-6">
             <div className="md:w-1/3">
                 <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
@@ -207,14 +253,33 @@ function DoctorProfile() {
           </div>
           {/* -------------------------- Home Fees -------------------------- */}
           { formik.values.visit == 1 &&
-          <NumberInput
-            label="Home Fees"
-            name="home_fees"
-            value={formik.values.home_fees}
-            onChange={formik.handleChange}
-            error={formik.errors.home_fees}
-            placeholder="home fees"
-          />}
+            <>
+              <NumberInput
+                label="Home Fees"
+                name="home_fees"
+                value={formik.values.home_fees}
+                onChange={formik.handleChange}
+                error={formik.errors.home_fees}
+                placeholder="home fees"
+                />
+              <TimeInput
+                label="Home Work Start"
+                name="home_work_start"
+                value={formik.values.home_work_start}
+                onChange={formik.handleChange}
+                error={formik.errors.home_work_start}
+                placeholder="home work start"
+                />
+              <TimeInput
+                label="Home Work End"
+                name="home_work_end"
+                value={formik.values.home_work_end}
+                onChange={formik.handleChange}
+                error={formik.errors.home_work_end}
+                placeholder="home work end"
+                />
+            </>
+          }
               {/* --------------------------Submit Button -------------------------- */}
             <div className="md:flex md:items-center">
                 <div className="md:w-1/3"></div>
