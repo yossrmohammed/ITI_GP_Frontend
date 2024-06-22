@@ -12,6 +12,7 @@ import Verify from "./src/pages/Verify/Verify";
 import ResetPassword from "./src/pages/ResetPassword/ResetPassword";
 import HospitalICUs from "./src/pages/Hospital/HospitalICUs";
 import Applications from "./src/pages/Hospital/Applications";
+import PatientProfile from "./src/pages/Patient/PatientProfile";
 import PayPal from "./src/pages/PayPal/PayPal";
 
 function Styled() 
@@ -81,6 +82,10 @@ export const router = createBrowserRouter([
             {
                 path:'/application',
                 element:<Applications/>
+            },
+            {
+                path: '/patientprofile',
+                element: <PatientProfile/>
             }
         ]
     },
