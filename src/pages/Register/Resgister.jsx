@@ -20,7 +20,7 @@ const RegistrationForm = () => {
     phone: '',
     role: 'doctor',
     history: '',
-    gender: '',
+    gender: 'm',
     birth_date: '',
     image: null,
     university: '',
@@ -30,6 +30,7 @@ const RegistrationForm = () => {
     workStart: '',
     workEnd: '',
     workDays: [],
+    address:''
   });
 
   const [formErrors, setFormErrors] = useState({
@@ -42,8 +43,14 @@ const RegistrationForm = () => {
     history: '',
     birth_date: '',
     image: '',
+    address:'',
   });
+  const handleLoginClick = ()=>{
+    
+    navigate('/login', { replace: true });
 
+  }
+  
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -135,6 +142,12 @@ const RegistrationForm = () => {
         valid = false;
       }
     }
+    if (formData.role === 'hospital') {
+      if (!formData.address.trim()) {
+        errors.address = 'address his required';
+        valid = false;
+      }
+    }
 
     if (formData.role !== 'patient' && formData.image) {
       const validImageTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
@@ -212,6 +225,7 @@ const RegistrationForm = () => {
                     { label: 'Doctor', value: 'doctor' },
                     { label: 'Patient', value: 'patient' },
                     { label: 'Nurse', value: 'nurse' },
+                    { label: 'Hospital', value: 'hospital' },
                   ]}
                   name="role"
                   value={formData.role}
@@ -231,7 +245,6 @@ const RegistrationForm = () => {
                   />
                   <SelectField
                     options={[
-                      { label: 'Select Gender', value: '' },
                       { label: 'Male', value: 'm' },
                       { label: 'Female', value: 'f' },
                     ]}
@@ -261,6 +274,18 @@ const RegistrationForm = () => {
                   )}
                 </div>
               )}
+               {formData.role === 'hospital' && (
+                <div className="flex flex-col gap-3">
+                 <InputField
+                    type="text"
+                    placeholder="Enter address"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    error={formErrors.address}
+                  />
+                </div>
+              )}
               {formData.role === 'nurse' && (
                 <div className="flex flex-col gap-3">
                   <FileInput
@@ -282,7 +307,8 @@ const RegistrationForm = () => {
           </div>
           <span className="block text-center mt-4">
             Already have an account?{' '}
-            <a href="#" className="text-blue-600 hover:text-blue-800 hover:underline">
+            <a href="#" className="text-blue-600 hover:text-blue-800 no-underline"
+              onClick={handleLoginClick}>
               Login
             </a>
           </span>

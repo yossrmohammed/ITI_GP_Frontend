@@ -23,6 +23,15 @@ export const patientRegister = async (formData) => {
   }
 };
 
+export const hospitalRegister = async (formData) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/HospitalRegister`, formData);
+    return response;
+  } catch (error) {
+    throw new Error(error.response.data.message || error.message);
+  }
+};
+
 export const nurseRegister = async (formData) => {
   try {
     const response = await axios.post(`${BASE_URL}/NurseRegister`, formData,{headers: {
