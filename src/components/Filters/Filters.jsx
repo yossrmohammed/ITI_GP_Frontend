@@ -29,10 +29,17 @@ function Filters(props) {
       specialization,
       fees
     };
+    
+    const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+    const day = new Date();
+    const today = day.getDay();
+    const tomorrow = (today+1) % 6;
 
-    if (availability.today) filters.available = 'Today';
-    if (availability.tomorrow) filters.available = 'Tomorrow';
-
+    if (availability.tomorrow && availability.today) filters.available = days[today]+','+days[tomorrow-1];
+    else if (availability.today) filters.available = days[today];
+    else if (availability.tomorrow) filters.available = days[tomorrow-1];
+    
+    console.log(filters)
     props.onFilterChange(filters);
   };
 
@@ -61,7 +68,7 @@ function Filters(props) {
     <div className="form-control">
     <label className="label cursor-pointer">
         <span className="label-text">Today</span> 
-        <input type="checkbox" className="checkbox checkbox-primary" value='today' onChange={handleAvailabilityChange}/>
+        <input type="checkbox" className="checkbox checkbox-primary" name='today' value='today' onChange={handleAvailabilityChange}/>
     </label>
     </div>
 
@@ -70,7 +77,7 @@ function Filters(props) {
     <div className="form-control">
     <label className="label cursor-pointer">
         <span className="label-text">Tomorrow</span> 
-        <input type="checkbox" className="checkbox checkbox-primary" value='tomorrow' onChange={handleAvailabilityChange} />
+        <input type="checkbox" className="checkbox checkbox-primary" name='tomorrow' value='tomorrow' onChange={handleAvailabilityChange} />
     </label>
     </div>
 

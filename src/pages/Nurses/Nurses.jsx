@@ -22,6 +22,7 @@ function Nurses() {
 
         if (filters.city) obj['city'] = filters.city;
         if (filters.fees) obj['fees'] = filters.fees;
+        if (filters.available) obj['available'] = filters.available; 
         obj.page = currPage;
 
         axiosInstance.get('/nurses',

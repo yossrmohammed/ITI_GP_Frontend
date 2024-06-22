@@ -23,7 +23,10 @@ function Doctors() {
         if (filters.city) obj['city'] = filters.city;
         if (filters.specialization) obj['specialization'] = filters.specialization;
         if (filters.fees) obj['fees'] = filters.fees;
+        if (filters.available) obj['available'] = filters.available; 
         obj.page = currPage;
+
+        
 
         axiosInstance.get('/doctors',
             { params: obj }
@@ -34,7 +37,6 @@ function Doctors() {
             setLoading(false);
         })
         .catch(err => console.log(err));
-        console.log(filters)
 
     },[filters,currPage])
 
