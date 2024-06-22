@@ -21,10 +21,10 @@ function DoctorCard(props) {
             </h1>
 
             <Rating
-            rate='4'
+            rate={props.rating}
             />
 
-
+            <p>{props.average_rating}</p>
             <div className="my-2">
               
               { props.proffession === 'Doctor' &&

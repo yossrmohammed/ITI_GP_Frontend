@@ -13,6 +13,7 @@ function MedicPage() {
         axiosInstance.get(`/${params.role}s/${params.id}'`)
         .then((res) => {
           setMedic(res.data.data);
+          console.log(res.data.data)
         })
         .catch((err) => console.log(err))
     },[])
@@ -49,6 +50,7 @@ function MedicPage() {
     phone={medic.phone}
     email={medic.email}
     address={medic.address}
+    rating={medic.average_rating}
     />
     }
 

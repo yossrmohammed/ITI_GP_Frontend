@@ -28,7 +28,6 @@ function Nurses() {
             { params: obj }
         )
         .then(res => {
-            console.log(res.data)
             setNurses(res.data.data);
             setTotalPages(res.data.last_page);
             setLoading(false)
@@ -76,6 +75,7 @@ function Nurses() {
                 work_days={el.work_days}
                 work_start={el.work_start}
                 work_end={el.work_end}
+                rating={Number(el.average_rating)}
                 online={el.online}
                 />
                 })}

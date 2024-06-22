@@ -77,6 +77,7 @@ function Doctors() {
                 work_days={el.work_days}
                 work_start={el.clinic_work_start}
                 work_end={el.clinic_work_end}
+                rating={el.average_rating}
                 online={el.online}
                 />
                 })}
