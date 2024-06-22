@@ -3,6 +3,9 @@ import { getDoctorById, updateDoctorById } from "/src/axios/DoctorProfile.jsx";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
+
+import TextInput from '/src/components/Form/TextInput.jsx';
+
 function DoctorProfile() {
 
     const phoneRegExp = /^(010|011|012|015)[0-9]{8}$/;
@@ -88,6 +91,9 @@ function DoctorProfile() {
         email: Yup.string()
           .required("Email is required")
           .email("Invalid email address"),
+        address: Yup.string()
+          .required("Address is required")
+        
         
       }),
       onSubmit:(values)=>{
@@ -95,7 +101,7 @@ function DoctorProfile() {
       }
     })
     // console.log(formik.values)
-    // console.log(formik.errors)
+    console.log(formik.errors)
 
     
       if (loading) {
@@ -119,60 +125,41 @@ function DoctorProfile() {
       {/* --------------------------------Form---------------------------------------- */}
       <form onSubmit={formik.handleSubmit}>
           {/* -------------------------- Name -------------------------- */}
-            <div className="md:flex md:items-center mb-6">
-                <div className="md:w-1/3">
-                  <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
-                   Name
-                  </label>
-                </div>
-                <div className="md:w-2/3">
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    placeholder="name"
-                    onChange={formik.handleChange}
-                    value={formik.values.name}
-                    className="input input-bordered input-sm w-full max-w-xs"
-                  />
-
-                  {
-                    formik.errors.name ? <p
-                    className="mt-3"
-                    style={{ color: "red", fontSize: "14px" }}>
-                    {formik.errors.name}
-                  </p> : null
-                  }
-                </div>
-            </div>
-
+          <TextInput
+              label="Name"
+              name="name"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              error={formik.errors.name}
+              placeholder="name"
+            />
           {/* -------------------------- Email -------------------------- */}
-          <div className="md:flex md:items-center mb-6">
-                <div className="md:w-1/3">
-                  <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
-                   Email
-                  </label>
-                </div>
-                <div className="md:w-2/3">
-                  <input
-                    type="text"
-                    name="email"
-                    id="email"
-                    placeholder="email"
-                    onChange={formik.handleChange}
-                    value={formik.values.email}
-                    className="input input-bordered input-sm w-full max-w-xs"
-                  />
-
-                  {
-                    formik.errors.email ? <p
-                    className="mt-3"
-                    style={{ color: "red", fontSize: "14px" }}>
-                    {formik.errors.email}
-                  </p> : null
-                  }
-                </div>
-            </div>
+          <TextInput
+              label="Email"
+              name="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={formik.errors.email}
+              placeholder="email"
+            />
+          {/* -------------------------- Phone -------------------------- */}
+          <TextInput
+              label="Phone"
+              name="phone"
+              value={formik.values.phone}
+              onChange={formik.handleChange}
+              error={formik.errors.phone}
+              placeholder="phone"
+            />
+          {/* -------------------------- Address -------------------------- */}
+          <TextInput
+              label="Address"
+              name="address"
+              value={formik.values.address}
+              onChange={formik.handleChange}
+              error={formik.errors.address}
+              placeholder="address"
+            />
           {/* --------------------------Submit Button -------------------------- */}
             <div className="md:flex md:items-center">
                 <div className="md:w-1/3"></div>
