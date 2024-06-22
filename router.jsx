@@ -10,6 +10,8 @@ import Nurses from "./src/pages/Nurses/Nurses";
 import MedicPage from "./src/pages/MedicPage/MedicPage";
 import Verify from "./src/pages/Verify/Verify";
 import ResetPassword from "./src/pages/ResetPassword/ResetPassword";
+import HospitalICUs from "./src/pages/Hospital/HospitalICUs";
+import Applications from "./src/pages/Hospital/Applications";
 
 function Styled() 
 {
@@ -36,6 +38,10 @@ export const router = createBrowserRouter([
                 element: <Doctors/>,
             },
             {
+                path: '/icu/:id',
+                element: <div>test</div>
+            },
+            {
                 path: '/icu',
                 element: <ICUs/>
             },
@@ -59,11 +65,19 @@ export const router = createBrowserRouter([
                 path: '/verify',
                 element: <Verify/>
             },
-            ,
             {
                 path: '/reset',
                 element: <ResetPassword/>
             },
+            {
+                path:'/hospital',
+                element: <HospitalICUs/>
+            },
+            {
+                path:'/application',
+                element:<Applications/>
+            }
+
         ]
     },
     {
