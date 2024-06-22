@@ -1,8 +1,51 @@
+/* eslint-disable react/prop-types */
 import { medicalSpecialties } from '../../data/specalities';
 import { egyptianCities } from '../../data/egyptCities';
+import { useState } from 'react';
 
 function Filters(props) {
-    console.log(medicalSpecialties);
+
+ const [availability, setAvailability] = useState({ today: false, tomorrow: false });
+  const [city, setCity] = useState('');
+  const [specialization, setSpecialization] = useState('');
+  const [fees, setFees] = useState('');
+
+  const handleAvailabilityChange = (e) => {
+    const { name, checked } = e.target;
+    setAvailability((prev) => ({ ...prev, [name]: checked }));
+  };
+
+  const handleCityChange = (e) => setCity(e.target.value);
+
+  const handleSpecializationChange = (e) => { 
+    
+    setSpecialization(e.target.value);
+  }
+  const handleFeesChange = (e) => setFees(e.target.value);
+
+  const handleFilter = () => {
+    const filters = {
+      city,
+      specialization,
+      fees
+    };
+
+    if (availability.today) filters.available = 'Today';
+    if (availability.tomorrow) filters.available = 'Tomorrow';
+
+    props.onFilterChange(filters);
+  };
+
+  const handleReset = () => {
+    setAvailability({ today: false, tomorrow: false });
+    setCity('');
+    setSpecialization('');
+    setFees('');
+    props.onFilterChange({ city: '', specialization: '', available: '', fees: '' });
+  };
+
+
+
   return (
     
     <div className="m-auto mt-5 w-3/4 text-center">
@@ -18,7 +61,7 @@ function Filters(props) {
     <div className="form-control">
     <label className="label cursor-pointer">
         <span className="label-text">Today</span> 
-        <input type="checkbox" className="checkbox checkbox-primary" />
+        <input type="checkbox" className="checkbox checkbox-primary" value='today' onChange={handleAvailabilityChange}/>
     </label>
     </div>
 
@@ -27,7 +70,7 @@ function Filters(props) {
     <div className="form-control">
     <label className="label cursor-pointer">
         <span className="label-text">Tomorrow</span> 
-        <input type="checkbox" className="checkbox checkbox-primary" />
+        <input type="checkbox" className="checkbox checkbox-primary" value='tomorrow' onChange={handleAvailabilityChange} />
     </label>
     </div>
 
@@ -38,7 +81,7 @@ function Filters(props) {
         <label htmlFor="city" className="label">
             <span className="label-text font-bold text-lg">Select City</span>
         </label>
-        <select id="city" className="select select-bordered w-full max-w-xs">
+        <select id="city" className="select select-bordered w-full max-w-xs" value={city} onChange={handleCityChange}>
             {egyptianCities.map(city => (
             <option key={city} value={city}>{city}</option>
             ))}
@@ -52,7 +95,7 @@ function Filters(props) {
       <label htmlFor="specialty" className="label">
         <span className="label-text font-bold text-lg">Select Specialty</span>
       </label>
-      <select id="specialty" className="select select-bordered w-full max-w-xs">
+      <select id="specialty" className="select select-bordered w-full max-w-xs" value={specialization} onChange={handleSpecializationChange}>
         {Object.entries(medicalSpecialties).map(([category, specialties]) => (
           <optgroup key={category} label={category}>
             {specialties.map((specialty) => (
@@ -69,7 +112,7 @@ function Filters(props) {
         <div className="label">
             <span className="label-text font-bold text-lg">Fees</span>
         </div>
-        <input type="number" placeholder="Type here" className="input input-bordered w-full max-w-xs" />
+        <input type="number" placeholder="Type here" className="input input-bordered w-full max-w-xs" value={fees} onChange={handleFeesChange} />
         <div className="label">
         </div>
     </label>
@@ -77,8 +120,8 @@ function Filters(props) {
 
 
     <div className="d-flex align-baseline justify-content-around">
-        <button className="btn btn-primary my-5">Filter</button>
-        <button className="btn btn-danger my-5 mx-3 ">Reset</button>
+        <button className="btn btn-primary my-5" onClick={handleFilter}>Filter</button>
+        <button className="btn btn-danger my-5 mx-3 " onClick={handleReset}>Reset</button>
     </div>
 
     </div>

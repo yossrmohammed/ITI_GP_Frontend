@@ -1,12 +1,46 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import MedicalCard from "../../components/MedicalCard/MedicalCard";
 import Filters from "../../components/Filters/Filters";
 import Skeleton from "../../components/Skeleton";
-
+import { axiosInstance } from '../../axios';
 
 function Doctors() {
 
-    const [loading,setLoading] = useState(false);
+    const [loading,setLoading] = useState(true);
+    const [currPage,setCurrPage] = useState(1);
+    const [doctors,setDoctors] = useState([]);
+    const [filters, setFilters] = useState({
+    city: '',
+    specialization: '',
+    available: '',
+    fees: ''
+    });
+
+    useEffect(()=> {
+        const obj = {};
+
+        if (filters.city) obj['city'] = filters.city;
+        if (filters.specialization) obj['specialization'] = filters.specialization;
+        if (filters.fees) obj['fees'] = filters.fees;
+
+        axiosInstance.get('/doctors',
+            { params: obj }
+        )
+        .then(res => {
+            setDoctors(res.data.data);
+            setLoading(false)
+        })
+        .catch(err => console.log(err));
+        console.log(filters)
+
+    },[filters])
+
+    const handleFilterChange = (newFilters) => {
+        setFilters((prevFilters) => ({
+        ...prevFilters,
+        ...newFilters
+    }));
+    };
 
     return (
     <>
@@ -16,7 +50,7 @@ function Doctors() {
         
         <div className="grid grid-rows-2 grid-flow-col gap-4">
             <div className="row-span-3">
-                <Filters proffession='Doctor'/>
+                <Filters proffession='Doctor' onFilterChange={handleFilterChange}/>
         </div>
 
 
@@ -25,27 +59,21 @@ function Doctors() {
 
                 {loading && <> <Skeleton/> <Skeleton/> <Skeleton/></>}
 
-                <MedicalCard
+                {doctors.map( (el) => {
+                    return <MedicalCard
+                key={el.user.id}
+                id={el.id}
                 proffession='Doctor'
-                name='John Doe'
-                specialization='Bones'
-                city='Cairo'
-                fees='500'
-                work_days='Sun,Mon'
-                work_start='8:00 AM'
-                work_end='2:00 PM'
-                online='1'
+                name={el.user?.name}
+                specialization={el.specialization}
+                city={el.city}
+                fees={el.clinic_fees}
+                work_days={el.work_days}
+                work_start={el.clinic_work_start}
+                work_end={el.clinic_work_end}
+                online={el.online}
                 />
-
-                <MedicalCard
-                proffession='Doctor'
-                name='John Doe'
-                />
-                
-                <MedicalCard
-                proffession='Doctor'
-                name='John Doe'
-                />
+                })}
             </div>
         </div>
     </div>
