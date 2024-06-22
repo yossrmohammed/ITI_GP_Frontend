@@ -65,7 +65,6 @@ export const router = createBrowserRouter([
                 path: '/verify',
                 element: <Verify/>
             },
-            ,
             {
                 path: '/reset',
                 element: <ResetPassword/>
