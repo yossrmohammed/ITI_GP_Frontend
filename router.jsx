@@ -10,6 +10,7 @@ import Nurses from "./src/pages/Nurses/Nurses";
 import MedicPage from "./src/pages/MedicPage/MedicPage";
 import Verify from "./src/pages/Verify/Verify";
 import ResetPassword from "./src/pages/ResetPassword/ResetPassword";
+import PayPal from "./src/pages/PayPal/PayPal";
 
 function Styled() 
 {
@@ -56,6 +57,10 @@ export const router = createBrowserRouter([
                 element: <Login/>
             },
             {
+                path: '/checkout',
+                element: <PayPal/>
+            },
+            {
                 path: '/verify',
                 element: <Verify/>
             },
@@ -64,6 +69,7 @@ export const router = createBrowserRouter([
                 path: '/reset',
                 element: <ResetPassword/>
             },
+           
         ]
     },
     {
