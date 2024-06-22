@@ -74,6 +74,14 @@ export const router = createBrowserRouter([
                 path: '/reset',
                 element: <ResetPassword/>
             },
+            {
+                path:'/hospital',
+                element: <HospitalICUs/>
+            },
+            {
+                path:'/application',
+                element:<Applications/>
+            }
         ]
     },
     {
