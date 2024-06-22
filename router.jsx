@@ -5,6 +5,8 @@ import Footer from "./src/components/Footer/Footer";
 import Doctors from "./src/pages/Doctors/Doctors";
 import ICUs from "./src/pages/ICUs/ICUs";
 import Nurses from "./src/pages/Nurses/Nurses";
+import HospitalICUs from "./src/pages/Hospital/HospitalICUs";
+import Applications from "./src/pages/Hospital/Applications";
 
 function Styled() 
 {
@@ -31,6 +33,10 @@ export const router = createBrowserRouter([
                 element: <Doctors/>
             },
             {
+                path: '/icu/:id',
+                element: <div>test</div>
+            },
+            {
                 path: '/icu',
                 element: <ICUs/>
             },
@@ -38,6 +44,15 @@ export const router = createBrowserRouter([
                 path: '/nurses',
                 element: <Nurses/>
             },
+            {
+                path:'/hospital',
+                element: <HospitalICUs/>
+            },
+            {
+                path:'/application',
+                element:<Applications/>
+            }
+
         ]
     },
     {
