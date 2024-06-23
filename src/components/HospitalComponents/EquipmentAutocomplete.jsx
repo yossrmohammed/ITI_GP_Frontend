@@ -78,7 +78,7 @@ const EquipmentAutocomplete = ({ selectedEquipments, setSelectedEquipments }) =>
                         {suggestions.map((equipment) => (
                             <li
                                 key={equipment.id}
-                                className="menu-item cursor-pointer"
+                                className="menu-item cursor-pointer hover:bg-base-200"
                                 onClick={() => handleSelectSuggestion(equipment.id)}
                             >
                                 {equipment.name}
@@ -86,7 +86,7 @@ const EquipmentAutocomplete = ({ selectedEquipments, setSelectedEquipments }) =>
                         ))}
                     </ul>
                 )}
-                {searchTerm && !suggestions.length && (
+                {searchTerm  && (
                     <button className="btn btn-outline btn-sm mt-2" onClick={handleAddEquipment}>
                         <FontAwesomeIcon icon={faPlus} /> Add "{searchTerm}"
                     </button>
@@ -99,11 +99,11 @@ const EquipmentAutocomplete = ({ selectedEquipments, setSelectedEquipments }) =>
                 {selectedEquipments.map(equipmentId => {
                     const equipment = equipments.find(e => e.id === equipmentId);
                     return (
-                        <div key={equipmentId} className="badge badge-primary m-1">
+                        <div key={equipmentId} className="badge badge-lg   badge-ghost badge-outline">
                             {equipment?.name}
                             <button
                                 type="button"
-                                className="btn btn-xs btn-outline ml-2"
+                                className="btn btn-xs  btn-circle btn-ghost ml-1  "
                                 onClick={() => handleRemoveEquipment(equipmentId)}
                             >
                                 <FontAwesomeIcon icon={faTimes} />
