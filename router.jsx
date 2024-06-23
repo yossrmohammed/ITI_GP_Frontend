@@ -16,6 +16,7 @@ import PatientProfile from "./src/pages/Patient/PatientProfile";
 import PayPal from "./src/pages/PayPal/PayPal";
 import PatientAppointments from "./src/pages/Patient/PatientAppointments";
 
+
 function Styled() 
 {
     return(
@@ -39,10 +40,6 @@ export const router = createBrowserRouter([
             {
                 path: '/doctors',
                 element: <Doctors/>,
-            },
-            {
-                path: '/icu/:id',
-                element: <div>test</div>
             },
             {
                 path: '/icu',
