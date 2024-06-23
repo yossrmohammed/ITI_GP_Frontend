@@ -84,8 +84,12 @@ function DoctorProfile() {
           .email("Invalid email address"),
         address: Yup.string()
           .required("Address is required"),
-          work_days: Yup.string()
-          .required("Work Days are required")
+        work_days: Yup.string()
+          .required("Work Days are required"),
+        home_fees:
+        Yup.number().required("Home Fees is required").min(1,"Home Fees must be greater than 0"),
+        clinic_fees:
+        Yup.number().required("Clinic Fees is required").min(1,"Clinic Fees must be greater than 0"),
       }),
       onSubmit:(values)=>{
         console.log("Submit===>",values)
@@ -193,7 +197,7 @@ function DoctorProfile() {
     return (
     <>
     
-    <div className="userprofile-container container mx-auto px-8 pt-6 pb-6 rounded-lg flex flex-col md:flex-row">
+    <div className="userprofile-container container mx-auto px-8 pt-6 pb-6 rounded-lg flex flex-col md:flex-row my-4">
       {/* Left Section - Avatar and Upload */}
       <div className="left flex flex-col items-center mb-6 md:mb-0">
         <div className="image-div mb-4">

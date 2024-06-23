@@ -4,8 +4,8 @@ const NumberInput = ({ label, name, value, onChange, error, placeholder }) => {
   return (
     <div className='md:flex md:flex-col md:items-center mb-1'>
 
-      <div className="mb-4">
-      <label className="block text-gray-500 font-bold mb-1">
+      <div className="mb-1">
+      <label className="block text-gray-500 font-bold">
         {label}
       </label>
       <input
