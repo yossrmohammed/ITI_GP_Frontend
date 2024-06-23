@@ -2,24 +2,34 @@ import { useEffect, useState } from "react"
 import { getDoctorById, updateDoctorById } from "/src/axios/DoctorProfile.jsx";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import Select from 'react-select';
 
 
 import TextInput from '/src/components/Form/TextInput.jsx';
 import NumberInput from '/src/components/Form/NumberInput.jsx';
 import TimeInput from '/src/components/Form/TimeInput.jsx';
+import { egyptianCities } from '/src/data/egyptCities';
+import { specalitiesNonCategorized } from '/src/data/specalitiesNonCategorized';
+import { universities } from '/src/data/universities'; 
+import { workdaysOptions } from '/src/data/workDays'; 
+import { qualifications } from '/src/data/qualifications'; 
 
+
+import "./Profile.css";
 
 function DoctorProfile() {
 
     const phoneRegExp = /^(010|011|012|015)[0-9]{8}$/;
     const nameRegExp = /^[a-zA-Z ]+$/;
+    const qualificationsOptions = qualifications.map(q => ({ value: q, label: q }));
+
 
     const doctorId = 1;
     const [doctor, setDoctor] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isHomeVisitChecked, setIsHomeVisitChecked] = useState(false);
-
+    const [file, setFile] = useState(null);
 
     useEffect(() => {
       if (doctorId) {
@@ -73,7 +83,9 @@ function DoctorProfile() {
           .required("Email is required")
           .email("Invalid email address"),
         address: Yup.string()
-          .required("Address is required")
+          .required("Address is required"),
+          work_days: Yup.string()
+          .required("Work Days are required")
       }),
       onSubmit:(values)=>{
         console.log("Submit===>",values)
@@ -140,7 +152,25 @@ function DoctorProfile() {
     // console.log(formik.values)
     console.log(formik.errors)
 
-    
+
+    const handleFileChange = (event) => {
+      setFile(event.target.files[0]);
+    };
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      console.log(file)
+
+      if (!file) {
+        alert("Please select a file before submitting.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('image', file);
+
+    };
+
+
       if (loading) {
         return <>
           <div className="flex justify-center">
@@ -164,134 +194,270 @@ function DoctorProfile() {
     <>
     
 
-    <div className="">
-    <div className="" style={{backgroundColor:"red"}}>
+    <div className="userprofile-container container mb-16 mx-auto px-8 pt-6 pb-6 rounded-lg flex"  >
+      <div className="left">
+        <div className="image-div">
+          <div className="avatar">
+            <div className="w-40 rounded-full ring ring-accent ring-offset-base-100 ring-offset-2">
+              <img src="https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"/>
+            </div>
+          </div>
+          {/* <button
+            className="image-edit-btn btn-sm badge bg-accent badge-lg rounded-full"
+            style={{ outline: "none" }}
+            >
+            <FontAwesomeIcon icon={faPen} style={{ fontSize: "14px" }} />
+          </button> */}
+        </div>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <input type="file" onChange={handleFileChange} />
+          </div>
+          <button type="submit">Upload</button>
+        </form>
+      </div>
+
+    <div className="right form-div rounded-lg w-full py-6 px-8" >
       {/* --------------------------------Form---------------------------------------- */}
       <form onSubmit={formik.handleSubmit}>
-          {/* -------------------------- Name -------------------------- */}
-          <TextInput
-              label="Name"
-              name="name"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              error={formik.errors.name}
-              placeholder="name"
-            />
-          {/* -------------------------- Email -------------------------- */}
-          <TextInput
-              label="Email"
-              name="email"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              error={formik.errors.email}
-              placeholder="email"
-            />
-          {/* -------------------------- Phone -------------------------- */}
-          <TextInput
-              label="Phone"
-              name="phone"
-              value={formik.values.phone}
-              onChange={formik.handleChange}
-              error={formik.errors.phone}
-              placeholder="phone"
-            />
-          {/* -------------------------- Address -------------------------- */}
-          <TextInput
-              label="Address"
-              name="address"
-              value={formik.values.address}
-              onChange={formik.handleChange}
-              error={formik.errors.address}
-              placeholder="address"
-            />
-          {/* -------------------------- Clinic Fields -------------------------- */}
-          {/* Horizontal Container */}
           <div className="flex flex-wrap mb-6">
-            <NumberInput
-              label="Clinic Fees"
-              name="clinic_fees"
-              value={formik.values.clinic_fees}
-              onChange={formik.handleChange}
-              error={formik.errors.clinic_fees}
-              placeholder="clinic fees"
-              className="w-full md:w-1/3 px-2"
-            />
-            <TimeInput
-              label="Clinic Work Start"
-              name="clinic_work_start"
-              value={formik.values.clinic_work_start}
-              onChange={formik.handleChange}
-              error={formik.errors.clinic_work_start}
-              placeholder="clinic work start"
-              className="w-full md:w-1/3 px-2"
-            />
-            <TimeInput
-              label="Clinic Work End"
-              name="clinic_work_end"
-              value={formik.values.clinic_work_end}
-              onChange={formik.handleChange}
-              error={formik.errors.clinic_work_end}
-              placeholder="clinic work end"
-              className="w-full md:w-1/3 px-2"
-            />
+              <TextInput
+                  label="Name"
+                  name="name"
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  error={formik.errors.name}
+                  placeholder="name"
+                />
+              <TextInput
+                  label="Email"
+                  name="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  error={formik.errors.email}
+                  placeholder="email"
+                />
+                 <TextInput
+                  label="Phone"
+                  name="phone"
+                  value={formik.values.phone}
+                  onChange={formik.handleChange}
+                  error={formik.errors.phone}
+                  placeholder="phone"
+                />
           </div>
-      {/* ---------------------- Home Visite --------------------------  */}
-          <div className="md:flex md:items-center mb-6">
-            <div className="md:w-1/3">
-                <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
-                Home Visite
-                </label>
-            </div>
-            <div className="md:w-2/3">
+
+          <div className="flex flex-wrap mb-6">
+            <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
+            Address
+            </label>
             <input
-            type="checkbox"
-            className="checkbox"
-            checked={formik.values.visit === 1}
-            onChange={handleHomeVisitChange}
-          />
-            </div>
+                type="text"
+                name="address"
+                id="address"
+                placeholder="address"
+                onChange={formik.handleChange}
+                value={formik.values.address}
+                className="input input-bordered input-sm w-full max-w-xs"
+              />
+            {formik.errors.address &&  (
+              <p
+                className="mt-3"
+                style={{ color: "red", fontSize: "14px" }}>
+                {formik.errors.address}
+              </p>
+            )}
+        
+            <div className="md:flex md:items-center mb-6">
+                  <div className="md:w-2/3">
+                      <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
+                      Home Visite
+                      </label>
+                  </div>
+              <div className="md:w-1/3">
+                  <input
+                  type="checkbox"
+                  className="checkbox"
+                  checked={formik.values.visit === 1}
+                  onChange={handleHomeVisitChange}
+                />
+                  </div>
+              </div>
           </div>
-          {/* -------------------------- Home Fees -------------------------- */}
-          { formik.values.visit == 1 &&
-            <>
+
+          <div className="flex flex-wrap mb-6">
+            <div className="clinic-fields" style={{width: "50%"}}> 
               <NumberInput
-                label="Home Fees"
-                name="home_fees"
-                value={formik.values.home_fees}
-                onChange={formik.handleChange}
-                error={formik.errors.home_fees}
-                placeholder="home fees"
-                />
-              <TimeInput
-                label="Home Work Start"
-                name="home_work_start"
-                value={formik.values.home_work_start}
-                onChange={formik.handleChange}
-                error={formik.errors.home_work_start}
-                placeholder="home work start"
-                />
-              <TimeInput
-                label="Home Work End"
-                name="home_work_end"
-                value={formik.values.home_work_end}
-                onChange={formik.handleChange}
-                error={formik.errors.home_work_end}
-                placeholder="home work end"
-                />
-            </>
-          }
-              {/* --------------------------Submit Button -------------------------- */}
-            <div className="md:flex md:items-center">
-                <div className="md:w-1/3"></div>
-                <div className="md:w-2/3">
-                  <button
-                    className="update-btn rounded-full shadow info btn  btn-accent text-white font-bold py-2 px-4 rounded"
-                    type="submit"
-                    disabled={!formik.isValid}>
-                    Update Profile
-                  </button>
-                </div>
+                    label="Clinic Fees"
+                    name="clinic_fees"
+                    value={formik.values.clinic_fees}
+                    onChange={formik.handleChange}
+                    error={formik.errors.clinic_fees}
+                    placeholder="clinic fees"
+                    className="w-full md:w-1/3 px-2"
+                  />
+                <TimeInput
+                    label="Clinic Work Start"
+                    name="clinic_work_start"
+                    value={formik.values.clinic_work_start}
+                    onChange={formik.handleChange}
+                    error={formik.errors.clinic_work_start}
+                    placeholder="clinic work start"
+                    className="w-full md:w-1/3 px-2"
+                  />
+                  <TimeInput
+                    label="Clinic Work End"
+                    name="clinic_work_end"
+                    value={formik.values.clinic_work_end}
+                    onChange={formik.handleChange}
+                    error={formik.errors.clinic_work_end}
+                    placeholder="clinic work end"
+                    className="w-full md:w-1/3 px-2"
+                  />
             </div>
+                
+            {/* ---------------------- Home Visite --------------------------  */}
+              { formik.values.visit == 1 &&
+                 <div className="home-visit-fields" style={{width: "50%"}}>
+                    <NumberInput
+                      label="Home Fees"
+                      name="home_fees"
+                      value={formik.values.home_fees}
+                      onChange={formik.handleChange}
+                      error={formik.errors.home_fees}
+                      placeholder="home fees"
+                      />
+                    <TimeInput
+                      label="Home Work Start"
+                      name="home_work_start"
+                      value={formik.values.home_work_start}
+                      onChange={formik.handleChange}
+                      error={formik.errors.home_work_start}
+                      placeholder="home work start"
+                      />
+                    <TimeInput
+                      label="Home Work End"
+                      name="home_work_end"
+                      value={formik.values.home_work_end}
+                      onChange={formik.handleChange}
+                      error={formik.errors.home_work_end}
+                      placeholder="home work end"
+                      />
+                  </div>
+                }
+
+          </div>
+
+          <div className="flex flex-wrap mb-6">
+              <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
+                City
+                </label>
+              <select className="select select-bordered w-full max-w-xs"  
+                name="city"
+                onChange={formik.handleChange}
+                value={formik.values.city}>
+                {egyptianCities.map(city => (
+                  <option key={city} value={city} label={city} />
+                ))}
+              </select>
+          </div>
+
+          <div className="flex flex-wrap mb-6">
+              <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
+              specialization
+                </label>
+              <select className="select select-bordered w-full max-w-xs"  
+                name="specialization"
+                onChange={formik.handleChange}
+                value={formik.values.specialization}>
+                {specalitiesNonCategorized.map(specialization => (
+                  <option key={specialization} value={specialization} label={specialization} />
+                ))}
+              </select>
+          </div>
+
+          <div className="flex flex-wrap mb-6">
+              <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
+              university
+                </label>
+              <select className="select select-bordered w-full max-w-xs"  
+                name="university"
+                onChange={formik.handleChange}
+                value={formik.values.university}>
+                {universities.map(university => (
+                  <option key={university} value={university} label={university} />
+                ))}
+              </select>
+          </div>
+
+          <div className="flex flex-wrap mb-6">
+            <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
+                  Work Days
+            </label>
+            <Select
+              isMulti
+              name="work_days"
+              options={workdaysOptions}
+              className="basic-multi-select"
+              classNamePrefix="select"
+              onChange={option => {
+                const selectedValues = option ? option.map(item => item.value).join(',') : '';
+                formik.setFieldValue('work_days', selectedValues);
+              }}
+              value={workdaysOptions.filter(option => formik.values.work_days.split(',').includes(option.value))}
+            />
+
+            {formik.errors.work_days &&  (
+                          <p
+                            className="mt-3"
+                            style={{ color: "red", fontSize: "14px" }}>
+                            {formik.errors.work_days}
+                          </p>
+                        )}
+          </div>
+
+          <div className="flex flex-wrap mb-6">
+            <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
+            qualifications
+            </label>
+            <Select
+            isMulti
+            name="qualifications"
+            options={qualificationsOptions}
+            className="basic-multi-select"
+            classNamePrefix="select"
+            onChange={option => {
+              const selectedValues = option ? option.map(item => item.value).join(',') : '';
+              formik.setFieldValue('qualifications', selectedValues);
+            }}
+            value={qualificationsOptions.filter(option => formik.values.qualifications.split(',').includes(option.value))}
+          />
+
+            {formik.errors.qualifications &&  (
+                          <p
+                            className="mt-3"
+                            style={{ color: "red", fontSize: "14px" }}>
+                            {formik.errors.qualifications}
+                          </p>
+                        )}
+          </div>
+
+
+
+
+          <div className="md:flex md:items-center">
+              <div className="md:w-1/3"></div>
+              <div className="md:w-2/3">
+                <button
+                  className="update-btn rounded-full shadow info btn  btn-accent text-white font-bold py-2 px-4 rounded"
+                  type="submit"
+                  disabled={!formik.isValid}>
+                  Update Profile
+                </button>
+              </div>
+          </div>
+
+
       </form>
     </div>
    
