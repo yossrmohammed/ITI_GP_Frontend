@@ -1,10 +1,11 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react"
 import MedicalCard from "../../components/MedicalCard/MedicalCard";
 import Filters from "../../components/Filters/Filters";
 import Skeleton from "../../components/Skeleton";
 import { axiosInstance } from '../../axios';
 
-function Doctors() {
+function Doctors(props) {
 
     const [loading,setLoading] = useState(true);
     const [currPage,setCurrPage] = useState(1);
@@ -15,7 +16,7 @@ function Doctors() {
     city: '',
     specialization: '',
     available: '',
-    fees: ''
+    fees: '',
     });
 
     useEffect(()=> {
@@ -28,6 +29,10 @@ function Doctors() {
         if (filters.name) obj['name'] = filters.name; 
         obj.page = currPage;
 
+        if (props.home) 
+        {
+          obj.visit = 1;
+        }
         
 
         axiosInstance.get('/doctors',
@@ -78,10 +83,10 @@ function Doctors() {
                 name={el.user?.name}
                 specialization={el.specialization}
                 city={el.city}
-                fees={el.clinic_fees}
+                fees={props.home ? el.clinic_fees : el.home_fees}
                 work_days={el.work_days}
-                work_start={el.clinic_work_start}
-                work_end={el.clinic_work_end}
+                work_start={!props.home ? el.clinic_work_start : el.home_work_start}
+                work_end={!props.home ? el.clinic_work_end : el.home_work_end}
                 rating={el.average_rating}
                 online={el.online}
                 />
@@ -90,6 +95,7 @@ function Doctors() {
         </div>
     </div>
 
+    {totalPages > 1 &&
     <div className="text-center">
         <div className="join my-5">
           <button
@@ -104,7 +110,7 @@ function Doctors() {
               key={page + 1}
               className={`join-item btn btn-md ${currPage === page + 1 ? 'btn-active' : ''}`}
               onClick={() => handlePageChange(page + 1)}
-            >
+              >
               {page + 1}
             </button>
           ))}
@@ -112,11 +118,12 @@ function Doctors() {
             className="join-item btn"
             onClick={() => handlePageChange(currPage + 1)}
             disabled={currPage === totalPages}
-          >
+            >
             »
           </button>
         </div>
       </div>
+      }
     </>
   )
 }

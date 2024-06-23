@@ -60,7 +60,7 @@ function Filters(props) {
 
   return (
     
-    <div className="m-auto mt-5 w-3/4 text-center">
+    <div className="m-auto mt-5 w-3/4 text-center bg-base-200">
     
     <div className="mt-3 border-4 rounded-xl py-3 px-10">
     <p className="font-bold text-2xl">Filters</p>

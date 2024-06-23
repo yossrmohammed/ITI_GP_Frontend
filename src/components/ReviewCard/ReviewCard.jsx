@@ -2,7 +2,7 @@ import Rating from "../Rating/Rating";
 
 function ReviewCard({ review }) {
     return (
-    <div className="m-auto shadow-lg border-2 rounded-lg w-full overflow-hidden mb-10">
+    <div className="m-auto shadow-lg border-2 rounded-lg w-full overflow-hidden mb-10 bg-base-200">
       <div className="px-4 py-2">
         <div className="flex items-center">
           <div className="ml-3">
