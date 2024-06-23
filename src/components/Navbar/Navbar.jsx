@@ -33,8 +33,13 @@ function Navbar() {
   </div>
     
 
-<a className="btn btn-outline mx-2">Login</a>
-<a className="btn btn-outline btn-info mx-2">Register</a>
+  <Link to={"/login"} className="btn btn-outline mx-2">
+    Login
+  </Link>
+  <Link to={"/register"} className="btn btn-outline btn-info mx-2">
+   Register
+  </Link>
+
 
 <label className="swap swap-rotate mx-3">
   <input type="checkbox" value="halloween" className="theme-controller" />

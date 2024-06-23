@@ -8,8 +8,10 @@ function Nurses() {
 
     const [loading,setLoading] = useState(true);
     const [currPage,setCurrPage] = useState(1);
+    const [totalPages,setTotalPages] = useState(1);
     const [nurses,setNurses] = useState([]);
     const [filters, setFilters] = useState({
+    name:'',
     city: '',
     specialization: '',
     available: '',
@@ -21,18 +23,21 @@ function Nurses() {
 
         if (filters.city) obj['city'] = filters.city;
         if (filters.fees) obj['fees'] = filters.fees;
+        if (filters.available) obj['available'] = filters.available; 
+        if (filters.name) obj['name'] = filters.name; 
+        obj.page = currPage;
 
         axiosInstance.get('/nurses',
             { params: obj }
         )
         .then(res => {
-            console.log(res.data)
             setNurses(res.data.data);
+            setTotalPages(res.data.last_page);
             setLoading(false)
         })
         .catch(err => console.log(err));
 
-    },[filters])
+    },[filters,currPage])
     
     const handleFilterChange = (newFilters) => {
         setFilters((prevFilters) => ({
@@ -40,6 +45,10 @@ function Nurses() {
         ...newFilters
     }));
     };
+
+    const handlePageChange = (page) => {
+        setCurrPage(page);
+    }
 
     return (
     <>
@@ -62,6 +71,7 @@ function Nurses() {
                     return <MedicalCard
                 key={el.id}
                 id={el.id}
+                image={el.image}
                 proffession='Nurse'
                 name={el.user?.name}
                 city={el.city}
@@ -69,6 +79,7 @@ function Nurses() {
                 work_days={el.work_days}
                 work_start={el.work_start}
                 work_end={el.work_end}
+                rating={Number(el.average_rating)}
                 online={el.online}
                 />
                 })}
@@ -78,16 +89,33 @@ function Nurses() {
     </div>
 
     <div className="text-center">
-    <div className="join my-5">
-        <button className="join-item btn">«</button>
-        <button className="join-item btn btn-md">1</button>
-        <button className="join-item btn btn-md btn-active">2</button>
-        <button className="join-item btn btn-md">3</button>
-        <button className="join-item btn btn-md">4</button>
-        <button className="join-item btn">»</button>
-    </div>
-    </div>
-    </>
+            <div className="join my-5">
+            <button
+                className="join-item btn"
+                onClick={() => handlePageChange(currPage - 1)}
+                disabled={currPage === 1}
+            >
+                «
+            </button>
+            {[...Array(totalPages).keys()].map((page) => (
+                <button
+                key={page + 1}
+                className={`join-item btn btn-md ${currPage === page + 1 ? 'btn-active' : ''}`}
+                onClick={() => handlePageChange(page + 1)}
+                >
+                {page + 1}
+                </button>
+            ))}
+            <button
+                className="join-item btn"
+                onClick={() => handlePageChange(currPage + 1)}
+                disabled={currPage === totalPages}
+            >
+                »
+            </button>
+            </div>
+        </div>
+        </>
   )
 }
 
