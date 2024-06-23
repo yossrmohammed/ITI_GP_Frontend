@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import ChatBot from 'react-simple-chatbot';
 import { ThemeProvider } from 'styled-components';
-import DoctorSearch from '../DoctorSearch/DoctorSearch'; // Import DoctorSearch component
+import DoctorSearch from './DoctorSearch'; // Import DoctorSearch component
 
 const ChatBotButton = () => {
   const [showChatBot, setShowChatBot] = useState(false);
