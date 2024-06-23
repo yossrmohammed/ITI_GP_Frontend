@@ -32,10 +32,10 @@ export default function PatientProfile() {
   }
   return (
     <div>
-        <div className="w-1/3 mx-auto p-6 bg-white border border-gray-300 rounded-lg shadow-lg mt-8">
+        <div className="w-1/3 mx-auto p-8 bg-base-200 border border-gray-300 rounded-lg shadow-lg mt-8">
           <div className="flex justify-center">
             <span style={{
-              fontSize: '1rem',
+              fontSize: '1.25rem',
               fontWeight: 'bold',
             }}>
               {user.email}
@@ -71,7 +71,7 @@ export default function PatientProfile() {
                 <Form>
                   
                   {/* Name Field */}
-                  <label className="input input-bordered flex items-center gap-2 mt-3">
+                  <label className="input input-bordered flex items-center gap-2 mt-3 base-100">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70">
                           <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
                       </svg>
@@ -88,18 +88,6 @@ export default function PatientProfile() {
                       <ErrorMessage name="phone" component="div" style={{ color: 'red' }} />
                   </label>
                   
-                  {/* Gender Field */}
-                  <label className="input input-bordered flex items-center gap-2 mt-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 opacity-70">
-                          <path d="M19.242 2.727a1.5 1.5 0 0 0-2.121 0L14.5 5.348 12.879 3.727l2.12-2.121a1.5 1.5 0 1 0-2.12-2.121L10.758 1.606 8.27.464A1.5 1.5 0 1 0 7.152 2.12L9.64 3.263 8.121 4.782l-2.12-2.121a1.5 1.5 0 1 0-2.12 2.121L3.758 4.75 1.636 6.88a1.5 1.5 0 1 0 2.12 2.121l2.122-2.121 1.061 1.06-2.12 2.122a1.5 1.5 0 1 0 2.12 2.12l2.12-2.121 1.061 1.06-2.12 2.122a1.5 1.5 0 1 0 2.12 2.12l2.12-2.121 1.061 1.06-2.12 2.122a1.5 1.5 0 1 0 2.12 2.12l2.121-2.12 1.061 1.06-2.12 2.121a1.5 1.5 0 0 0 2.12 2.121l2.121-2.121 1.061 1.06-2.12 2.121a1.5 1.5 0 1 0 2.12 2.121l2.121-2.121 1.06 1.061 2.122-2.121a1.5 1.5 0 0 0-2.121-2.122L18.394 20.5l1.061-1.061 2.12-2.121a1.5 1.5 0 1 0-2.12-2.121l-2.121 2.12-1.061-1.06 2.12-2.122a1.5 1.5 0 1 0-2.12-2.12l-2.121 2.12-1.061-1.06 2.121-2.122a1.5 1.5 0 1 0-2.121-2.12l-2.122 2.121-1.061-1.06 2.121-2.122a1.5 1.5 0 0 0-2.121-2.121L12.758 5.5l-1.06-1.061L12.879 2.18a1.5 1.5 0 0 0 2.121-2.12l-1.757 1.756L19.242 2.727z"/>
-                      </svg>
-                      <Field as="select" name="gender" className="grow">
-                          <option selected={true} disabled={true}>Select Gender</option>
-                          <option value="m">Male</option>
-                          <option value="f">Female</option>
-                      </Field>
-                  </label>
-                  
                   {/* Birth Date Field */}
                   <label className="input input-bordered flex items-center gap-2 mt-3">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 opacity-70">
@@ -108,9 +96,16 @@ export default function PatientProfile() {
                       <Field name="birth_date" type="date" className="grow" placeholder="Birth Date" />
                       <ErrorMessage name="birth_date" component="div" style={{ color: 'red' }} />
                   </label>
+
+                  {/* Gender Field */}
+                  <Field as="select" name="gender" className="grow select select-bordered mt-3">
+                      <option selected={true} disabled={true}>Select Gender</option>
+                      <option value="m">Male</option>
+                      <option value="f">Female</option>
+                  </Field><br/>
                   
                   {/* Submit Button */}
-                  <input type="submit" value="Update" className="btn btn-info mx-auto mt-4" />
+                  <input type="submit" value="Update" className="btn btn-primary mx-auto mt-4" />
               </Form>
 
             </Formik>
