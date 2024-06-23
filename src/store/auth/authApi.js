@@ -24,7 +24,7 @@ export const patientRegister = async (formData) => {
 
 export const hospitalRegister = async (formData) => {
   try {
-    const response = await axios.post(`${BASE_URL}/HospitalRegister`, formData);
+    const response = await axiosInstance.post(`/HospitalRegister`, formData);
     return response;
   } catch (error) {
     throw new Error(error.response.data.message || error.message);
@@ -116,9 +116,9 @@ export const resetPassword = async (formData) => {
 */
 //email: this.userEmail, 
 
-export const editPatient = async () => {
+export const editPatient = async (formData, patientID) => {
   try {
-    const response = null
+    const response = await axiosInstance.put(`/patients/${patientID}`, formData)
     return response;
   } catch(error) {
     throw new Error(error.response.data.message || error.message);
