@@ -219,7 +219,7 @@ function DoctorProfile() {
       <div className="left flex flex-col items-center mb-6 md:mb-0">
         <div className="image-div mb-4">
           <div className="avatar">
-            <div className="w-40 h-40 rounded-full overflow-hidden ring-2 ring-accent ring-offset-base-100 ring-offset-2">
+            <div className="w-40 h-40 rounded-full overflow-hidden ring-2 ring-info ring-offset-base-100 ring-offset-2">
               <img src={`${doctor.image}`} />
             </div>
           </div>
@@ -228,13 +228,13 @@ function DoctorProfile() {
           <div className="mb-4 flex flex-col items-center">
             <input type="file" onChange={handleFileChange} accept="image/*" className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
           
-          <button type="submit" className="btn btn-sm btn-accent rounded-full py-0 px-5 mt-2">Upload</button>
+          <button type="submit" className="btn btn-sm btn-info rounded-full py-0 px-5 mt-2">Upload</button>
           </div>
         </form>
       </div>
 
       {/* Right Section - Form Inputs */}
-      <div className="right form-div rounded-lg w-full py-6 px-8 bg-white shadow-lg">
+      <div className="right form-div rounded-lg w-full py-6 px-8 shadow-lg">
       <form onSubmit={formik.handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="col-span-3">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
@@ -447,7 +447,7 @@ function DoctorProfile() {
           <div className="col-span-3 mt-6">
             <button
               type="submit"
-              className="btn btn-accent px-6 py-2 rounded-full text-white font-bold"
+              className="btn btn-info px-6 py-2 rounded-full text-white font-bold"
               disabled={!formik.isValid}
             >
               Update Profile
