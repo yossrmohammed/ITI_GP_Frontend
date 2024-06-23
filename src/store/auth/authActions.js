@@ -1,5 +1,5 @@
 import { registerStart, registerSuccess, registerFailure, loginStart, loginSuccess, loginFailure, fetchUserStart, fetchUserSuccess, fetchUserFailure } from './authSlice';
-import { doctorRegister, patientRegister, nurseRegister,hospitalRegister , login, getUserData ,verifyEmail, forgetPassword,resetPassword} from './authApi';
+import { doctorRegister, patientRegister, nurseRegister,hospitalRegister , login, getUserData ,verifyEmail, forgetPassword,resetPassword, editPatient} from './authApi';
 
 export const register = (formData, role, setFormErrors) => async (dispatch) => {
   dispatch(registerStart());
@@ -85,3 +85,12 @@ export const resetPsswordUser = (formData) => async () => {
    throw new Error(error.response.data.message || error.message);
   }
 };
+
+export const editPatientAction = (formData, patientID) => async () => {
+  try {
+    const response = await editPatient(formData, patientID);
+    return response;
+  } catch (error) {
+    throw new Error(error.response.data.message || error.message)
+  }
+}

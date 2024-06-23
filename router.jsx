@@ -14,6 +14,7 @@ import HospitalICUs from "./src/pages/Hospital/HospitalICUs";
 import Applications from "./src/pages/Hospital/Applications";
 import PatientProfile from "./src/pages/Patient/PatientProfile";
 import PayPal from "./src/pages/PayPal/PayPal";
+import PatientAppointments from "./src/pages/Patient/PatientAppointments";
 
 function Styled() 
 {
@@ -84,9 +85,13 @@ export const router = createBrowserRouter([
                 element:<Applications/>
             },
             {
-                path: '/patientprofile',
+                path: '/patient/profile',
                 element: <PatientProfile/>
-            }
+            },
+            {
+                path: '/patient/appointments',
+                element: <PatientAppointments/>
+            },
         ]
     },
     {
