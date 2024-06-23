@@ -8,6 +8,7 @@ import Doctors from "./src/pages/Doctors/Doctors";
 import ICUs from "./src/pages/ICUs/ICUs";
 import Nurses from "./src/pages/Nurses/Nurses";
 import MedicPage from "./src/pages/MedicPage/MedicPage";
+import DoctorProfile from "/src/pages/Doctors/DoctorProfile"
 import Verify from "./src/pages/Verify/Verify";
 import ResetPassword from "./src/pages/ResetPassword/ResetPassword";
 import HospitalICUs from "./src/pages/Hospital/HospitalICUs";
@@ -54,6 +55,9 @@ export const router = createBrowserRouter([
                 element: <MedicPage/>,
             },
             {
+                path: '/doctor-profile',
+                element: <DoctorProfile/>,
+            }
                 path: '/register',
                 element: <Register/>
             },
