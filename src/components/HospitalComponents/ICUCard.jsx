@@ -3,15 +3,11 @@ import { deleteICU } from '../../store/slices/HospitalSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-const ICUCard = ({ icu, onUpdate }) => {
+const ICUCard = ({ icu, onUpdate, hospitalId }) => {
     const dispatch = useDispatch();
 
-    const handleDelete = async () => {
-        try {
-            await dispatch(deleteICU(icu.id));
-        } catch (error) {
-            console.error('Failed to delete ICU:', error);
-        }
+    const handleDelete = (id) =>  {
+        dispatch(deleteICU({ id, hospitalId }));
     };
 
     const handleUpdate = () => {
@@ -28,7 +24,7 @@ const ICUCard = ({ icu, onUpdate }) => {
                     <button onClick={handleUpdate} className="btn btn-secondary mr-2">
                         <FontAwesomeIcon icon={faEdit} /> Update
                     </button>
-                    <button onClick={handleDelete} className="btn btn-danger">
+                    <button onClick={() => handleDelete(icu.id)} className="btn btn-danger">
                         <FontAwesomeIcon icon={faTrash} /> Delete
                     </button>
                 </div>
