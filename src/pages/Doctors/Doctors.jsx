@@ -61,7 +61,7 @@ function Doctors() {
 
                 {doctors.map( (el) => {
                     return <MedicalCard
-                key={el.user.id}
+                key={el.user?.id}
                 id={el.id}
                 proffession='Doctor'
                 name={el.user?.name}
