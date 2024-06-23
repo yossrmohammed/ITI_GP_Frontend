@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { addICU, updateICU } from '../../store/slices/HospitalSlice';
@@ -6,6 +5,7 @@ import EquipmentAutocomplete from './EquipmentAutocomplete';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+
 const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selectedICU }) => {
     const dispatch = useDispatch();
     const [selectedEquipments, setSelectedEquipments] = useState([]);
@@ -14,6 +14,7 @@ const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selected
         capacity: '',
         equipments: [],
     });
+    const [validationErrors, setValidationErrors] = useState({});
 
     useEffect(() => {
         if (selectedICU) {
@@ -40,6 +41,21 @@ const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selected
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
+
+        // Validation logic
+        const errors = {};
+        if (formData.capacity < 0) {
+            errors.capacity = 'Capacity must be a positive number or zero.';
+        }
+        if (selectedEquipments.length === 0) {
+            errors.equipments = 'At least one equipment must be selected.';
+        }
+
+        if (Object.keys(errors).length > 0) {
+            setValidationErrors(errors);
+            return;
+        }
+
         const formDataWithEquipments = { ...formData, equipments: selectedEquipments };
         try {
             if (selectedICU) {
@@ -75,8 +91,8 @@ const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selected
                                 required
                                 onChange={handleChange}
                             />
-                            {errors.capacity && (
-                                <p className="text-red-500 text-xs mt-1">{errors.capacity}</p>
+                            {validationErrors.capacity && (
+                                <p className="text-red-500 text-xs mt-1">{validationErrors.capacity}</p>
                             )}
                         </div>
                         <div className="form-control">
@@ -87,8 +103,8 @@ const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selected
                                 selectedEquipments={selectedEquipments}
                                 setSelectedEquipments={setSelectedEquipments}
                             />
-                            {errors.equipments && (
-                                <p className="text-red-500 text-xs mt-1">{errors.equipments}</p>
+                            {validationErrors.equipments && (
+                                <p className="text-red-500 text-xs mt-1">{validationErrors.equipments}</p>
                             )}
                         </div>
                         <div className="modal-action">
