@@ -1,8 +1,19 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../store/auth/authSlice';
+
 function Navbar() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const loggedUser = useSelector((state) => state.auth.user);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/');
+  };
 
   return (
-<div className="navbar bg-base-100">
+<div className="navbar bg-base-200 border-b-2">
   <div className="navbar-start">
     <div className="dropdown">
       <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
@@ -14,31 +25,87 @@ function Navbar() {
         <li><a>About</a></li>
       </ul>
     </div>
-  <div className="navbar-start">
-    <a className="btn btn-ghost text-xl">MediPal</a>
-    {/* <a className="btn btn-ghost text-xl">daisyUI</a>
-    <a className="btn btn-ghost text-xl">daisyUI</a>
-    <a className="btn btn-ghost text-xl">daisyUI</a> */}
+  
+  <div className="navbar-start w-full">
+    <Link to={'/'} className="btn btn-ghost text-2xl">MediPal</Link>
+  
+  {/* patient links */}
+  
+  {(loggedUser?.role === 'patient' || !loggedUser) &&
+  <>
+    <Link to={"/doctors"} className="font-bold text-blue-600 mx-2 text-lg"> Doctors </Link>
+    <Link to={"/nurses"} className="font-bold text-blue-600 mx-2 text-lg"> Nurses </Link>
+    <Link to={"/doctors/home-visit"} className="font-bold text-blue-600 mx-2 text-lg"> Home visit </Link>
+  </>
+  }
+
+  {/* doctor links */}
+
+  { loggedUser?.role === 'doctor' &&
+    <>
+    <Link to={"/doctors"} className="font-bold text-blue-600 mx-2 text-lg"> Doctors </Link>
+    </>
+  }
+
+
+  {/* nurse links */}
+
+
+  {/* hospital links */}
+
   </div>
   </div>
 
   <div className="navbar-end">
-    <Link to={"/icu"} className="font-bold">
-    Book ICU
-    </Link>
+
+
+    { loggedUser?.role === 'patient' || !loggedUser &&
+      <Link to={"/icu"} className="font-bold text-blue-600 mx-2 text-lg"> Book ICU </Link>
+    }
  
-<div className="avatar mx-3">
-  <div className="w-12 rounded-full">
-    <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+  {loggedUser &&
+  <div className="avatar mx-3">
+    <div className="w-12 rounded-full">
+    
+    {
+    !loggedUser.image && 
+    (loggedUser.role === 'doctor' || loggedUser.role === 'doctor') &&
+    <>
+    <img src={loggedUser.role === 'doctor' ? 'default_doctor.jpg' : 'default_nurse.jpg'} />
+    </>
+    }
+
+    {
+      loggedUser.image &&
+      <>
+      <img src={loggedUser.image} />
+      <p>{loggedUser.name}</p>
+      </>
+    }
+    </div>
   </div>
+  }
+    
+  { loggedUser?.name && <p>{loggedUser.name}</p> }
     
 
+  { !loggedUser &&
+  <>
   <Link to={"/login"} className="btn btn-outline mx-2">
     Login
   </Link>
   <Link to={"/register"} className="btn btn-outline btn-info mx-2">
    Register
   </Link>
+  </>
+  }
+
+  {
+    loggedUser &&
+  <button className="btn btn-outline mx-2" onClick={handleLogout}>
+   Logout
+  </button>
+  }
 
 
 <label className="swap swap-rotate mx-3">
@@ -51,7 +118,6 @@ function Navbar() {
 </div>
 
   </div>
-</div>
 );
 
 }
