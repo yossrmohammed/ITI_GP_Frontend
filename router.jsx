@@ -13,6 +13,7 @@ import ResetPassword from "./src/pages/ResetPassword/ResetPassword";
 import HospitalICUs from "./src/pages/Hospital/HospitalICUs";
 import Applications from "./src/pages/Hospital/Applications";
 
+
 function Styled() 
 {
     return(
@@ -36,10 +37,6 @@ export const router = createBrowserRouter([
             {
                 path: '/doctors',
                 element: <Doctors/>,
-            },
-            {
-                path: '/icu/:id',
-                element: <div>test</div>
             },
             {
                 path: '/icu',

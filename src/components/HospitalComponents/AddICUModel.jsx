@@ -1,16 +1,12 @@
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { addICU } from '../../store/slices/HospitalSlice';
+import { addICU, updateICU } from '../../store/slices/HospitalSlice';
 import EquipmentAutocomplete from './EquipmentAutocomplete';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
-
-const AddICUModal = ({
-    showModal,
-    handleCloseModal,
-    hospitalId,
-    errors
-}) => {
+import { useNavigate } from 'react-router-dom';
+const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selectedICU }) => {
     const dispatch = useDispatch();
     const [selectedEquipments, setSelectedEquipments] = useState([]);
     const [formData, setFormData] = useState({
@@ -18,75 +14,53 @@ const AddICUModal = ({
         capacity: '',
         equipments: [],
     });
-    const [validationErrors, setValidationErrors] = useState({
-        capacity: '',
-        equipments: ''
-    });
+
+    useEffect(() => {
+        if (selectedICU) {
+            setFormData({
+                hospital_id: hospitalId,
+                capacity: selectedICU.capacity,
+                equipments: selectedICU.equipments.map(e => e.name),
+            });
+            setSelectedEquipments(selectedICU.equipments.map(e => e.id));
+        } else {
+            setFormData({
+                hospital_id: hospitalId,
+                capacity: '',
+                equipments: [],
+            });
+            setSelectedEquipments([]);
+        }
+    }, [selectedICU, hospitalId]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevState) => ({ ...prevState, [name]: value }));
     };
 
-    const validateForm = () => {
-        let valid = true;
-        let errors = { capacity: '', equipments: '' };
-
-        if (formData.capacity <= 0) {
-            errors.capacity = 'Capacity must be a positive number.';
-            valid = false;
-        }
-
-        if (selectedEquipments.length === 0) {
-            errors.equipments = 'At least one equipment must be selected.';
-            valid = false;
-        }
-
-        setValidationErrors(errors);
-        return valid;
-    };
-
-    const resetForm = () => {
-        setSelectedEquipments([]);
-        setFormData({
-            hospital_id: hospitalId,
-            capacity: '',
-            equipments: [],
-        });
-        setValidationErrors({
-            capacity: '',
-            equipments: ''
-        });
-    };
-
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-
-        if (!validateForm()) {
-            return;
-        }
-
         const formDataWithEquipments = { ...formData, equipments: selectedEquipments };
         try {
-            await dispatch(addICU(formDataWithEquipments));
-            console.log('ICU added successfully:', formDataWithEquipments);
+            if (selectedICU) {
+                await dispatch(updateICU({ id: selectedICU.id, data: formDataWithEquipments }));
+            } else {
+                await dispatch(addICU(formDataWithEquipments));
+            }
+            console.log('ICU saved successfully:', formDataWithEquipments);
+            
             handleCloseModal();
-            resetForm(); // Reset the form after successful submission
+            
         } catch (error) {
-            console.error('Failed to add ICU:', error);
+            console.error('Failed to save ICU:', error);
         }
-    };
-
-    const handleModalClose = () => {
-        handleCloseModal();
-        resetForm(); // Reset the form when modal is closed
     };
 
     return (
         showModal && (
             <div className="modal modal-open">
                 <div className="modal-box">
-                    <h3 className="font-bold text-lg">Add New ICU</h3>
+                    <h3 className="font-bold text-lg">{selectedICU ? 'Update ICU' : 'Add New ICU'}</h3>
                     <form onSubmit={handleFormSubmit}>
                         <div className="form-control">
                             <label className="label">
@@ -97,11 +71,12 @@ const AddICUModal = ({
                                 name="capacity"
                                 placeholder="Capacity"
                                 className="input input-bordered"
+                                value={formData.capacity}
                                 required
                                 onChange={handleChange}
                             />
-                            {validationErrors.capacity && (
-                                <p className="text-red-500 text-xs mt-1">{validationErrors.capacity}</p>
+                            {errors.capacity && (
+                                <p className="text-red-500 text-xs mt-1">{errors.capacity}</p>
                             )}
                         </div>
                         <div className="form-control">
@@ -112,15 +87,15 @@ const AddICUModal = ({
                                 selectedEquipments={selectedEquipments}
                                 setSelectedEquipments={setSelectedEquipments}
                             />
-                            {validationErrors.equipments && (
-                                <p className="text-red-500 text-xs mt-1">{validationErrors.equipments}</p>
+                            {errors.equipments && (
+                                <p className="text-red-500 text-xs mt-1">{errors.equipments}</p>
                             )}
                         </div>
                         <div className="modal-action">
                             <button type="submit" className="btn btn-primary">
-                                <FontAwesomeIcon icon={faSave} /> Save
+                                <FontAwesomeIcon icon={faSave} /> {selectedICU ? 'Save Changes' : 'Save'}
                             </button>
-                            <button type="button" onClick={handleModalClose} className="btn btn-secondary">
+                            <button type="button" onClick={handleCloseModal} className="btn btn-secondary">
                                 <FontAwesomeIcon icon={faTimes} /> Cancel
                             </button>
                         </div>
