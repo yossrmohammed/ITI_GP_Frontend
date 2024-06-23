@@ -64,6 +64,18 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    updatePatientStart(state) {
+      state.loading = true;
+      state.error = {}
+    },
+    updatePatientSuccess(state, action) {
+      state.loading = false;
+      state.user = action.payload.user;
+    },
+    updatePatientFailure(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -80,6 +92,9 @@ export const {
   fetchUserSuccess,
   fetchUserFailure,
   verifyFailure,
+  updatePatientStart,
+  updatePatientSuccess,
+  updatePatientFailure,
 } = authSlice.actions;
 
 export const selectUser = (state) => state.auth.user;
