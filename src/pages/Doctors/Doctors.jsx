@@ -8,8 +8,10 @@ function Doctors() {
 
     const [loading,setLoading] = useState(true);
     const [currPage,setCurrPage] = useState(1);
+    const [totalPages,setTotalPages] = useState(1);
     const [doctors,setDoctors] = useState([]);
     const [filters, setFilters] = useState({
+    name:'',
     city: '',
     specialization: '',
     available: '',
@@ -22,18 +24,23 @@ function Doctors() {
         if (filters.city) obj['city'] = filters.city;
         if (filters.specialization) obj['specialization'] = filters.specialization;
         if (filters.fees) obj['fees'] = filters.fees;
+        if (filters.available) obj['available'] = filters.available; 
+        if (filters.name) obj['name'] = filters.name; 
+        obj.page = currPage;
+
+        
 
         axiosInstance.get('/doctors',
             { params: obj }
         )
         .then(res => {
             setDoctors(res.data.data);
-            setLoading(false)
+            setTotalPages(res.data.last_page);
+            setLoading(false);
         })
         .catch(err => console.log(err));
-        console.log(filters)
 
-    },[filters])
+    },[filters,currPage])
 
     const handleFilterChange = (newFilters) => {
         setFilters((prevFilters) => ({
@@ -42,6 +49,9 @@ function Doctors() {
     }));
     };
 
+    const handlePageChange = (page) => {
+        setCurrPage(page);
+    }
     return (
     <>
     
@@ -63,6 +73,7 @@ function Doctors() {
                     return <MedicalCard
                 key={el.user?.id}
                 id={el.id}
+                image={el.image}
                 proffession='Doctor'
                 name={el.user?.name}
                 specialization={el.specialization}
@@ -71,6 +82,7 @@ function Doctors() {
                 work_days={el.work_days}
                 work_start={el.clinic_work_start}
                 work_end={el.clinic_work_end}
+                rating={el.average_rating}
                 online={el.online}
                 />
                 })}
@@ -79,15 +91,32 @@ function Doctors() {
     </div>
 
     <div className="text-center">
-    <div className="join my-5">
-        <button className="join-item btn">«</button>
-        <button className="join-item btn btn-md">1</button>
-        <button className="join-item btn btn-md btn-active">2</button>
-        <button className="join-item btn btn-md">3</button>
-        <button className="join-item btn btn-md">4</button>
-        <button className="join-item btn">»</button>
-    </div>
-    </div>
+        <div className="join my-5">
+          <button
+            className="join-item btn"
+            onClick={() => handlePageChange(currPage - 1)}
+            disabled={currPage === 1}
+          >
+            «
+          </button>
+          {[...Array(totalPages).keys()].map((page) => (
+            <button
+              key={page + 1}
+              className={`join-item btn btn-md ${currPage === page + 1 ? 'btn-active' : ''}`}
+              onClick={() => handlePageChange(page + 1)}
+            >
+              {page + 1}
+            </button>
+          ))}
+          <button
+            className="join-item btn"
+            onClick={() => handlePageChange(currPage + 1)}
+            disabled={currPage === totalPages}
+          >
+            »
+          </button>
+        </div>
+      </div>
     </>
   )
 }
