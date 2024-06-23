@@ -11,7 +11,7 @@ const rate = Number(props.rating) || 0;
         <div className="lg:w-1/3">
           <img
             src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-            alt="Doctor"
+            alt={props.role}
             className="m-auto my-10 w-40 rounded-full"
           />
         </div>

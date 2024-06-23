@@ -11,6 +11,7 @@ function Doctors() {
     const [totalPages,setTotalPages] = useState(1);
     const [doctors,setDoctors] = useState([]);
     const [filters, setFilters] = useState({
+    name:'',
     city: '',
     specialization: '',
     available: '',
@@ -24,6 +25,7 @@ function Doctors() {
         if (filters.specialization) obj['specialization'] = filters.specialization;
         if (filters.fees) obj['fees'] = filters.fees;
         if (filters.available) obj['available'] = filters.available; 
+        if (filters.name) obj['name'] = filters.name; 
         obj.page = currPage;
 
         
@@ -71,6 +73,7 @@ function Doctors() {
                     return <MedicalCard
                 key={el.user.id}
                 id={el.id}
+                image={el.image}
                 proffession='Doctor'
                 name={el.user?.name}
                 specialization={el.specialization}

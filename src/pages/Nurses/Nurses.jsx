@@ -11,6 +11,7 @@ function Nurses() {
     const [totalPages,setTotalPages] = useState(1);
     const [nurses,setNurses] = useState([]);
     const [filters, setFilters] = useState({
+    name:'',
     city: '',
     specialization: '',
     available: '',
@@ -23,6 +24,7 @@ function Nurses() {
         if (filters.city) obj['city'] = filters.city;
         if (filters.fees) obj['fees'] = filters.fees;
         if (filters.available) obj['available'] = filters.available; 
+        if (filters.name) obj['name'] = filters.name; 
         obj.page = currPage;
 
         axiosInstance.get('/nurses',
@@ -69,6 +71,7 @@ function Nurses() {
                     return <MedicalCard
                 key={el.id}
                 id={el.id}
+                image={el.image}
                 proffession='Nurse'
                 name={el.user?.name}
                 city={el.city}

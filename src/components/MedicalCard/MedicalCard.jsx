@@ -10,7 +10,7 @@ function DoctorCard(props) {
         <div className="flex items-center">
           <div className={props.online == 1 ? 'avatar mx-10 online' : 'avatar mx-10 offline'}>
             <div className="w-24 rounded-full">
-              <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+              <img src={props.image} />
             </div>
           </div>
           <div className="ml-5">
