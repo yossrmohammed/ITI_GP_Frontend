@@ -5,11 +5,15 @@ import { useState } from 'react';
 
 function Filters(props) {
 
- const [availability, setAvailability] = useState({ today: false, tomorrow: false });
+  const [availability, setAvailability] = useState({ today: false, tomorrow: false });
   const [city, setCity] = useState('');
   const [specialization, setSpecialization] = useState('');
   const [fees, setFees] = useState('');
+  const [name, setName] = useState('');
 
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  }
   const handleAvailabilityChange = (e) => {
     const { name, checked } = e.target;
     setAvailability((prev) => ({ ...prev, [name]: checked }));
@@ -25,14 +29,21 @@ function Filters(props) {
 
   const handleFilter = () => {
     const filters = {
+      name,
       city,
       specialization,
       fees
     };
+    
+    const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+    const day = new Date();
+    const today = day.getDay();
+    const tomorrow = (today+1) % 6;
 
-    if (availability.today) filters.available = 'Today';
-    if (availability.tomorrow) filters.available = 'Tomorrow';
-
+    if (availability.tomorrow && availability.today) filters.available = days[today]+','+days[tomorrow-1];
+    else if (availability.today) filters.available = days[today];
+    else if (availability.tomorrow) filters.available = days[tomorrow-1];
+    
     props.onFilterChange(filters);
   };
 
@@ -41,7 +52,8 @@ function Filters(props) {
     setCity('');
     setSpecialization('');
     setFees('');
-    props.onFilterChange({ city: '', specialization: '', available: '', fees: '' });
+    setName('');
+    props.onFilterChange({ name:'' ,city: '', specialization: '', available: '', fees: '' });
   };
 
 
@@ -53,6 +65,15 @@ function Filters(props) {
     <div className="mt-3 border-4 rounded-xl py-3 px-10">
     <p className="font-bold text-2xl">Filters</p>
 
+    <label className="form-control w-full max-w-xs">
+        <div className="label">
+            <span className="label-text font-bold text-lg">Name</span>
+        </div>
+        <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs" value={name} onChange={handleNameChange} />
+        <div className="label">
+        </div>
+    </label>
+
     <label htmlFor="city" className="label">
         <span className="label-text font-bold text-lg">Availability</span>
     </label>
@@ -61,34 +82,31 @@ function Filters(props) {
     <div className="form-control">
     <label className="label cursor-pointer">
         <span className="label-text">Today</span> 
-        <input type="checkbox" className="checkbox checkbox-primary" value='today' onChange={handleAvailabilityChange}/>
+        <input type="checkbox" className="checkbox checkbox-primary" name='today' value='today' checked={availability.today} onChange={handleAvailabilityChange}/>
     </label>
     </div>
-
-
 
     <div className="form-control">
     <label className="label cursor-pointer">
         <span className="label-text">Tomorrow</span> 
-        <input type="checkbox" className="checkbox checkbox-primary" value='tomorrow' onChange={handleAvailabilityChange} />
+        <input type="checkbox" className="checkbox checkbox-primary" name='tomorrow' value='tomorrow' checked={availability.tomorrow} onChange={handleAvailabilityChange} />
     </label>
     </div>
 
     </div>
 
-    {/* city */}
     <div className="form-control">
         <label htmlFor="city" className="label">
             <span className="label-text font-bold text-lg">Select City</span>
         </label>
         <select id="city" className="select select-bordered w-full max-w-xs" value={city} onChange={handleCityChange}>
+            <option value="null" selected>Choose city</option>
             {egyptianCities.map(city => (
             <option key={city} value={city}>{city}</option>
             ))}
         </select>
     </div>
 
-    {/* spaciality */}
     { props.proffession === 'Doctor' &&
       <div>
     <div className="form-control">
