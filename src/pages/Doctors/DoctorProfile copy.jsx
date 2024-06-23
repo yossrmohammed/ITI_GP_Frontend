@@ -447,7 +447,7 @@ function DoctorProfile() {
               <div className="md:w-1/3"></div>
               <div className="md:w-2/3">
                 <button
-                  className="update-btn rounded-full shadow info btn  btn-accent text-white font-bold py-2 px-4 rounded"
+                  className="update-btn rounded-full shadow info btn  btn-info text-white font-bold py-2 px-4 rounded"
                   type="submit"
                   disabled={!formik.isValid}>
                   Update Profile
