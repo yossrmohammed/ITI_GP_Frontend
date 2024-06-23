@@ -3,6 +3,7 @@ import { getDoctorById, updateDoctorById } from "/src/axios/DoctorProfile.jsx";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Select from 'react-select';
+import Swal from 'sweetalert2'
 
 
 import TextInput from '/src/components/Form/TextInput.jsx';
@@ -160,7 +161,7 @@ function DoctorProfile() {
     const handleFileChange = (event) => {
       setFile(event.target.files[0]);
     };
-    const handleSubmit = (event) => {
+    const handleFileSubmit = (event) => {
       event.preventDefault();
       console.log(file)
 
@@ -169,11 +170,27 @@ function DoctorProfile() {
         return;
       }
 
-      const formData = new FormData();
-      formData.append('image', file);
+      const ImageformData = new FormData();
+      ImageformData.append('_method', "patch");
+      ImageformData.append('image', file);
 
-    };
 
+      updateDoctorById(doctorId, ImageformData)
+      .then(response => {
+        console.log("update doctor Image response : ",response)
+
+        Swal.fire({
+          icon: "success",
+          text: "Your Image have been updated successfully!",
+          showConfirmButton: false,
+          timer: 1500
+        });
+        setDoctor(response.data.data);
+      })
+      .catch(error => {
+        console.log("error : ",error)
+      });
+    }
 
       if (loading) {
         return <>
@@ -203,13 +220,13 @@ function DoctorProfile() {
         <div className="image-div mb-4">
           <div className="avatar">
             <div className="w-40 h-40 rounded-full overflow-hidden ring-2 ring-accent ring-offset-base-100 ring-offset-2">
-              <img src="https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg" alt="Avatar" className="w-full h-full object-cover" />
+              <img src={`${doctor.image}`} />
             </div>
           </div>
         </div>
-        <form onSubmit={formik.handleSubmit} className="w-full px-4">
+        <form onSubmit={handleFileSubmit} className="w-full px-4">
           <div className="mb-4 flex flex-col items-center">
-            <input type="file" onChange={handleFileChange} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
+            <input type="file" onChange={handleFileChange} accept="image/*" className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100" />
           
           <button type="submit" className="btn btn-sm btn-accent rounded-full py-0 px-5 mt-2">Upload</button>
           </div>
@@ -445,4 +462,4 @@ function DoctorProfile() {
   )
 }
 
-export default DoctorProfile
+export default DoctorProfile;
