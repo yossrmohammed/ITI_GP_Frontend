@@ -34,7 +34,7 @@ const DoctorSearch = ({ steps, triggerNextStep }) => {
           <p>Here are the doctors in {city_name.value}:</p>
           <ul>
             {doctors.map((doctor) => (
-              <li key={doctor.id}>{doctor.created_at}</li>
+              <li key={doctor.id}>{doctor.user?.name}</li>
             ))}
           </ul>
         </div>
