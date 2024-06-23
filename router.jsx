@@ -57,7 +57,8 @@ export const router = createBrowserRouter([
             {
                 path: '/doctor-profile',
                 element: <DoctorProfile/>,
-            }
+            },
+            {
                 path: '/register',
                 element: <Register/>
             },
