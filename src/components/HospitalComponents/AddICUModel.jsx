@@ -59,7 +59,7 @@ const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selected
         const formDataWithEquipments = { ...formData, equipments: selectedEquipments };
         try {
             if (selectedICU) {
-                await dispatch(updateICU({ id: selectedICU.id, data: formDataWithEquipments }));
+                await dispatch(updateICU({ id: selectedICU.id, data: formDataWithEquipments, hospitalId }));
             } else {
                 await dispatch(addICU(formDataWithEquipments));
             }
