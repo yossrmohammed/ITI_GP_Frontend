@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 function Navbar() {
 
   return (
@@ -22,15 +23,23 @@ function Navbar() {
   </div>
 
   <div className="navbar-end">
- <a href="#" className="font-bold">Book ICU</a>
+    <Link to={"/icu"} className="font-bold">
+    Book ICU
+    </Link>
+ 
 <div className="avatar mx-3">
   <div className="w-12 rounded-full">
     <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
   </div>
     
 
-<a className="btn btn-outline mx-2">Login</a>
-<a className="btn btn-outline btn-info mx-2">Register</a>
+  <Link to={"/login"} className="btn btn-outline mx-2">
+    Login
+  </Link>
+  <Link to={"/register"} className="btn btn-outline btn-info mx-2">
+   Register
+  </Link>
+
 
 <label className="swap swap-rotate mx-3">
   <input type="checkbox" value="halloween" className="theme-controller" />

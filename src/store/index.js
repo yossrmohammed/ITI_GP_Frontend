@@ -1,6 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
+import authReducer from './auth/authSlice';
 
-
+import ICUSlice from "./slices/ICUSlice";
+import ApplicationSlice from "./slices/ApplicationSlice";
+import HospitalSlice from "./slices/HospitalSlice";
+import AppointmentSlice from "./slices/AppointmentSlice";
 export default configureStore({
-    reducer: {}
+    reducer: {
+        ICUs: ICUSlice,
+        applications: ApplicationSlice,
+        auth: authReducer,
+        hospitals: HospitalSlice,
+        appointments: AppointmentSlice,
+
+    }
 });

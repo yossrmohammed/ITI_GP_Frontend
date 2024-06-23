@@ -1,10 +1,20 @@
 import { Outlet, createBrowserRouter } from "react-router-dom";
 import Home from './src/pages/Home/Home';
+import Register from './src/pages/Register/Resgister';
+import Login from './src/pages/Login/Login';
 import Navbar from "./src/components/Navbar/Navbar";
 import Footer from "./src/components/Footer/Footer";
 import Doctors from "./src/pages/Doctors/Doctors";
+import ICUs from "./src/pages/ICUs/ICUs";
 import Nurses from "./src/pages/Nurses/Nurses";
 import MedicPage from "./src/pages/MedicPage/MedicPage";
+import Verify from "./src/pages/Verify/Verify";
+import ResetPassword from "./src/pages/ResetPassword/ResetPassword";
+import HospitalICUs from "./src/pages/Hospital/HospitalICUs";
+import Applications from "./src/pages/Hospital/Applications";
+import PatientProfile from "./src/pages/Patient/PatientProfile";
+import PayPal from "./src/pages/PayPal/PayPal";
+import PatientAppointments from "./src/pages/Patient/PatientAppointments";
 
 function Styled() 
 {
@@ -31,13 +41,57 @@ export const router = createBrowserRouter([
                 element: <Doctors/>,
             },
             {
+                path: '/icu/:id',
+                element: <div>test</div>
+            },
+            {
+                path: '/icu',
+                element: <ICUs/>
+            },
+            {
                 path: '/nurses',
                 element: <Nurses/>,
             },
             {
                 path: '/user/:role/:id',
                 element: <MedicPage/>,
-            }
+            },
+            {
+                path: '/register',
+                element: <Register/>
+            },
+            {
+                path: '/login',
+                element: <Login/>
+            },
+            {
+                path: '/checkout',
+                element: <PayPal/>
+            },
+            {
+                path: '/verify',
+                element: <Verify/>
+            },
+            {
+                path: '/reset',
+                element: <ResetPassword/>
+            },
+            {
+                path:'/hospital',
+                element: <HospitalICUs/>
+            },
+            {
+                path:'/application',
+                element:<Applications/>
+            },
+            {
+                path: '/patient/profile',
+                element: <PatientProfile/>
+            },
+            {
+                path: '/patient/appointments',
+                element: <PatientAppointments/>
+            },
         ]
     },
     {
