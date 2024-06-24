@@ -81,12 +81,43 @@ function DoctorAppointments () {
                   console.error('Error submitting reply:', error);
                 });
       };
-      if (loading) {
-        return <>
-        <div>LOading</div>
-    
-        </>
-        }
+      const renderSkeletonTable = () => (
+        <div className="overflow-x-auto">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Day</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...Array(5)].map((_, index) => (
+                <tr key={index}>
+                  <td>
+                    <div className="skeleton h-4 w-32"></div>
+                  </td>
+                  <td>
+                    <div className="skeleton h-4 w-24"></div>
+                  </td>
+                  <td>
+                    <div className="skeleton h-4 w-20"></div>
+                  </td>
+                  <td>
+                    <div className="skeleton h-4 w-16"></div>
+                  </td>
+                  <td>
+                    <div className="skeleton h-4 w-20"></div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+     
       if (error) {
         return <div>Error: {error.message}</div>;
         }
@@ -94,6 +125,7 @@ function DoctorAppointments () {
     return (
         <>
         <div className="userprofile-container container mx-auto px-8 pt-6 pb-6 rounded-lg  my-4">
+        {loading ? renderSkeletonTable() : (
             <div className="overflow-x-auto">
                 <table className="table">
                     <thead>
@@ -157,6 +189,7 @@ function DoctorAppointments () {
 
                 </table>
             </div>
+        )}
             <dialog id="note_modal" className="modal" >
                 <div className="modal-box" style={{ width: '500px', maxWidth: '90%', maxHeight: '400px' }}>
                 <div className="modal-action mt-0 flex flex-col justify-center items-center ">
