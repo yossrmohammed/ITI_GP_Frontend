@@ -1,44 +1,166 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../store/auth/authSlice';
+
 function Navbar() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const loggedUser = useSelector((state) => state.auth.user);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/');
+  };
 
   return (
-<div className="navbar bg-base-100">
+<div className="navbar bg-base-200 border-b-2">
   <div className="navbar-start">
-    <div className="dropdown">
+    <div className="dropdown block md:hidden ">
       <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
       </div>
       <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-        <li><a>Homepage</a></li>
-        <li><a>Portfolio</a></li>
-        <li><a>About</a></li>
+
+          {/* patient links */}
+          
+          {(
+            !loggedUser ||
+            loggedUser?.role === 'patient' ) && 
+          <>
+            <li><Link to={"/doctors"} className=""> Doctors </Link></li>
+            <li><Link to={"/nurses"} className=""> Nurses </Link></li>
+            <li><Link to={"/doctors/home-visit"} className=""> Home visit </Link></li>
+          </>
+          }
+
+          {/* doctor links */}
+
+          { loggedUser?.role === 'doctor' &&
+            <>
+            <li><Link to={"/doctor/profile"} className="font-normal text-blue-600 mx-2 text-lg"> Profile </Link></li>
+            <li><Link to={"/doctor/prescriptions/read"} className="font-normal text-blue-600 mx-2 text-lg"> Prescriptions </Link></li>
+            <li><Link to={"/doctor/prescriptions/unread"} className="font-normal text-blue-600 mx-2 text-lg"> Unread </Link></li>
+            <li><Link to={"/doctor/appointments"} className="font-normal text-blue-600 mx-2 text-lg"> Appointments </Link></li>
+            </>
+          }
+
+          {/* nurse links */}
+
+          {
+            loggedUser?.role === 'nurse' &&
+            <>
+            <li><Link to={"/nurse/profile"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Profile </Link></li>
+            <li><Link to={"/nurse/appointments"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Appointments </Link></li>
+            </>
+          }
+
       </ul>
     </div>
-  <div className="navbar-start">
-    <a className="btn btn-ghost text-xl">MediPal</a>
-    {/* <a className="btn btn-ghost text-xl">daisyUI</a>
-    <a className="btn btn-ghost text-xl">daisyUI</a>
-    <a className="btn btn-ghost text-xl">daisyUI</a> */}
+  
+  <div className="navbar-start w-full">
+    <Link to={'/'} className="btn btn-ghost text-2xl">MediPal</Link>
+  
+  {/* patient links */}
+  
+  {(loggedUser?.role === 'patient' || !loggedUser) &&
+  <>
+    <div className='hidden md:inline-block'>
+    <Link to={"/doctors"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Doctors </Link>
+    <Link to={"/nurses"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Nurses </Link>
+    <Link to={"/doctors/home-visit"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Home visit </Link>
+    </div>
+  </>
+  }
+
+  { loggedUser?.role === 'patient' &&
+    <>
+    <div className='hidden md:inline-block'> 
+    <Link to={"/patient/profile"} className="font-bold text-blue-600 mx-2 text-lg"> Profile </Link>
+    <Link to={"/patient/appointments"} className="font-bold text-blue-600 mx-2 text-lg"> Appointments </Link>
+    <Link to={"/patient/reviews"} className="font-bold text-blue-600 mx-2 text-lg"> Reviews </Link>
+    </div>
+    </>
+  }
+
+  {/* doctor links */}
+
+  { loggedUser?.role === 'doctor' &&
+    <>
+    <div className='hidden md:inline-block'>
+    <Link to={"/doctor/profile"} className="font-normal text-blue-600 mx-2 text-lg"> Profile </Link>
+    <Link to={"/doctor/prescriptions/read"} className="font-normal text-blue-600 mx-2 text-lg"> Prescriptions </Link>
+    <Link to={"/doctor/prescriptions/unread"} className="font-normal text-blue-600 mx-2 text-lg"> Unread </Link>
+    <Link to={"/doctor/appointments"} className="font-normal text-blue-600 mx-2 text-lg"> Appointments </Link>
+    </div>
+    </>
+  }
+
+
+  {/* nurse links */}
+
+  {
+    loggedUser?.role === 'nurse' &&
+    <>
+    <Link to={"/nurse/profile"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Profile </Link>
+    <Link to={"/nurse/appointments"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Appointments </Link>
+    </>
+  }
+
+  {/* hospital links */}
+
   </div>
   </div>
 
   <div className="navbar-end">
-    <Link to={"/icu"} className="font-bold">
-    Book ICU
-    </Link>
+
+
+    { loggedUser?.role === 'patient' || !loggedUser &&
+      <Link to={"/icu"} className="font-normal text-blue-600 mx-2 p-2 text-lg btn btn-ghost"> Book ICU </Link>
+    }
  
-<div className="avatar mx-3">
-  <div className="w-12 rounded-full">
-    <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+  {loggedUser &&
+  <div className="avatar mx-3">
+    <div className="w-12 rounded-full">
+    
+    {
+    !loggedUser.image && 
+    (loggedUser.role === 'doctor' || loggedUser.role === 'nurse') &&
+    <>
+    <img src={loggedUser.role === 'doctor' ? 'default_doctor.jpg' : 'default_nurse.jpg'} />
+    </>
+    }
+
+    {
+      loggedUser.image &&
+      <>
+      <img src={loggedUser.image} />
+      <p>{loggedUser.name}</p>
+      </>
+    }
+    </div>
   </div>
+  }
+    
+  { loggedUser?.name && <p>{loggedUser.name}</p> }
     
 
+  { !loggedUser &&
+  <>
   <Link to={"/login"} className="btn btn-outline mx-2">
     Login
   </Link>
-  <Link to={"/register"} className="btn btn-outline btn-info mx-2">
+  <Link to={"/register"} className="btn btn-outline text-blue-600 hover:bg-blue-600 mx-2">
    Register
   </Link>
+  </>
+  }
+
+  {
+    loggedUser &&
+  <button className="btn btn-sm btn-outline mx-2" onClick={handleLogout}>
+   Logout
+  </button>
+  }
 
 
 <label className="swap swap-rotate mx-3">
@@ -51,7 +173,6 @@ function Navbar() {
 </div>
 
   </div>
-</div>
 );
 
 }

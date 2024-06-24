@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getDoctorById, updateDoctorById } from "/src/axios/DoctorProfile.jsx";
+import { getNurseById, updateNurseById } from "/src/axios/NurseProfile.jsx";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Select from 'react-select';
@@ -10,34 +10,33 @@ import TextInput from '/src/components/Form/TextInput.jsx';
 import NumberInput from '/src/components/Form/NumberInput.jsx';
 import TimeInput from '/src/components/Form/TimeInput.jsx';
 import { egyptianCities } from '/src/data/egyptCities';
-import { specalitiesNonCategorized } from '/src/data/specalitiesNonCategorized';
-import { universities } from '/src/data/universities'; 
+import { nurseSpecialties } from '/src/data/nurseSpecialties';
+import { nurseUniversities } from '/src/data/nurseUniversities'; 
 import { workdaysOptions } from '/src/data/workDays'; 
-import { qualifications } from '/src/data/qualifications'; 
+import { nurseQualifications } from '/src/data/nurseQualifications'; 
 
 
-import "./Profile.css";
+import "/src/App.css";
 
-function DoctorProfile() {
+function NurseProfile() {
 
     const phoneRegExp = /^(010|011|012|015)[0-9]{8}$/;
     const nameRegExp = /^[a-zA-Z ]+$/;
-    const qualificationsOptions = qualifications.map(q => ({ value: q, label: q }));
+    const nurseQualificationsOptions = nurseQualifications.map(q => ({ value: q, label: q }));
 
 
-    const doctorId = 1;
-    const [doctor, setDoctor] = useState(null);
+    const nurseId = 1;
+    const [nurse, setNurse] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [isHomeVisitChecked, setIsHomeVisitChecked] = useState(false);
     const [file, setFile] = useState(null);
 
     useEffect(() => {
-      if (doctorId) {
+      if (nurseId) {
         setLoading(true);
-        getDoctorById(doctorId)
+        getNurseById(nurseId)
           .then(response => {
-            setDoctor(response.data.data);
+            setNurse(response.data.data);
             console.log("response date : ",response.data.data)
             setLoading(false);
           })
@@ -58,16 +57,9 @@ function DoctorProfile() {
         university: "",
         qualifications: "",
         city: "",
-        address: "",
-        clinic_fees: "",
-        home_fees: "",
+        fees: "",
         online: 0,
         specialization: "",
-        visit: 0,
-        clinic_work_start: "",
-        clinic_work_end: "",
-        home_work_start: "",
-        home_work_end: "",
         work_days: "",
     },
       validationSchema: Yup.object({
@@ -83,14 +75,9 @@ function DoctorProfile() {
         email: Yup.string()
           .required("Email is required")
           .email("Invalid email address"),
-        address: Yup.string()
-          .required("Address is required"),
         work_days: Yup.string()
           .required("Work Days are required"),
-        home_fees:
-        Yup.number().required("Home Fees is required").min(1,"Home Fees must be greater than 0"),
-        clinic_fees:
-        Yup.number().required("Clinic Fees is required").min(1,"Clinic Fees must be greater than 0"),
+        fees: Yup.number().required("Clinic Fees is required").min(1,"Clinic Fees must be greater than 0"),
       }),
       onSubmit:(values)=>{
         console.log("Submit===>",values)
@@ -101,22 +88,23 @@ function DoctorProfile() {
         formData.append("university", values.university);
         formData.append("qualifications", values.qualifications);
         formData.append("city", values.city);
-        formData.append("address", values.address);
-        formData.append("clinic_fees", values.clinic_fees);
-        formData.append("home_fees", values.home_fees);
+        formData.append("fees", values.fees);
         formData.append("online", values.online);
         formData.append("specialization", values.specialization);
-        formData.append("visit", values.visit);
-        formData.append("clinic_work_start", values.clinic_work_start);
-        formData.append("clinic_work_end", values.clinic_work_end);
-        formData.append("home_work_start", values.home_work_start);
-        formData.append("home_work_end", values.home_work_end);
+        formData.append("work_start", values.work_start);
+        formData.append("work_end", values.work_end);
         formData.append("work_days", values.work_days);
         formData.append("_method", "patch");
 
-        updateDoctorById(doctorId, formData)
+        updateNurseById(nurseId, formData)
         .then(response => {
-          console.log("update doctor response : ",response)
+          console.log("update nurse response : ",response)
+          Swal.fire({
+            icon: "success",
+            text: "Your Profile have been updated successfully!",
+            showConfirmButton: false,
+            timer: 1500
+          });
         })
         .catch(error => {
           console.log("error : ",error)
@@ -125,36 +113,27 @@ function DoctorProfile() {
     })
 
     useEffect(() => {
-      if (doctor) {
+      if (nurse) {
         formik.setValues({
-          name: doctor.name,
-          phone: doctor.phone,
-          image: doctor.image,
-          email: doctor.email,
-          university: doctor.university,
-          qualifications: doctor.qualifications,
-          city: doctor.city,
-          address: doctor.address,
-          clinic_fees: doctor.clinic_fees,
-          home_fees: doctor.home_fees,
-          online: doctor.online,
-          specialization: doctor.specialization,
-          visit: doctor.visit,
-          clinic_work_start: doctor.clinic_work_start,
-          clinic_work_end: doctor.clinic_work_end,
-          home_work_start: doctor.home_work_start,
-          home_work_end: doctor.home_work_end,
-          work_days: doctor.work_days,
+          name: nurse.name,
+          phone: nurse.phone,
+          image: nurse.image,
+          email: nurse.email,
+          university: nurse.university,
+          qualifications: nurse.qualifications,
+          city: nurse.city,
+          fees: nurse.fees,
+          online: nurse.online,
+          specialization: nurse.specialization,
+          work_start: nurse.work_start,
+          work_end: nurse.work_end,
+          work_days: nurse.work_days,
       });
       
       }
-    }, [doctor]);
+    }, [nurse]);
 
-    const handleHomeVisitChange = (event) => {
-      setIsHomeVisitChecked(event.target.checked);
-      formik.setFieldValue("visit", event.target.checked ? 1 : 0);
-    };
-  
+
     // console.log(formik.values)
     console.log(formik.errors)
 
@@ -176,9 +155,9 @@ function DoctorProfile() {
       ImageformData.append('image', file);
 
 
-      updateDoctorById(doctorId, ImageformData)
+      updateNurseById(nurseId, ImageformData)
       .then(response => {
-        console.log("update doctor Image response : ",response)
+        console.log("update nurse Image response : ",response)
 
         Swal.fire({
           icon: "success",
@@ -186,7 +165,7 @@ function DoctorProfile() {
           showConfirmButton: false,
           timer: 1500
         });
-        setDoctor(response.data.data);
+        setNurse(response.data.data);
       })
       .catch(error => {
         console.log("error : ",error)
@@ -208,8 +187,8 @@ function DoctorProfile() {
         return <div>Error: {error.message}</div>;
       }
     
-      if (!doctor) {
-        return <div>No doctor found</div>;
+      if (!nurse) {
+        return <div>No nurse found</div>;
       }
     
     return (
@@ -221,7 +200,7 @@ function DoctorProfile() {
         <div className="image-div mb-4">
           <div className="avatar">
             <div className="w-40 h-40 rounded-full overflow-hidden ring-2 ring-info ring-offset-base-100 ring-offset-2">
-              <img src={`${doctor.image}`} />
+              <img src={`${nurse.image}`} />
             </div>
           </div>
         </div>
@@ -263,14 +242,7 @@ function DoctorProfile() {
                 error={formik.errors.phone}
                 placeholder="Phone"
               />
-              <TextInput
-                label="Address"
-                name="address"
-                value={formik.values.address}
-                onChange={formik.handleChange}
-                error={formik.errors.address}
-                placeholder="Address"
-              />
+             
           
             </div>
           </div>
@@ -302,7 +274,7 @@ function DoctorProfile() {
                   onChange={formik.handleChange}
                   value={formik.values.specialization}
                 >
-                  {specalitiesNonCategorized.map(specialization => (
+                  {nurseSpecialties.map(specialization => (
                     <option key={specialization} value={specialization}>{specialization}</option>
                   ))}
                 </select>
@@ -317,25 +289,10 @@ function DoctorProfile() {
                   onChange={formik.handleChange}
                   value={formik.values.university}
                 >
-                  {universities.map(university => (
+                  {nurseUniversities.map(university => (
                     <option key={university} value={university}>{university}</option>
                   ))}
                 </select>
-              </div>
-              <div className="md:flex md:items-center ">
-                  {/* <div className="md:w-1/3"> */}
-                    <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4">
-                      Home Visit
-                    </label>
-                  {/* </div> */}
-                  {/* <div className="md:w-2/3"> */}
-                      <input
-                        type="checkbox"
-                        checked={formik.values.visit}
-                        onChange={handleHomeVisitChange}
-                        className="checkbox"
-                      />
-                  {/* </div> */}
               </div>
             </div>
           </div>
@@ -343,60 +300,32 @@ function DoctorProfile() {
           <div className="col-span-3">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-2">
               <NumberInput
-                  label="Clinic Fees"
-                  name="clinic_fees"
-                  value={formik.values.clinic_fees}
+                  label="Fees"
+                  name="fees"
+                  value={formik.values.fees}
                   onChange={formik.handleChange}
-                  error={formik.errors.clinic_fees}
-                  placeholder="Clinic Fees"
+                  error={formik.errors.fees}
+                  placeholder="Fees"
                 />
                 <TimeInput
-                  label="Clinic Work Start"
-                  name="clinic_work_start"
-                  value={formik.values.clinic_work_start}
+                  label="Work Start"
+                  name="work_start"
+                  value={formik.values.work_start}
                   onChange={formik.handleChange}
-                  error={formik.errors.clinic_work_start}
+                  error={formik.errors.work_start}
                   placeholder="Clinic Work Start"
                 />
                 <TimeInput
-                  label="Clinic Work End"
-                  name="clinic_work_end"
-                  value={formik.values.clinic_work_end}
+                  label="Work End"
+                  name="work_end"
+                  value={formik.values.work_end}
                   onChange={formik.handleChange}
-                  error={formik.errors.clinic_work_end}
-                  placeholder="Clinic Work End"
+                  error={formik.errors.work_end}
+                  placeholder="Work End"
                 />
               </div>
           </div>
-          { formik.values.visit == 1 &&
-           <div className="col-span-3">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-2">
-            <NumberInput
-              label="Home Fees"
-              name="home_fees"
-              value={formik.values.home_fees}
-              onChange={formik.handleChange}
-              error={formik.errors.home_fees}
-              placeholder="home fees"
-              />
-            <TimeInput
-              label="Home Work Start"
-              name="home_work_start"
-              value={formik.values.home_work_start}
-              onChange={formik.handleChange}
-              error={formik.errors.home_work_start}
-              placeholder="home work start"
-              />
-            <TimeInput
-              label="Home Work End"
-              name="home_work_end"
-              value={formik.values.home_work_end}
-              onChange={formik.handleChange}
-              error={formik.errors.home_work_end}
-              placeholder="home work end"
-              />
-            </div>
-          </div> }
+         
          
           <div className="col-span-3">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-2">
@@ -427,14 +356,14 @@ function DoctorProfile() {
                 <Select
                   isMulti
                   name="qualifications"
-                  options={qualificationsOptions}
+                  options={nurseQualificationsOptions}
                   className="basic-multi-select"
                   classNamePrefix="select"
                   onChange={option => {
                     const selectedValues = option ? option.map(item => item.value).join(',') : '';
                     formik.setFieldValue('qualifications', selectedValues);
                   }}
-                  value={qualificationsOptions.filter(option => formik.values.qualifications.includes(option.value))}
+                  value={nurseQualificationsOptions.filter(option => formik.values.qualifications.includes(option.value))}
                 />
                 {formik.errors.qualifications && (
                   <div className="text-red-500 text-sm mt-1">{formik.errors.qualifications}</div>
@@ -463,4 +392,4 @@ function DoctorProfile() {
   )
 }
 
-export default DoctorProfile;
+export default NurseProfile;
