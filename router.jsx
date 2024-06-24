@@ -12,6 +12,9 @@ import MedicPage from "./src/pages/MedicPage/MedicPage";
 import DoctorProfile from "/src/pages/Doctors/DoctorProfile"
 import ReadPrescriptions from "/src/pages/Doctors/Prescriptions/ReadPrescriptions"
 import UnReadPrescriptions from "/src/pages/Doctors/Prescriptions/UnReadPrescriptions"
+import DoctorAppointments from "/src/pages/Doctors/Appointments"
+
+import NurseProfile from "/src/pages/Nurses/NurseProfile"
 
 import Verify from "./src/pages/Verify/Verify";
 import ResetPassword from "./src/pages/ResetPassword/ResetPassword";
@@ -77,6 +80,14 @@ export const router = createBrowserRouter([
             {
                 path: '/doctor/prescriptions/unread',
                 element: <UnReadPrescriptions/>,
+            },
+            {
+                path: '/doctor/appointments',
+                element: <DoctorAppointments/>,
+            },
+            {
+                path: '/nurse/profile',
+                element: <NurseProfile/>,
             },
             {
                 path: '/register',

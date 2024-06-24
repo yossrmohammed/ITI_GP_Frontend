@@ -76,7 +76,7 @@ function Doctors(props) {
 
                 {doctors.map( (el) => {
                     return <MedicalCard
-                key={el.user.id}
+                key={el.user?.id}
                 id={el.id}
                 image={el.image}
                 proffession='Doctor'

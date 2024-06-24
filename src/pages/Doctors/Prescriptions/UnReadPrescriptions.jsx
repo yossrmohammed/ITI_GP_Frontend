@@ -118,7 +118,7 @@ function UnReadPrescriptions() {
                       {prescription.patient_DOB && <p ><FontAwesomeIcon icon={faCalendarDays} /> {calculateAge(prescription.patient_DOB)} Years</p>}
                     </div>
                     <div className="card-actions justify-center">
-                    <button className="btn btn-outline  btn-md btn-wide rounded-full btn-info"
+                    <button className="btn btn-outline  btn-md btn-wide rounded-full btn-info "
                      onClick={()=>{
                       setCurrentPrescriptionId(prescription.id);
                       document.getElementById('my_modal_1').showModal()

@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../axios";
 
-export const getICUs = createAsyncThunk("ICUs/getICUs", async (address) => {
+export const getICUs = createAsyncThunk("ICUs/getICUs", async ({ address, page, itemsPerPage }) => {
     const response = await axiosInstance.get("/icus", {
-        params: { address }
+        params: { address, page, itemsPerPage }
     });
-    return response.data.data;
+    return response.data;
 });
 
 const ICUSlice = createSlice({
@@ -13,6 +13,15 @@ const ICUSlice = createSlice({
     initialState: {
         ICUs: [],
         isLoading: false,
+        currentPage: 1,
+        totalPages: 1,
+        itemsPerPage: 5,
+    },
+    reducers: {
+        setItemsPerPage: (state, action) => {
+            state.itemsPerPage = action.payload;
+            state.currentPage = 1; // Reset to first page on items per page change
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -20,7 +29,9 @@ const ICUSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(getICUs.fulfilled, (state, action) => {
-                state.ICUs = action.payload;
+                state.ICUs = action.payload.data;
+                state.currentPage = action.payload.current_page;
+                state.totalPages = action.payload.last_page;
                 state.isLoading = false;
             })
             .addCase(getICUs.rejected, (state) => {
@@ -28,5 +39,7 @@ const ICUSlice = createSlice({
             });
     },
 });
+
+export const { setItemsPerPage } = ICUSlice.actions;
 
 export default ICUSlice.reducer;
