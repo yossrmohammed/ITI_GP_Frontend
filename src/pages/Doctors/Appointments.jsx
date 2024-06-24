@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck , faXmark ,faPlus } from '@fortawesome/free-solid-svg-icons'
 import Swal from 'sweetalert2'
 
+import {calculateAge} from "/src/helperFunctions"
 function DoctorAppointments () {  
 
     const doctorId = 1;
@@ -12,16 +13,22 @@ function DoctorAppointments () {
     const [appointments, setAppointments] = useState([]);
     const [notes, setNotes] = useState('');
     const [currentAppointmentId, setCurrentAppointmentId] = useState(null);
+   
+    const [selectedkindOfVisitFilter, setSelectedkindOfVisitFilter] = useState('all'); 
+
+    const [date, setDate] = useState(null);
 
     useEffect(() => {
         if (doctorId) {
           setLoading(true);
-          CallDoctorAppointmentsFunction(doctorId)
-        
+          CallDoctorAppointmentsFunction(doctorId);
         }
       }, []);
-      const CallDoctorAppointmentsFunction = (doctorId) => {
-        getDoctorAppointments(doctorId)
+      const CallDoctorAppointmentsFunction = (doctorId ) => {
+        const params = {};
+        params.kind_of_visit = selectedkindOfVisitFilter;
+        params.date = date;
+        getDoctorAppointments(doctorId , params)
         .then(response => {
          setAppointments(response.data.data);
           console.log("getDoctorAppointments response date : ",response.data.data)
@@ -32,6 +39,18 @@ function DoctorAppointments () {
           setLoading(false);
         });
       };
+      const handlekindOfVisitFilter = (event) => {
+        setSelectedkindOfVisitFilter(event.target.value);
+        console.log("selectedkindOfVisitFilter : ",event.target.value)
+      };
+    
+      const handleFilterButtonClick = () => {
+        CallDoctorAppointmentsFunction(doctorId);
+      };
+      const handleDateFilter =(event)=>{
+        setDate(event.target.value);
+        console.log("selectedDate : ",event.target.value)
+      }
       const getBadgeClass = (status) => {
         switch (status) {
           case "accepted":
@@ -124,13 +143,66 @@ function DoctorAppointments () {
     
     return (
         <>
-        <div className="userprofile-container container mx-auto px-8 pt-6 pb-6 rounded-lg  my-4">
+        <div className="userprofile-container container mx-auto px-8 pt-6 pb-6 rounded-lg  my-4 flex justify-between">
+            <div className="filters-container p-4 rounded-lg max-h-fit"> 
+                <h2 className="text-2xl font-bold mb-4">Appointment Type</h2>
+                <hr></hr>
+                <div className="form-control ">
+                    <label className="label cursor-pointer">
+                        <span className="label-text">All Appointments</span>
+                        <input
+                            type="radio"
+                            name="radio-1"
+                            className="radio radio-sm ml-2"
+                            value="all"
+                            checked={selectedkindOfVisitFilter === 'all'}
+                            onChange={handlekindOfVisitFilter}
+                            />               
+                    </label>
+                    <label className="label cursor-pointer">
+                        <span className="label-text">  Clinic Appointments</span>
+                        <input
+                            type="radio"
+                            name="radio-1"
+                            className="radio radio-sm ml-2"
+                            value="clinic"
+                            checked={selectedkindOfVisitFilter === 'clinic'}
+                            onChange={handlekindOfVisitFilter}
+                            />
+                    </label>
+                    <label className="label cursor-pointer">
+                        <span className="label-text">Home Visit Appointments</span>
+                        <input
+                            type="radio"
+                            name="radio-1"
+                            className="radio radio-sm ml-2"
+                            value="home"
+                            checked={selectedkindOfVisitFilter === 'home'}
+                            onChange={handlekindOfVisitFilter}
+                            />
+                    </label>
+                </div>
+                <br></br>
+                
+                <h2 className="text-2xl font-bold mb-4">Appointment Date</h2>
+                <hr></hr>
+                <input type="date" value={date}  onChange={handleDateFilter} placeholder="Type here" 
+                className="input input-bordered w-full max-w-xs mt-3" />
+                <button
+                    className="btn btn-info mt-4"
+                    onClick={handleFilterButtonClick} >Apply Filter
+                </button>
+
+               
+                
+            </div>
         {loading ? renderSkeletonTable() : (
-            <div className="overflow-x-auto">
+            <div className="table-container overflow-x-auto grow ml-5">
                 <table className="table">
                     <thead>
-                        <tr className="text-center">
-                            <th className="font-bold">Type</th>
+                        <tr className="text-center"> 
+                            <th >Type</th>
+                            <th>Patient</th>
                             <th>Date</th>
                             <th >Status</th>
                             <th>Accept</th>
@@ -145,9 +217,15 @@ function DoctorAppointments () {
                                     {appointment.kind_of_visit}
                                 </td>
                                 <td>
+                                     {appointment.patient_name} - {calculateAge(appointment.patient_DOB)} Years
+                                         <br />
+                                        < br />
+                                    {appointment.patient_phone}                                    
+                                </td>
+                                <td>
                                     {appointment.day} - {appointment.date}
                                 </td>
-                                <td className="flex justify-center">
+                                <td className="">
                                     {
                                     appointment.kind_of_visit === "clinic" ? " --" :
                                     <div className={getBadgeClass(appointment.status) } >
@@ -214,6 +292,3 @@ function DoctorAppointments () {
     )
 }
 export default DoctorAppointments;
-// Zemlak, Daniel and Leannon
-// <br />
-// <span className="badge badge-ghost badge-sm">Desktop Support Technician</span>

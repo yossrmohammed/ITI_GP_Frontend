@@ -1,7 +1,7 @@
 import {axiosInstance} from "/src/axios";
 
-export const getDoctorAppointments = (doctorId) => {
-    return axiosInstance.get(`doctors/${doctorId}/appointments`);
+export const getDoctorAppointments = (doctorId , params) => {
+    return axiosInstance.get(`doctors/${doctorId}/appointments` , {params});
 };
 
 export const ApproveDoctorAppointments = (appointmentId, status) => {
