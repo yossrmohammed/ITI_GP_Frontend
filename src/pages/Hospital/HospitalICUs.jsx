@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getHospitalICUs, deleteICU, setCurrentPage } from '../../store/slices/HospitalSlice';
+import { getHospitalICUs, setCurrentPage } from '../../store/slices/HospitalSlice';
 import ICUCard from '../../components/HospitalComponents/ICUCard';
 import { Link } from 'react-router-dom';
 import AddICUModal from '../../components/HospitalComponents/AddICUModel';
@@ -32,11 +32,7 @@ const HospitalICUs = () => {
         setShowModal(true);
     };
 
-    const handleDeleteICU = (id) => {
-        if (window.confirm('Are you sure you want to delete this ICU?')) {
-            dispatch(deleteICU({ id, hospitalId, page: currentPage, itemsPerPage }));
-        }
-    };
+
 
     const handlePageChange = (page) => {
         dispatch(setCurrentPage(page));
@@ -77,7 +73,7 @@ const HospitalICUs = () => {
                                     key={index}
                                     icu={icu}
                                     onUpdate={handleUpdateICU}
-                                    onDelete={handleDeleteICU}
+                                    
                                     hospitalId={hospitalId}
                                 />
                             ))}
