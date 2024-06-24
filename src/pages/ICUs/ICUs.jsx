@@ -4,7 +4,7 @@ import { getICUs, setItemsPerPage } from '../../store/slices/ICUSlice';
 import ICUBookCard from '../../components/ICUComponents/ICUBookCard';
 import ICUApplication from '../../components/ICUComponents/ICUApplication';
 import Toast from '../../components/ICUComponents/Toast';
-
+import { addApplication } from '../../store/slices/ApplicationSlice';
 const ICUs = () => {
     const dispatch = useDispatch();
     const { ICUs, isLoading, currentPage, totalPages, itemsPerPage } = useSelector((state) => state.ICUs);
