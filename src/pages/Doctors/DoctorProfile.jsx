@@ -130,6 +130,7 @@ function DoctorProfile() {
           name: doctor.name,
           phone: doctor.phone,
           image: doctor.image,
+          email: doctor.email,
           university: doctor.university,
           qualifications: doctor.qualifications,
           city: doctor.city,
