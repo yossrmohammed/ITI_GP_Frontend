@@ -5,7 +5,7 @@ import { faPhone, faUser } from '@fortawesome/free-solid-svg-icons'
 function ReadPrescriptions() {  
 
     const doctorId = 1;
-    const [prescriptions, setPrescriptions] = useState(null);
+    const [prescriptions, setPrescriptions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
