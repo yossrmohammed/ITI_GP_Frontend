@@ -30,15 +30,15 @@ const NursesApproval = () => {
   };
 
   const approveNurse = (nurseId) => {
-    axiosInstance.put(`/doctors/${doctorId}/verify`,{ verification_status:'accepted'})
+    axiosInstance.patch(`/nurses/${nurseId}/verify`,{ verification_status:'accepted'})
     .then(response => {
-      const updatedHospitals = hospitals.map(hospital => {
-        if (hospital.id === hospitalId) {
-          return { ...hospital, verification_status: 'accepted' };
+      const updatedNurses = nurses.map(nurse => {
+        if (nurse.id === nurseId) {
+          return { ...nurse, verification_status: 'accepted' };
         }
-        return hospital;
+        return nurse;
       });
-      setHospitals(updatedHospitals);
+      setNurses(updatedNurses);
     })
     .catch(error => {
       console.error("Error fetching hospitals:", error);
@@ -46,21 +46,22 @@ const NursesApproval = () => {
     });
   };
 
-  const rejectDoctor = (doctorId) => {
-    axiosInstance.put(`/doctors/${doctorId}/verify`,{ verification_status:'rejected'})
+  const rejectNurse = (nurseId) => {
+    axiosInstance.patch(`/nurses/${nurseId}/verify`,{ verification_status:'rejected'})
     .then(response => {
-      const updatedHospitals = hospitals.map(hospital => {
-        if (hospital.id === hospitalId) {
-          return { ...hospital, verification_status: 'rejected' };
+      const updatedNurses = nurses.map(nurse => {
+        if (nurse.id === nurseId) {
+          return { ...nurse, verification_status: 'rejected' };
         }
-        return hospital;
+        return nurse;
       });
-      setHospitals(updatedHospitals);
+      setNurses(updatedNurses);
     })
     .catch(error => {
-      console.error("Error fetching hospitals:", error);
+      console.error("Error fetching nurses:", error);
       
-   })
+    });
+
   };
 
   const handlePageChange = (page) => {
