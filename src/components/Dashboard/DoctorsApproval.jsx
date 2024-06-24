@@ -29,20 +29,39 @@ const DoctorsApproval = () => {
       });
   };
 
-  const approveDoctor = (index) => {
-    const updatedDoctors = [...doctors];
-    updatedDoctors[index].verification_status = 'Approved';
-    setDoctors(updatedDoctors);
+  const approveDoctor = (doctorId) => {
+    axiosInstance.patch(`/doctors/${doctorId}/verify`,{ verification_status:'accepted'})
+    .then(response => {
+      const updatedDoctors = doctors.map(doctor => {
+        if (doctor.id === doctorId) {
+          return { ...doctor, verification_status: 'accepted' };
+        }
+        return doctor;
+      });
+      setDoctors(updatedDoctors);
+    })
+    .catch(error => {
+      console.error("Error fetching doctors:", error);
+      
+    });
   };
 
-  const rejectDoctor = (index) => {
-    const updatedDoctors = [...doctors];
-    updatedDoctors[index].verification_status = 'Rejected';
-    setDoctors(updatedDoctors);
-  };
-
-  const deleteCurrentDoctor = (index) => {
-    setDoctors(doctors.filter((_, i) => i !== index));
+  const rejectDoctor = (doctorId) => {
+    axiosInstance.patch(`/doctors/${doctorId}/verify`,{ verification_status:'rejected'})
+    .then(response => {
+      const updatedDoctors = doctors.map(doctor => {
+        if (doctor.id === doctorId) {
+          return { ...doctor, verification_status: 'rejected' };
+        }
+        return doctor;
+      });
+      setDoctors(updatedDoctors);
+    })
+    .catch(error => {
+      console.error("Error fetching doctors:", error);
+      
+    });
+   
   };
 
   const handlePageChange = (page) => {
@@ -69,7 +88,7 @@ const DoctorsApproval = () => {
             </thead>
             <tbody>
               {doctors.map((doctor, index) => (
-                <tr key={index}>
+                <tr key={index+1}>
                   <td>
                     <div className="flex items-center space-x-3">
                       <div className="avatar">
@@ -88,17 +107,15 @@ const DoctorsApproval = () => {
                   <td>
                     {doctor.verification_status === 'pending' && (
                       <>
-                        <button className="btn btn-square btn-success" onClick={() => approveDoctor(index)}>
+                        <button className="btn btn-square btn-success" onClick={() => approveDoctor(doctor.id)}>
                           <RiCheckLine className="w-5" />
                         </button>
-                        <button className="btn btn-square btn-error ml-2" onClick={() => rejectDoctor(index)}>
+                        <button className="btn btn-square btn-error ml-2" onClick={() => rejectDoctor(doctor.id)}>
                           <RiCloseLine className="w-5" />
                         </button>
                       </>
                     )}
-                    <button className="btn btn-square btn-ghost ml-2" onClick={() => deleteCurrentDoctor(index)}>
-                      <RiDeleteBinLine className="w-5" />
-                    </button>
+
                   </td>
                 </tr>
               ))}

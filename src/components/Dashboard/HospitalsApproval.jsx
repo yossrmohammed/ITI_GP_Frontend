@@ -27,14 +27,39 @@ const HospitalsApproval = () => {
         setLoading(false);
       });
   };
-
+// 'accepted', 'rejected'
   const approveHospital = (hospitalId) => {
-
+    axiosInstance.put(`hospital/${hospitalId}/verification`,{ status:'accepted'})
+    .then(response => {
+      const updatedHospitals = hospitals.map(hospital => {
+        if (hospital.id === hospitalId) {
+          return { ...hospital, verification_status: 'accepted' };
+        }
+        return hospital;
+      });
+      setHospitals(updatedHospitals);
+    })
+    .catch(error => {
+      console.error("Error fetching hospitals:", error);
+      
+    });
   };
 
   const rejectHospital = (hospitalId) => {
-  
-  
+    axiosInstance.put(`hospital/${hospitalId}/verification`,{ status:'rejected'})
+    .then(response => {
+      const updatedHospitals = hospitals.map(hospital => {
+        if (hospital.id === hospitalId) {
+          return { ...hospital, verification_status: 'rejected' };
+        }
+        return hospital;
+      });
+      setHospitals(updatedHospitals);
+    })
+    .catch(error => {
+      console.error("Error fetching hospitals:", error);
+      
+    });
   };
 
 

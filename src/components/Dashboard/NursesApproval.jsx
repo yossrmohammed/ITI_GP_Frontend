@@ -28,16 +28,40 @@ const NursesApproval = () => {
         setLoading(false);
       });
   };
+
   const approveNurse = (nurseId) => {
-
-
+    axiosInstance.put(`/doctors/${doctorId}/verify`,{ verification_status:'accepted'})
+    .then(response => {
+      const updatedHospitals = hospitals.map(hospital => {
+        if (hospital.id === hospitalId) {
+          return { ...hospital, verification_status: 'accepted' };
+        }
+        return hospital;
+      });
+      setHospitals(updatedHospitals);
+    })
+    .catch(error => {
+      console.error("Error fetching hospitals:", error);
+      
+    });
   };
- 
-  const rejectNurse = (nurseId) => {
-  
-  
-  };
 
+  const rejectDoctor = (doctorId) => {
+    axiosInstance.put(`/doctors/${doctorId}/verify`,{ verification_status:'rejected'})
+    .then(response => {
+      const updatedHospitals = hospitals.map(hospital => {
+        if (hospital.id === hospitalId) {
+          return { ...hospital, verification_status: 'rejected' };
+        }
+        return hospital;
+      });
+      setHospitals(updatedHospitals);
+    })
+    .catch(error => {
+      console.error("Error fetching hospitals:", error);
+      
+   })
+  };
 
   const handlePageChange = (page) => {
     setCurrPage(page);
@@ -130,6 +154,7 @@ const NursesApproval = () => {
       </div>
     </div>
   );
-};
+}
+
 
 export default NursesApproval;

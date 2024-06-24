@@ -85,20 +85,27 @@ const Statistics = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center mb-8">
-      <h2 className="text-xl font-bold mb-4">Statistics</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full justify-items-center">
-        <div className="w-full md:w-4/5 lg:w-2/3 p-4" style={{ height: '20rem' }}>
+  <div className="flex flex-col items-center mb-8">
+    <h2 className="text-xl font-bold mb-4">Statistics</h2>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+      <div className="flex justify-center">
+        <div className="w-full md:w-4/5 lg:w-2/3 p-4">
           <BarChart data={doctorData} title="Top Rated Doctors by State" />
         </div>
-        <div className="w-full md:w-4/5 lg:w-2/3 p-4" style={{ height: '20rem' }}>
+      </div>
+      <div className="flex justify-center">
+        <div className="w-full md:w-4/5 lg:w-2/3 p-4">
           <BarChart data={nurseData} title="Top Rated Nurses by State" />
         </div>
-        <div className="w-full md:w-4/5 lg:w-2/3 p-4 " style={{ height: '20rem' }}>
+      </div>
+      <div className="flex justify-center">
+        <div className="w-full md:w-4/5 lg:w-2/3 p-4">
           <BarChart data={activeDoctorsData} title="Top Active Doctors by Prescriptions" />
         </div>
       </div>
     </div>
+  </div>
+
   );
 };
 
