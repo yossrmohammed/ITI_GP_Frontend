@@ -82,14 +82,14 @@ function Filters(props) {
     <div className="form-control">
     <label className="label cursor-pointer">
         <span className="label-text">Today</span> 
-        <input type="checkbox" className="checkbox checkbox-primary" name='today' value='today' checked={availability.today} onChange={handleAvailabilityChange}/>
+        <input type="checkbox" className="checkbox checkbox-info" name='today' value='today' checked={availability.today} onChange={handleAvailabilityChange}/>
     </label>
     </div>
 
     <div className="form-control">
     <label className="label cursor-pointer">
         <span className="label-text">Tomorrow</span> 
-        <input type="checkbox" className="checkbox checkbox-primary" name='tomorrow' value='tomorrow' checked={availability.tomorrow} onChange={handleAvailabilityChange} />
+        <input type="checkbox" className="checkbox checkbox-info" name='tomorrow' value='tomorrow' checked={availability.tomorrow} onChange={handleAvailabilityChange} />
     </label>
     </div>
 
@@ -138,7 +138,7 @@ function Filters(props) {
 
 
     <div className="d-flex align-baseline justify-content-around">
-        <button className="btn btn-primary my-5" onClick={handleFilter}>Filter</button>
+        <button className="btn btn-info my-5" onClick={handleFilter}>Filter</button>
         <button className="btn btn-danger my-5 mx-3 " onClick={handleReset}>Reset</button>
     </div>
 
