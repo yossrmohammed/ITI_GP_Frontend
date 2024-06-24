@@ -14,6 +14,8 @@ import ReadPrescriptions from "/src/pages/Doctors/Prescriptions/ReadPrescription
 import UnReadPrescriptions from "/src/pages/Doctors/Prescriptions/UnReadPrescriptions"
 import DoctorAppointments from "/src/pages/Doctors/Appointments"
 
+import NurseProfile from "/src/pages/Nurses/NurseProfile"
+
 import Verify from "./src/pages/Verify/Verify";
 import ResetPassword from "./src/pages/ResetPassword/ResetPassword";
 import HospitalICUs from "./src/pages/Hospital/HospitalICUs";
@@ -82,6 +84,10 @@ export const router = createBrowserRouter([
             {
                 path: '/doctor/appointments',
                 element: <DoctorAppointments/>,
+            },
+            {
+                path: '/nurse/profile',
+                element: <NurseProfile/>,
             },
             {
                 path: '/register',
