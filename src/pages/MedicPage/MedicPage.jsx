@@ -71,7 +71,9 @@ function MedicPage() {
     }
     
 
-    <h2 className="text-2xl font-bold mb-5 ml-28 mt-10">Doctor Reviews</h2>
+    <h2 className="text-2xl font-bold mb-5 ml-28 mt-10">
+      {params.role === 'doctor' ? 'Doctor ' : 'Nurse '}
+      Reviews</h2>
       {reviews.length === 0 && <p className="text-xl my-10 text-center">No Reviews Yet</p>}
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 px-28">
         {reviews.map((review) => (

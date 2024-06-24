@@ -1,8 +1,8 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { axiosInstance } from '../../axios';
 import ApplicationCard from '../../components/HospitalComponents/ApplicationCard';
 
-export default function Applications() {
+const Applications = () => {
     const [applications, setApplications] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [currentTab, setCurrentTab] = useState('pending');
@@ -37,16 +37,16 @@ export default function Applications() {
 
     if (isLoading) {
         return (
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center h-48">
                 <span className="loading loading-dots loading-lg"></span>
             </div>
         );
     }
 
     return (
-        <div className="p-4">
-            <h1 className="text-2xl font-bold mb-4">Hospital Applications</h1>
-            <div className="tabs mb-4">
+        <div className="container mx-auto p-4">
+            <h1 className="text-3xl font-bold mb-8">Hospital Applications</h1>
+            <div className="tabs mb-4 flex justify-center">
                 <a 
                     className={`tab tab-bordered ${currentTab === 'pending' ? 'tab-active' : ''}`} 
                     onClick={() => setCurrentTab('pending')}
@@ -66,13 +66,17 @@ export default function Applications() {
                     Rejected
                 </a>
             </div>
-            {filteredApplications.map((application) => (
-                <ApplicationCard 
-                    key={application.id} 
-                    application={application} 
-                    updateApplicationStatus={updateApplicationStatus} 
-                />
-            ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {filteredApplications.map((application) => (
+                    <ApplicationCard 
+                        key={application.id} 
+                        application={application} 
+                        updateApplicationStatus={updateApplicationStatus} 
+                    />
+                ))}
+            </div>
         </div>
     );
 }
+
+export default Applications;
