@@ -1,43 +1,43 @@
 // src/pages/DoctorsApproval.jsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import { RiDeleteBinLine, RiCheckLine, RiCloseLine } from 'react-icons/ri'; // Importing icons from React Icons
+import { RiDeleteBinLine, RiCheckLine, RiCloseLine } from 'react-icons/ri';
+import { axiosInstance } from '../../axios';
+import Skeleton from '../Skeleton';
 
 const DoctorsApproval = () => {
-  const [doctors, setDoctors] = useState([
-    {
-      id: 1,
-      first_name: 'John',
-      last_name: 'Doe',
-      email: 'john.doe@example.com',
-      avatar: 'https://via.placeholder.com/150',
-      status: 'Pending',
-    },
-    {
-      id: 2,
-      first_name: 'Jane',
-      last_name: 'Smith',
-      email: 'jane.smith@example.com',
-      avatar: 'https://via.placeholder.com/150',
-      status: 'Pending',
-    },
-    // Add more dummy doctors if needed
-  ]);
+  const [loading, setLoading] = useState(true);
+  const [doctors, setDoctors] = useState([]);
+  const [currPage, setCurrPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const getDummyStatus = (index) => {
-    const statuses = ['Pending', 'Approved', 'Rejected'];
-    return statuses[index % statuses.length];
+  useEffect(() => {
+    fetchDoctors(currPage);
+  }, [currPage]);
+
+  const fetchDoctors = (page) => {
+    setLoading(true);
+    axiosInstance.get(`/doctors?page=${page}`)
+      .then(response => {
+        setDoctors(response.data.data);
+        setTotalPages(response.data.last_page);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error("Error fetching doctors:", error);
+        setLoading(false);
+      });
   };
 
   const approveDoctor = (index) => {
     const updatedDoctors = [...doctors];
-    updatedDoctors[index].status = 'Approved';
+    updatedDoctors[index].verification_status = 'Approved';
     setDoctors(updatedDoctors);
   };
 
   const rejectDoctor = (index) => {
     const updatedDoctors = [...doctors];
-    updatedDoctors[index].status = 'Rejected';
+    updatedDoctors[index].verification_status = 'Rejected';
     setDoctors(updatedDoctors);
   };
 
@@ -45,61 +45,95 @@ const DoctorsApproval = () => {
     setDoctors(doctors.filter((_, i) => i !== index));
   };
 
+  const handlePageChange = (page) => {
+    setCurrPage(page);
+  };
+
   return (
-    <div className="p-4">
+    <div className="p-4" style={{ border: '2px solid white', borderRadius: '25px' }}>
       <h1 className="text-2xl font-bold mb-4">Approve Doctors</h1>
       <div className="overflow-x-auto w-full">
-        <table className="table w-full">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email Id</th>
-              <th>Created At</th>
-              <th>Status</th>
-              <th>Actions</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              doctors.map((doctor, index) => (
+        {loading ? (
+          <Skeleton count={5} />
+        ) : (
+          <table className="table w-full">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email Id</th>
+                <th>Created At</th>
+                <th>Status</th>
+                <th>Actions</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {doctors.map((doctor, index) => (
                 <tr key={index}>
                   <td>
                     <div className="flex items-center space-x-3">
                       <div className="avatar">
                         <div className="mask mask-squircle w-12 h-12">
-                          <img src={doctor.avatar} alt="Avatar" />
+                          <img src={doctor.image} alt="Avatar" />
                         </div>
                       </div>
                       <div>
-                        <div className="font-bold">{doctor.first_name}</div>
-                        <div className="text-sm opacity-50">{doctor.last_name}</div>
+                        <div className="font-bold">{doctor?.user.name}</div>
                       </div>
                     </div>
                   </td>
-                  <td>{doctor.email}</td>
-                  <td>{moment().add(-5 * (index + 2), 'days').format("DD MMM YY")}</td>
-                  <td>{doctor.status}</td>
+                  <td>{doctor.user.email}</td>
+                  <td>{moment(doctor.created_at).format("DD MMM YY")}</td>
+                  <td>{doctor.verification_status}</td>
                   <td>
-                    {doctor.status === 'Pending' && (
+                    {doctor.verification_status === 'pending' && (
                       <>
                         <button className="btn btn-square btn-success" onClick={() => approveDoctor(index)}>
-                          <RiCheckLine className="w-5" /> 
+                          <RiCheckLine className="w-5" />
                         </button>
                         <button className="btn btn-square btn-error ml-2" onClick={() => rejectDoctor(index)}>
-                          <RiCloseLine className="w-5" /> 
+                          <RiCloseLine className="w-5" />
                         </button>
                       </>
                     )}
                     <button className="btn btn-square btn-ghost ml-2" onClick={() => deleteCurrentDoctor(index)}>
-                      <RiDeleteBinLine className="w-5" /> 
+                      <RiDeleteBinLine className="w-5" />
                     </button>
                   </td>
                 </tr>
-              ))
-            }
-          </tbody>
-        </table>
+              ))}
+            </tbody>
+          </table>
+        )}
+        {totalPages > 1 && (
+          <div className="text-center">
+            <div className="join my-5">
+              <button
+                className="join-item btn"
+                onClick={() => handlePageChange(currPage - 1)}
+                disabled={currPage === 1}
+              >
+                «
+              </button>
+              {[...Array(totalPages).keys()].map((page) => (
+                <button
+                  key={page + 1}
+                  className={`join-item btn btn-md ${currPage === page + 1 ? 'btn-active' : ''}`}
+                  onClick={() => handlePageChange(page + 1)}
+                >
+                  {page + 1}
+                </button>
+              ))}
+              <button
+                className="join-item btn"
+                onClick={() => handlePageChange(currPage + 1)}
+                disabled={currPage === totalPages}
+              >
+                »
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
