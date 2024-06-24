@@ -10,10 +10,10 @@ import TextInput from '/src/components/Form/TextInput.jsx';
 import NumberInput from '/src/components/Form/NumberInput.jsx';
 import TimeInput from '/src/components/Form/TimeInput.jsx';
 import { egyptianCities } from '/src/data/egyptCities';
-import { specalitiesNonCategorized } from '/src/data/specalitiesNonCategorized';
-import { universities } from '/src/data/universities'; 
+import { nurseSpecialties } from '/src/data/nurseSpecialties';
+import { nurseUniversities } from '/src/data/nurseUniversities'; 
 import { workdaysOptions } from '/src/data/workDays'; 
-import { qualifications } from '/src/data/qualifications'; 
+import { nurseQualifications } from '/src/data/nurseQualifications'; 
 
 
 import "/src/App.css";
@@ -22,7 +22,7 @@ function NurseProfile() {
 
     const phoneRegExp = /^(010|011|012|015)[0-9]{8}$/;
     const nameRegExp = /^[a-zA-Z ]+$/;
-    const qualificationsOptions = qualifications.map(q => ({ value: q, label: q }));
+    const nurseQualificationsOptions = nurseQualifications.map(q => ({ value: q, label: q }));
 
 
     const nurseId = 1;
@@ -57,7 +57,6 @@ function NurseProfile() {
         university: "",
         qualifications: "",
         city: "",
-        address: "",
         fees: "",
         online: 0,
         specialization: "",
@@ -76,8 +75,6 @@ function NurseProfile() {
         email: Yup.string()
           .required("Email is required")
           .email("Invalid email address"),
-        address: Yup.string()
-          .required("Address is required"),
         work_days: Yup.string()
           .required("Work Days are required"),
         fees: Yup.number().required("Clinic Fees is required").min(1,"Clinic Fees must be greater than 0"),
@@ -91,7 +88,6 @@ function NurseProfile() {
         formData.append("university", values.university);
         formData.append("qualifications", values.qualifications);
         formData.append("city", values.city);
-        formData.append("address", values.address);
         formData.append("fees", values.fees);
         formData.append("online", values.online);
         formData.append("specialization", values.specialization);
@@ -103,6 +99,12 @@ function NurseProfile() {
         updateNurseById(nurseId, formData)
         .then(response => {
           console.log("update nurse response : ",response)
+          Swal.fire({
+            icon: "success",
+            text: "Your Profile have been updated successfully!",
+            showConfirmButton: false,
+            timer: 1500
+          });
         })
         .catch(error => {
           console.log("error : ",error)
@@ -116,10 +118,10 @@ function NurseProfile() {
           name: nurse.name,
           phone: nurse.phone,
           image: nurse.image,
+          email: nurse.email,
           university: nurse.university,
           qualifications: nurse.qualifications,
           city: nurse.city,
-          address: nurse.address,
           fees: nurse.fees,
           online: nurse.online,
           specialization: nurse.specialization,
@@ -240,14 +242,7 @@ function NurseProfile() {
                 error={formik.errors.phone}
                 placeholder="Phone"
               />
-              <TextInput
-                label="Address"
-                name="address"
-                value={formik.values.address}
-                onChange={formik.handleChange}
-                error={formik.errors.address}
-                placeholder="Address"
-              />
+             
           
             </div>
           </div>
@@ -279,7 +274,7 @@ function NurseProfile() {
                   onChange={formik.handleChange}
                   value={formik.values.specialization}
                 >
-                  {specalitiesNonCategorized.map(specialization => (
+                  {nurseSpecialties.map(specialization => (
                     <option key={specialization} value={specialization}>{specialization}</option>
                   ))}
                 </select>
@@ -294,7 +289,7 @@ function NurseProfile() {
                   onChange={formik.handleChange}
                   value={formik.values.university}
                 >
-                  {universities.map(university => (
+                  {nurseUniversities.map(university => (
                     <option key={university} value={university}>{university}</option>
                   ))}
                 </select>
@@ -361,14 +356,14 @@ function NurseProfile() {
                 <Select
                   isMulti
                   name="qualifications"
-                  options={qualificationsOptions}
+                  options={nurseQualificationsOptions}
                   className="basic-multi-select"
                   classNamePrefix="select"
                   onChange={option => {
                     const selectedValues = option ? option.map(item => item.value).join(',') : '';
                     formik.setFieldValue('qualifications', selectedValues);
                   }}
-                  value={qualificationsOptions.filter(option => formik.values.qualifications.includes(option.value))}
+                  value={nurseQualificationsOptions.filter(option => formik.values.qualifications.includes(option.value))}
                 />
                 {formik.errors.qualifications && (
                   <div className="text-red-500 text-sm mt-1">{formik.errors.qualifications}</div>
