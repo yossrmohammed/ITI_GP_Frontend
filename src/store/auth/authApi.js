@@ -55,7 +55,7 @@ export const login = async (formData) => {
 export const getUserData = async () => {
   try {
     const token = getCookie('token');
-    console.log(token);
+  
     if (!token) {
       throw new Error('No token found');
     }
@@ -65,11 +65,9 @@ export const getUserData = async () => {
           },
         };
         const response = await axiosInstance.get(`/user`, config);
-        console.log("here");
-        console.log(response);
+
         return response;
   } catch (error) {
-    console.log(error.message);
     throw new Error(error.response?.data?.message || error.message);
   }
 };
