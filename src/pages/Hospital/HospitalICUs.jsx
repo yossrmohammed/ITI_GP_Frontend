@@ -11,7 +11,7 @@ const HospitalICUs = () => {
     const [hospitalId, setHospitalId] = useState(1);
     const [showModal, setShowModal] = useState(false);
     const [selectedICU, setSelectedICU] = useState(null);
-    const [itemsPerPage, setItemsPerPage] = useState(5); // Default items per page
+    const [itemsPerPage, setItemsPerPage] = useState(5); 
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
@@ -45,7 +45,7 @@ const HospitalICUs = () => {
     const handleItemsPerPageChange = (e) => {
         const value = parseInt(e.target.value);
         setItemsPerPage(value);
-        dispatch(setCurrentPage(1)); // Reset to first page
+        dispatch(setCurrentPage(1)); 
         dispatch(getHospitalICUs({ hospitalId, page: 1, itemsPerPage: value }));
     };
 
@@ -66,17 +66,23 @@ const HospitalICUs = () => {
                 </div>
             ) : (
                 <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {hICUs.map((icu, index) => (
-                            <ICUCard
-                                key={index}
-                                icu={icu}
-                                onUpdate={handleUpdateICU}
-                                onDelete={handleDeleteICU}
-                                hospitalId={hospitalId}
-                            />
-                        ))}
-                    </div>
+                    {hICUs.length === 0 ? (
+                        <div className="text-center text-gray-500 mt-8">
+                            No ICUs found.
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {hICUs.map((icu, index) => (
+                                <ICUCard
+                                    key={index}
+                                    icu={icu}
+                                    onUpdate={handleUpdateICU}
+                                    onDelete={handleDeleteICU}
+                                    hospitalId={hospitalId}
+                                />
+                            ))}
+                        </div>
+                    )}
                     <div className="flex justify-between items-center mt-4">
                         <div className="flex items-center">
                             <span>Show:</span>
@@ -85,7 +91,6 @@ const HospitalICUs = () => {
                                 value={itemsPerPage}
                                 onChange={handleItemsPerPageChange}
                             >
-                                <option value="2">2</option>
                                 <option value="5">5</option>
                                 <option value="10">10</option>
                                 <option value="20">20</option>
