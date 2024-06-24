@@ -8,6 +8,11 @@ import Doctors from "./src/pages/Doctors/Doctors";
 import ICUs from "./src/pages/ICUs/ICUs";
 import Nurses from "./src/pages/Nurses/Nurses";
 import MedicPage from "./src/pages/MedicPage/MedicPage";
+
+import DoctorProfile from "/src/pages/Doctors/DoctorProfile"
+import ReadPrescriptions from "/src/pages/Doctors/Prescriptions/ReadPrescriptions"
+import UnReadPrescriptions from "/src/pages/Doctors/Prescriptions/UnReadPrescriptions"
+
 import Verify from "./src/pages/Verify/Verify";
 import ResetPassword from "./src/pages/ResetPassword/ResetPassword";
 import HospitalICUs from "./src/pages/Hospital/HospitalICUs";
@@ -15,6 +20,7 @@ import Applications from "./src/pages/Hospital/Applications";
 import PatientProfile from "./src/pages/Patient/PatientProfile";
 import PayPal from "./src/pages/PayPal/PayPal";
 import PatientAppointments from "./src/pages/Patient/PatientAppointments";
+
 
 function Styled() 
 {
@@ -59,6 +65,18 @@ export const router = createBrowserRouter([
             {
                 path: '/user/:role/:id',
                 element: <MedicPage/>,
+            },
+            {
+                path: '/doctor/profile',
+                element: <DoctorProfile/>,
+            },
+            {
+                path: '/doctor/prescriptions/read',
+                element: <ReadPrescriptions/>,
+            },
+            {
+                path: '/doctor/prescriptions/unread',
+                element: <UnReadPrescriptions/>,
             },
             {
                 path: '/register',

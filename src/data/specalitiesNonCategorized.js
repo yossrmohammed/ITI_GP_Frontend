@@ -1,0 +1,33 @@
+export const specalitiesNonCategorized = [ 
+    "Family Medicine",
+    "Internal Medicine",
+    "Pediatrics",
+    "General Surgery",
+    "Orthopedic Surgery",
+    "Neurosurgery",
+    "Cardiothoracic Surgery",
+    "Plastic Surgery",
+  "Diagnostic Specialties",
+    "Radiology",
+    "Pathology",
+    "Nuclear Medicine"
+ ,
+    "Cardiology",
+    "Endocrinology",
+    "Gastroenterology",
+    "Hematology",
+    "Oncology",
+    "Infectious Disease",
+    "Nephrology",
+    "Pulmonology",
+    "Rheumatology" ,
+    "Anesthesiology",
+    "Dermatology",
+    "Emergency Medicine",
+    "Obstetrics and Gynecology",
+    "Ophthalmology",
+    "Otolaryngology",
+    "Psychiatry",
+    "Urology"
+  
+];

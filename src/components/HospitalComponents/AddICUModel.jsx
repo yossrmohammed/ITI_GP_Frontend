@@ -1,58 +1,74 @@
-import { useEffect, useState } from 'react';
-import { axiosInstance } from '../../axios';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { addICU } from '../../store/slices/HospitalSlice';
+import { addICU, updateICU } from '../../store/slices/HospitalSlice';
+import EquipmentAutocomplete from './EquipmentAutocomplete';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
-const AddICUModal = ({
-    showModal,
-    handleCloseModal,
-    hospitalId,
-    errors
-}) => {
+const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selectedICU }) => {
     const dispatch = useDispatch();
-    const [equipments, setEquipments] = useState([]);
-    let [selectedEquipments, setSelectedEquipments] = useState([]);
+    const [selectedEquipments, setSelectedEquipments] = useState([]);
     const [formData, setFormData] = useState({
         hospital_id: hospitalId,
         capacity: '',
         equipments: [],
     });
+    const [validationErrors, setValidationErrors] = useState({});
 
     useEffect(() => {
-        const fetchEquipments = async () => {
-            try {
-                const response = await axiosInstance.get("/equipment");
-                setEquipments(response.data);
-            } catch (error) {
-                console.error("Failed to fetch equipments:", error);
-            }
-        };
-
-        fetchEquipments();
-    }, []);
-
-    const handleEquipmentChange = (event) => {
-        const selectedOptions = Array.from(event.target.value)
-        //const selectedEquipment = selectedOptions.map(option => option.value);
-       let selectedEquipment=selectedOptions.pop();
-        setSelectedEquipments([...selectedEquipments, selectedEquipment]);
-        setFormData({ ...formData, equipments: selectedEquipments });
-    };
+        if (selectedICU) {
+            setFormData({
+                hospital_id: hospitalId,
+                capacity: selectedICU.capacity,
+                equipments: selectedICU.equipments.map(e => e.name),
+            });
+            setSelectedEquipments(selectedICU.equipments.map(e => e.id));
+        } else {
+            setFormData({
+                hospital_id: hospitalId,
+                capacity: '',
+                equipments: [],
+            });
+            setSelectedEquipments([]);
+        }
+    }, [selectedICU, hospitalId]);
 
     const handleChange = (e) => {
-        
         const { name, value } = e.target;
-        setFormData((prevState) => ({ ...prevState, capacity: value }));
+        setFormData((prevState) => ({ ...prevState, [name]: value }));
     };
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
+
+        // Validation logic
+        const errors = {};
+        if (formData.capacity < 0) {
+            errors.capacity = 'Capacity must be a positive number or zero.';
+        }
+        if (selectedEquipments.length === 0) {
+            errors.equipments = 'At least one equipment must be selected.';
+        }
+
+        if (Object.keys(errors).length > 0) {
+            setValidationErrors(errors);
+            return;
+        }
+
+        const formDataWithEquipments = { ...formData, equipments: selectedEquipments };
         try {
-            await dispatch(addICU(formData));
-            console.log('ICU added successfully:', formData);
+            if (selectedICU) {
+                await dispatch(updateICU({ id: selectedICU.id, data: formDataWithEquipments, hospitalId }));
+            } else {
+                await dispatch(addICU(formDataWithEquipments));
+            }
+            console.log('ICU saved successfully:', formDataWithEquipments);
+            
             handleCloseModal();
+            
         } catch (error) {
-            console.error('Failed to add ICU:', error);
+            console.error('Failed to save ICU:', error);
         }
     };
 
@@ -60,7 +76,7 @@ const AddICUModal = ({
         showModal && (
             <div className="modal modal-open">
                 <div className="modal-box">
-                    <h3 className="font-bold text-lg">Add New ICU</h3>
+                    <h3 className="font-bold text-lg">{selectedICU ? 'Update ICU' : 'Add New ICU'}</h3>
                     <form onSubmit={handleFormSubmit}>
                         <div className="form-control">
                             <label className="label">
@@ -71,39 +87,33 @@ const AddICUModal = ({
                                 name="capacity"
                                 placeholder="Capacity"
                                 className="input input-bordered"
+                                value={formData.capacity}
                                 required
-                                
                                 onChange={handleChange}
                             />
-                            {errors.capacity && (
-                                <p className="text-red-500 text-xs mt-1">{errors.capacity}</p>
+                            {validationErrors.capacity && (
+                                <p className="text-red-500 text-xs mt-1">{validationErrors.capacity}</p>
                             )}
                         </div>
                         <div className="form-control">
                             <label className="label">
                                 <span className="label-text">Equipments</span>
                             </label>
-                            <select
-                                
-                                name="equipments"
-                                onChange={handleEquipmentChange}
-                                className="select select-bordered"
-                                required
-                            >
-                                <option value="">Select Equipment</option>
-                                {equipments.map((equipment) => (
-                                    <option key={equipment.id} value={equipment.id}>
-                                        {equipment.id}
-                                    </option>
-                                ))}
-                            </select>
-                            {errors.equipments && (
-                                <p className="text-red-500 text-xs mt-1">{errors.equipments}</p>
+                            <EquipmentAutocomplete
+                                selectedEquipments={selectedEquipments}
+                                setSelectedEquipments={setSelectedEquipments}
+                            />
+                            {validationErrors.equipments && (
+                                <p className="text-red-500 text-xs mt-1">{validationErrors.equipments}</p>
                             )}
                         </div>
                         <div className="modal-action">
-                            <button type="submit" className="btn btn-primary">Save</button>
-                            <button type="button" onClick={handleCloseModal} className="btn">Cancel</button>
+                            <button type="submit" className="btn btn-primary">
+                                <FontAwesomeIcon icon={faSave} /> {selectedICU ? 'Save Changes' : 'Save'}
+                            </button>
+                            <button type="button" onClick={handleCloseModal} className="btn btn-secondary">
+                                <FontAwesomeIcon icon={faTimes} /> Cancel
+                            </button>
                         </div>
                     </form>
                 </div>
