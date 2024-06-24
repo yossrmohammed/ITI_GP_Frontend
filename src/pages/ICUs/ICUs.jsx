@@ -1,14 +1,13 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getICUs } from '../../store/slices/ICUSlice';
-import { addApplication } from '../../store/slices/ApplicationSlice';
+import { getICUs, setItemsPerPage } from '../../store/slices/ICUSlice';
 import ICUBookCard from '../../components/ICUComponents/ICUBookCard';
 import ICUApplication from '../../components/ICUComponents/ICUApplication';
 import Toast from '../../components/ICUComponents/Toast';
 
-export default function ICUs() {
+const ICUs = () => {
     const dispatch = useDispatch();
-    const { ICUs, isLoading } = useSelector((state) => state.ICUs);
+    const { ICUs, isLoading, currentPage, totalPages, itemsPerPage } = useSelector((state) => state.ICUs);
     const [showModal, setShowModal] = useState(false);
     const [selectedICU, setSelectedICU] = useState(null);
     const [formData, setFormData] = useState({
@@ -23,13 +22,16 @@ export default function ICUs() {
     const [toastType, setToastType] = useState('success'); // 'success' or 'error'
     const [toastMessage, setToastMessage] = useState('');
 
-    useEffect(() => {
-        dispatch(getICUs(address));
-    }, [dispatch, address]);
+    // Define options for items per page dropdown
+    const itemsPerPageOptions = [5, 10, 20, 50];
 
     useEffect(() => {
-        console.log("ICUs data:", ICUs);
-    }, [ICUs]);
+        fetchICUs();
+    }, [dispatch, address, currentPage, itemsPerPage]);
+
+    const fetchICUs = () => {
+        dispatch(getICUs({ address, page: currentPage, itemsPerPage }));
+    };
 
     const handleBookICU = (icu) => {
         setSelectedICU(icu);
@@ -83,7 +85,7 @@ export default function ICUs() {
                     handleCloseModal();
                 })
                 .catch((error) => {
-                    console.log("errror" + error.response.data);
+                    console.log("Error:", error.response.data);
                     if (error.response && error.response.data.errors) {
                         setErrors(error.response.data.errors);
                     } else {
@@ -99,10 +101,20 @@ export default function ICUs() {
         setAddress(e.target.value);
     };
 
+    const handlePageChange = (page) => {
+        dispatch(getICUs({ address, page, itemsPerPage }));
+    };
+
+    const handleItemsPerPageChange = (e) => {
+        const newItemsPerPage = parseInt(e.target.value);
+        dispatch(setItemsPerPage(newItemsPerPage));
+        fetchICUs();
+    };
+
     return (
         <div className="p-4">
             <h1 className="text-2xl font-bold mb-4">Intensive Care Units</h1>
-            <div className="mb-4">
+            <div className="mb-4 flex items-center">
                 <input
                     type="text"
                     placeholder="Filter by hospital address"
@@ -116,9 +128,37 @@ export default function ICUs() {
                     <span className="loading loading-dots loading-lg"></span>
                 </div>
             ) : (
-                ICUs.map((icu, index) => (
-                    <ICUBookCard key={index} icu={icu} onBookICU={handleBookICU} />
-                ))
+                <>
+                    {ICUs.map((icu, index) => (
+                        <ICUBookCard key={index} icu={icu} onBookICU={handleBookICU} />
+                    ))}
+                    <div className="flex justify-between items-center mt-4">
+                        <div>
+                            <span>Show:</span>
+                            <select
+                                className="ml-2 border rounded p-1"
+                                value={itemsPerPage}
+                                onChange={handleItemsPerPageChange}
+                            >
+                                {itemsPerPageOptions.map((option) => (
+                                    <option key={option} value={option}>{option}</option>
+                                ))}
+                            </select>
+                            <span>items per page</span>
+                        </div>
+                        <div className="flex space-x-1">
+                            {Array.from({ length: totalPages }, (_, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => handlePageChange(index + 1)}
+                                    className={`btn btn-xs ${currentPage === index + 1 ? 'btn-primary' : 'btn-secondary'}`}
+                                >
+                                    {index + 1}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </>
             )}
 
             <ICUApplication
@@ -133,4 +173,6 @@ export default function ICUs() {
             <Toast showToast={showToast} toastType={toastType} toastMessage={toastMessage} />
         </div>
     );
-}
+};
+
+export default ICUs;

@@ -1,34 +1,43 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../axios";
 
-export const getHospitalICUs = createAsyncThunk("ICUs/getICUs", async (hospitalId) => {
-    const response = await axiosInstance.get(`/intensive-care-units/${hospitalId}`);
-    return response.data.data;
+export const getHospitalICUs = createAsyncThunk("ICUs/getICUs", async ({ hospitalId, page, itemsPerPage }) => {
+    const response = await axiosInstance.get(`/intensive-care-units/${hospitalId}`, {
+        params: { page, itemsPerPage }
+    });
+    return response.data;
 });
 
 export const addICU = createAsyncThunk("ICUs/addICU", async (data, { dispatch }) => {
     const response = await axiosInstance.post("/intensive-care-units", data);
-    dispatch(getHospitalICUs(data.hospital_id)); // Dispatch refetch action
+    dispatch(getHospitalICUs({ hospitalId: data.hospital_id, page: 1, itemsPerPage: 5 })); // Dispatch refetch action
     return response.data;
 });
 
 export const updateICU = createAsyncThunk("ICUs/updateICU", async ({ id, data }, { dispatch }) => {
     const response = await axiosInstance.put(`/intensive-care-units/${id}`, data);
-    dispatch(getHospitalICUs(data.hospital_id)); // Dispatch refetch action
+    dispatch(getHospitalICUs({ hospitalId: data.hospital_id, page: 1, itemsPerPage: 5 })); // Dispatch refetch action
     return response.data;
 });
 
-export const deleteICU = createAsyncThunk("ICUs/deleteICU", async ({ id, hospitalId }, { dispatch }) => {
+export const deleteICU = createAsyncThunk("ICUs/deleteICU", async ({ id, hospitalId, itemsPerPage }, { dispatch }) => {
     await axiosInstance.delete(`/intensive-care-units/${id}`);
-    dispatch(getHospitalICUs(hospitalId)); // Dispatch refetch action
+    dispatch(getHospitalICUs({ hospitalId, page: 1, itemsPerPage })); // Dispatch refetch action
     return id;
 });
 
 const HospitalSlice = createSlice({
-    name: "ICUs",
+    name: "hospital",
     initialState: {
-        ICUs: [],
+        hICUs: [],
+        currentPage: 1,
+        totalPages: 1,
         isLoading: false,
+    },
+    reducers: {
+        setCurrentPage: (state, action) => {
+            state.currentPage = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -36,7 +45,9 @@ const HospitalSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(getHospitalICUs.fulfilled, (state, action) => {
-                state.ICUs = action.payload;
+                state.hICUs = action.payload.data;
+                state.currentPage = action.payload.current_page;
+                state.totalPages = action.payload.last_page;
                 state.isLoading = false;
             })
             .addCase(getHospitalICUs.rejected, (state) => {
@@ -46,7 +57,7 @@ const HospitalSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(addICU.fulfilled, (state, action) => {
-                state.ICUs.push(action.payload);
+                state.hICUs.push(action.payload);
                 state.isLoading = false;
             })
             .addCase(addICU.rejected, (state) => {
@@ -56,9 +67,9 @@ const HospitalSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(updateICU.fulfilled, (state, action) => {
-                const index = state.ICUs.findIndex(icu => icu.id === action.payload.id);
+                const index = state.hICUs.findIndex(icu => icu.id === action.payload.id);
                 if (index !== -1) {
-                    state.ICUs[index] = action.payload;
+                    state.hICUs[index] = action.payload;
                 }
                 state.isLoading = false;
             })
@@ -69,7 +80,7 @@ const HospitalSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(deleteICU.fulfilled, (state, action) => {
-                state.ICUs = state.ICUs.filter(icu => icu.id !== action.payload);
+                state.hICUs = state.hICUs.filter(icu => icu.id !== action.payload);
                 state.isLoading = false;
             })
             .addCase(deleteICU.rejected, (state) => {
@@ -77,5 +88,7 @@ const HospitalSlice = createSlice({
             });
     },
 });
+
+export const { setCurrentPage } = HospitalSlice.actions;
 
 export default HospitalSlice.reducer;
