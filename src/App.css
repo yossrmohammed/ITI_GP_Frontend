@@ -25,4 +25,10 @@
   .show-order-btn:hover {
     color: white !important;
     font-weight: normal !important;
-  }
+  }.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;  
+  scrollbar-width: none;  
+}
