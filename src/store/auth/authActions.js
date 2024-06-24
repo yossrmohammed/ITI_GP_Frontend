@@ -46,7 +46,7 @@ export const fetchUserData = () => async (dispatch) => {
   dispatch(fetchUserStart());
   try{
     const response =await getUserData();
-    console.log(response.data);
+
     dispatch(fetchUserSuccess(response.data));
     return response;
   } catch (error) {
@@ -81,7 +81,7 @@ export const resetPsswordUser = (formData) => async () => {
     const response = await resetPassword(formData);
     return response;
   } catch (error) {
-    console.log("catch error in action ");
+
    throw new Error(error.response.data.message || error.message);
   }
 };
