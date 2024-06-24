@@ -11,6 +11,7 @@ import MedicPage from "./src/pages/MedicPage/MedicPage";
 
 import DoctorProfile from "/src/pages/Doctors/DoctorProfile"
 import ReadPrescriptions from "/src/pages/Doctors/Prescriptions/ReadPrescriptions"
+import UnReadPrescriptions from "/src/pages/Doctors/Prescriptions/UnReadPrescriptions"
 
 import Verify from "./src/pages/Verify/Verify";
 import ResetPassword from "./src/pages/ResetPassword/ResetPassword";
@@ -64,6 +65,10 @@ export const router = createBrowserRouter([
             {
                 path: '/doctor/prescriptions/read',
                 element: <ReadPrescriptions/>,
+            },
+            {
+                path: '/doctor/prescriptions/unread',
+                element: <UnReadPrescriptions/>,
             },
             {
                 path: '/register',

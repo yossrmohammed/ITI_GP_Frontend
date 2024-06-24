@@ -86,12 +86,8 @@ function ReadPrescriptions() {
               <div className="card-title  mb-2">
                     <p> <FontAwesomeIcon icon={faPhone} />  {prescription.patient_phone} </p>
               </div>
-              {/* <p>{prescription.prescription_description}.</p> */}
-              <p>Apply the ointment twice a day.this is test description,
-                 Apply the ointment twice a day.this is test description, 
-                 Apply the ointment twice a day.this is test description,
-
-</p>
+              <p>{prescription.prescription_description}.</p>
+              
             </div>
           </div>
         ))}
