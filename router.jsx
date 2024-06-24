@@ -24,6 +24,7 @@ import PatientProfile from "./src/pages/Patient/PatientProfile";
 import PayPal from "./src/pages/PayPal/PayPal";
 import PatientAppointments from "./src/pages/Patient/PatientAppointments";
 import { Link } from "react-router-dom";
+import PatientPage from "./src/pages/Patient/PatientPage";
 
 function Styled() 
 {
@@ -124,6 +125,10 @@ export const router = createBrowserRouter([
             {
                 path: '/patient/appointments',
                 element: <PatientAppointments/>
+            },
+            {
+                path: '/patient/:id',
+                element: <PatientPage/>
             },
         ]
     },
