@@ -3,6 +3,7 @@ import ChatBot from 'react-simple-chatbot';
 import { ThemeProvider } from 'styled-components';
 import DoctorSearch from './DoctorSearch'; // Import DoctorSearch component
 import NurseSearch from './NurseSearch'; // Import NurseSearch component
+import HospitalSearch from './HospitalSearch'; // Import HospitalSearch component
 import PrescriptionUpload from './PrescriptionUpload';
 
 const ChatBotButton = () => {
@@ -73,6 +74,7 @@ const ChatBotButton = () => {
                   options: [
                     { value: 'find_doctor', label: 'Find a Doctor', trigger: 'find_doctor_option' },
                     { value: 'find_nurse', label: 'Find a Nurse', trigger: 'find_nurse_option' }, 
+                    { value: 'find_hospital', label: 'Find a Hospital', trigger: 'find_hospital_option' },
                     { value: 'upload_prescription', label: 'Upload Prescription', trigger: 'upload_prescription' },
                   ],
                 },
@@ -149,6 +151,22 @@ const ChatBotButton = () => {
                 {
                   id: 'show_nurses',
                   component: <NurseSearch />,
+                  waitAction: true,
+                  trigger: 'options',
+                },
+                {
+                  id: 'find_hospital_option',
+                  message: 'Please enter the city name to find hospitals:',
+                  trigger: 'hospital_city_name',
+                },
+                {
+                  id: 'hospital_city_name',
+                  user: true,
+                  trigger: 'show_hospitals',
+                },
+                {
+                  id: 'show_hospitals',
+                  component: <HospitalSearch />,
                   waitAction: true,
                   trigger: 'options',
                 },
