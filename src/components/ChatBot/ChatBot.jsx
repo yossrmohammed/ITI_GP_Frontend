@@ -1,8 +1,9 @@
-// ChatBotButton.js
 import React, { useState } from 'react';
 import ChatBot from 'react-simple-chatbot';
 import { ThemeProvider } from 'styled-components';
 import DoctorSearch from './DoctorSearch'; // Import DoctorSearch component
+import NurseSearch from './NurseSearch'; // Import NurseSearch component
+import PrescriptionUpload from './PrescriptionUpload';
 
 const ChatBotButton = () => {
   const [showChatBot, setShowChatBot] = useState(false);
@@ -20,6 +21,12 @@ const ChatBotButton = () => {
     botFontColor: '#fff',
     userBubbleColor: '#fff',
     userFontColor: '#4a4a4a',
+  };
+
+  const handleTriggerNextStep = (trigger) => {
+    // This function should handle triggering the next step in the chatbot
+    // It could be implemented to perform specific actions based on the trigger value
+    console.log('Triggering next step:', trigger);
   };
 
   return (
@@ -64,19 +71,40 @@ const ChatBotButton = () => {
                 {
                   id: 'options',
                   options: [
-                    { value: 'find_doctor', label: 'Find a Doctor', trigger: 'find_doctor' },
-                    { value: 'book_appointment', label: 'Book an Appointment', trigger: 'book_appointment' },
+                    { value: 'find_doctor', label: 'Find a Doctor', trigger: 'find_doctor_option' },
+                    { value: 'find_nurse', label: 'Find a Nurse', trigger: 'find_nurse_option' }, 
                     { value: 'upload_prescription', label: 'Upload Prescription', trigger: 'upload_prescription' },
-                    { value: 'pay', label: 'Make a Payment', trigger: 'pay' },
                   ],
                 },
                 {
-                  id: 'find_doctor',
+                  id: 'find_doctor_option',
+                  message: 'Would you like to search by city or by doctor name?',
+                  trigger: 'doctor_search_options',
+                },
+                {
+                  id: 'doctor_search_options',
+                  options: [
+                    { value: 'city', label: 'City', trigger: 'find_doctor_by_city' },
+                    { value: 'name', label: 'Doctor Name', trigger: 'find_doctor_by_name' },
+                  ],
+                },
+                {
+                  id: 'find_doctor_by_city',
                   message: 'Please enter the city name to find doctors:',
                   trigger: 'city_name',
                 },
                 {
+                  id: 'find_doctor_by_name',
+                  message: 'Please enter the doctor name to search for:',
+                  trigger: 'doctor_name',
+                },
+                {
                   id: 'city_name',
+                  user: true,
+                  trigger: 'show_doctors',
+                },
+                {
+                  id: 'doctor_name',
                   user: true,
                   trigger: 'show_doctors',
                 },
@@ -87,50 +115,60 @@ const ChatBotButton = () => {
                   trigger: 'options',
                 },
                 {
-                  id: 'book_appointment',
-                  message: 'Please provide the doctor/nurse ID and your preferred date and time.',
-                  trigger: 'appointment_info',
+                  id: 'find_nurse_option',
+                  message: 'Would you like to search by city or by nurse name?',
+                  trigger: 'nurse_search_options',
                 },
                 {
-                  id: 'appointment_info',
+                  id: 'nurse_search_options',
+                  options: [
+                    { value: 'city', label: 'City', trigger: 'find_nurse_by_city' },
+                    { value: 'name', label: 'Nurse Name', trigger: 'find_nurse_by_name' },
+                  ],
+                },
+                {
+                  id: 'find_nurse_by_city',
+                  message: 'Please enter the city name to find nurses:',
+                  trigger: 'nurse_city_name',
+                },
+                {
+                  id: 'find_nurse_by_name',
+                  message: 'Please enter the nurse name to search for:',
+                  trigger: 'nurse_name',
+                },
+                {
+                  id: 'nurse_city_name',
                   user: true,
-                  trigger: 'appointment_confirmation',
+                  trigger: 'show_nurses',
                 },
                 {
-                  id: 'appointment_confirmation',
-                  message: 'Booking appointment for {previousValue}...',
+                  id: 'nurse_name',
+                  user: true,
+                  trigger: 'show_nurses',
+                },
+                {
+                  id: 'show_nurses',
+                  component: <NurseSearch />,
+                  waitAction: true,
                   trigger: 'options',
                 },
                 {
                   id: 'upload_prescription',
-                  message: 'Please upload your prescription.',
+                  message: 'Please upload your prescription:',
                   trigger: 'prescription_upload',
                 },
                 {
                   id: 'prescription_upload',
-                  user: true,
-                  trigger: 'upload_confirmation',
+                  component: <PrescriptionUpload triggerNextStep={handleTriggerNextStep} />, // Pass triggerNextStep function here
+                  waitAction: true,
+                  trigger: 'options',
                 },
                 {
                   id: 'upload_confirmation',
                   message: 'Uploading prescription...',
                   trigger: 'options',
                 },
-                {
-                  id: 'pay',
-                  message: 'Please provide the amount and patient ID for payment.',
-                  trigger: 'payment_info',
-                },
-                {
-                  id: 'payment_info',
-                  user: true,
-                  trigger: 'payment_confirmation',
-                },
-                {
-                  id: 'payment_confirmation',
-                  message: 'Processing payment of {previousValue}...',
-                  trigger: 'options',
-                },
+
               ]}
               handleEnd={() => setShowChatBot(false)}
             />

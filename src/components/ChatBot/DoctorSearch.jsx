@@ -1,17 +1,17 @@
-// DoctorSearch.js
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { axiosInstance } from '../../axios'; // Import your axios instance
 
 const DoctorSearch = ({ steps, triggerNextStep }) => {
-  const { city_name } = steps;
+  const { city_name, doctor_name } = steps;
   const [loading, setLoading] = useState(true);
   const [doctors, setDoctors] = useState([]);
-  
+  const baseUrl = import.meta.env.VITE_FRONT_URL; // Use VITE_FRONT_URL
+
   useEffect(() => {
-    const fetchDoctorsByCity = async (city) => {
+    const fetchDoctors = async (city, name) => {
       try {
-        const response = await axiosInstance.get('/doctors', { params: { city } });
+        const response = await axiosInstance.get('/doctors', { params: { city, name } });
         setDoctors(response.data.data);
       } catch (error) {
         console.error('Error fetching doctors:', error);
@@ -20,10 +20,10 @@ const DoctorSearch = ({ steps, triggerNextStep }) => {
       }
     };
 
-    if (city_name.value) {
-      fetchDoctorsByCity(city_name.value);
+    if (city_name?.value || doctor_name?.value) {
+      fetchDoctors(city_name?.value, doctor_name?.value);
     }
-  }, [city_name]);
+  }, [city_name, doctor_name]);
 
   return (
     <div>
@@ -31,15 +31,19 @@ const DoctorSearch = ({ steps, triggerNextStep }) => {
         <p>Loading doctors...</p>
       ) : doctors.length > 0 ? (
         <div>
-          <p>Here are the doctors in {city_name.value}:</p>
+          <p>Here are the doctors (click on name to get nurse page):</p>
           <ul>
             {doctors.map((doctor) => (
-              <li key={doctor.id}>{doctor.user?.name}</li>
+              <li key={doctor.id}>
+                <a href={`${baseUrl}/user/doctor/${doctor.id}`} target="_blank" rel="noopener noreferrer">
+                  {doctor.user?.name}
+                </a>
+              </li>
             ))}
           </ul>
         </div>
       ) : (
-        <p>No doctors found in {city_name.value}.</p>
+        <p>No doctors found.</p>
       )}
       <button onClick={triggerNextStep}>Next</button>
     </div>

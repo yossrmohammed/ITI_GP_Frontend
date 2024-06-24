@@ -55,6 +55,7 @@ export const login = async (formData) => {
 export const getUserData = async () => {
   try {
     const token = getCookie('token');
+    console.log(token);
     if (!token) {
       throw new Error('No token found');
     }
