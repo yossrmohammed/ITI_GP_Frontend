@@ -145,7 +145,7 @@ function NurseAppointments () {
         <>
         <div className="userprofile-container container mx-auto px-8 pt-6 pb-6 rounded-lg  my-4 flex justify-between">
             <div className="filters-container p-4 rounded-lg max-h-fit"> 
-                <h2 className="text-2xl font-bold mb-4">Appointment Type</h2>
+                <h2 className="text-2xl font-bold mb-4">Appointment Status</h2>
                 <hr></hr>
                 <div className="form-control ">
                     <label className="label cursor-pointer">
