@@ -5,7 +5,7 @@ import Header from "../../components/MedicalCard/Header";
 import ReviewCard from "../../components/ReviewCard/ReviewCard";
 function MedicPage() {
     const params = useParams();
-    const [medic,setMedic] = useState({});
+    const [medic,setMedic] = useState(null);
     const [currPage,setCurrPage] = useState(1);
     const [totalPages,setTotalPages] = useState(0);
     const [reviews,setReviews] = useState([]);
@@ -32,7 +32,12 @@ function MedicPage() {
     {
       setCurrPage(page);
     }
-
+  console.log("Medic", medic)
+  if (!medic) {
+    return (
+      <div>Loading..</div>
+    )
+  }
   return (
     <>
     <div className="">

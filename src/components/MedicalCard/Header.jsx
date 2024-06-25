@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Rating from "../Rating/Rating";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuildingColumns, faEnvelope, faLocationDot, faMoneyBillWave, faPhone, faUserDoctor, faCalendarAlt, faClinicMedical, faHome } from '@fortawesome/free-solid-svg-icons';
 import { Dialog, DialogContent, DialogTitle, IconButton, Card, CardContent, Typography, Grid } from '@mui/material';
 import { Close } from '@mui/icons-material';
+import dayjs from "dayjs"; // Library for date manipulation
 
 function Header(props) {
   const headerClass = "text-lg font-semibold card-title";
@@ -15,9 +16,41 @@ function Header(props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDayModalOpen, setIsDayModalOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null); // Track selected option
+  const [upcomingDates, setUpcomingDates] = useState([]); // Track upcoming dates for work days
 
-  // Define the days of the week
-  const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  // Define all days of the week
+  const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+  useEffect(() => {
+    if (props.work_days) {
+      // Parse work days from props
+      const workDays = props.work_days.split(", ").map(day => day.trim());
+
+      // Calculate the next dates for the work days
+      const nextDates = workDays.map(day => {
+        // Find the index of the day in the daysOfWeek array
+        const dayIndex = daysOfWeek.indexOf(day);
+
+        // Calculate the upcoming date for this day
+        const today = dayjs();
+        const todayIndex = today.day(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
+
+        // Calculate the days until the next occurrence of the target day
+        let daysToAdd = dayIndex - todayIndex;
+        if (daysToAdd < 0) {
+          daysToAdd += 7; // Add 7 days if the day is in the past
+        }
+
+        const nextDate = today.add(daysToAdd, 'day');
+        return {
+          day,
+          date: nextDate.format("dddd, MMMM D, YYYY") // Format the date
+        };
+      });
+
+      setUpcomingDates(nextDates);
+    }
+  }, [props.work_days]);
 
   const handleBooking = () => {
     setIsModalOpen(true);
@@ -178,16 +211,21 @@ function Header(props) {
         </DialogTitle>
         <DialogContent>
           <Grid container spacing={2}>
-            {daysOfWeek.map((day) => (
-              <Grid item xs={12} sm={6} md={4} key={day}>
-                <Card className="hover:shadow-lg cursor-pointer">
-                  <CardContent className="text-center">
-                    <FontAwesomeIcon icon={faCalendarAlt} size="2x" className="text-blue-600 mb-2" />
-                    <Typography variant="h6">{day}</Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
+          {daysOfWeek.map((day) => {
+              const nextDate = upcomingDates.find(d => d.day === day);
+              const isDisabled = !nextDate; // Disable if no next date for this day
+              return (
+                <Grid item xs={12} sm={6} md={4} key={day}>
+                  <Card className={`hover:shadow-lg ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`} disabled={isDisabled}>
+                    <CardContent className="text-center">
+                      <FontAwesomeIcon icon={faCalendarAlt} size="2x" className={`text-blue-600 mb-2 ${isDisabled ? 'opacity-50' : ''}`} />
+                      <Typography variant="h6">{day}</Typography>
+                      {nextDate && <Typography>{nextDate.date}</Typography>}
+                    </CardContent>
+                  </Card>
+                </Grid>
+              );
+            })}
           </Grid>
         </DialogContent>
       </Dialog>
@@ -196,3 +234,4 @@ function Header(props) {
 }
 
 export default Header;
+
