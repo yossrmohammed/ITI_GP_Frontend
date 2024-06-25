@@ -62,6 +62,12 @@ const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selected
                 await dispatch(updateICU({ id: selectedICU.id, data: formDataWithEquipments, hospitalId }));
             } else {
                 await dispatch(addICU(formDataWithEquipments));
+                setFormData({
+                    hospital_id: hospitalId,
+                    capacity: '',
+                    equipments: [],
+                });
+                setSelectedEquipments([]);
             }
             console.log('ICU saved successfully:', formDataWithEquipments);
             

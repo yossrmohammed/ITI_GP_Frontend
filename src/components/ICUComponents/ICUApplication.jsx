@@ -1,3 +1,4 @@
+import React from 'react';
 
 const ICUApplication = ({
     showModal,
@@ -13,11 +14,12 @@ const ICUApplication = ({
                 <h3 className="font-bold text-lg">Book ICU</h3>
                 <form onSubmit={handleSubmit}>
                     <div className="form-control">
-                        <label className="label">
+                        <label htmlFor="patient_name" className="label">
                             <span className="label-text">Patient Name</span>
                         </label>
                         <input
                             type="text"
+                            id="patient_name"
                             name="patient_name"
                             value={formData.patient_name}
                             onChange={handleChange}
@@ -29,11 +31,12 @@ const ICUApplication = ({
                         )}
                     </div>
                     <div className="form-control">
-                        <label className="label">
+                        <label htmlFor="patient_phone" className="label">
                             <span className="label-text">Patient Phone</span>
                         </label>
                         <input
                             type="text"
+                            id="patient_phone"
                             name="patient_phone"
                             value={formData.patient_phone}
                             onChange={handleChange}
@@ -45,10 +48,11 @@ const ICUApplication = ({
                         )}
                     </div>
                     <div className="form-control">
-                        <label className="label">
+                        <label htmlFor="description" className="label">
                             <span className="label-text">Description</span>
                         </label>
                         <textarea
+                            id="description"
                             name="description"
                             value={formData.description}
                             onChange={handleChange}
