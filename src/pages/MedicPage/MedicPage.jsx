@@ -14,6 +14,7 @@ function MedicPage() {
         axiosInstance.get(`/${params.role}s/${params.id}'`)
         .then((res) => {
           setMedic(res.data.data);
+          console.log(res.data.data);
         })
         .catch((err) => console.log(err))
     },[])
@@ -46,11 +47,21 @@ function MedicPage() {
     qualifications={medic.qualifications}
     specialization={medic.specialization}
     city={medic.city}
-    fees={medic.clinic_fees}
+
+    clinic_fees={medic.clinic_fees}
+    clinic_work_end={medic.clinic_work_end}
+    clinic_work_start={medic.clinic_work_start}
+    
+    home_fees={medic.home_fees}
+    home_work_end={medic.home_work_end}
+    home_work_start={medic.home_work_start}
+
     phone={medic.phone}
     email={medic.email}
     address={medic.address}
     rating={medic.average_rating}
+    work_days={medic.work_days}
+
     />
     }
 
