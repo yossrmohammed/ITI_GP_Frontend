@@ -3,8 +3,13 @@ import { axiosInstance } from '../../axios';
 import ApplicationCard from '../../components/HospitalComponents/ApplicationCard';
 import SkeletonCard from '../../components/Reuseable/SkeletonCard';
 import Pagination from '../../components/Reuseable/Pagination';
+import { useSelector } from 'react-redux';
+
+
 
 const Applications = () => {
+    const loggedUser = useSelector((state) => state.auth.user);
+    const id = loggedUser.id;
     const [applications, setApplications] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [currentTab, setCurrentTab] = useState('pending');
@@ -19,7 +24,7 @@ const Applications = () => {
     const fetchApplications = async () => {
         setIsLoading(true);
         try {
-            const response = await axiosInstance.get(`/hospitals/1/applications`, {
+            const response = await axiosInstance.get(`/hospitals/${id}/applications`, {
                 params: {
                     status: currentTab,
                     page: currentPage,

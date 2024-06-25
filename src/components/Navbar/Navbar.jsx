@@ -62,7 +62,7 @@ function Navbar() {
             loggedUser?.user?.role === 'hospital' &&
             <>
             <Link to={"/hospital"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Profile </Link>
-            <Link to={"/applications"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Applications </Link>
+            <Link to={"/application"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Applications </Link>
             </>
           }
 
@@ -79,7 +79,6 @@ function Navbar() {
     <div className='hidden md:inline-block'> 
     <Link to={"/patient/profile"} className="font-bold text-blue-600 mx-2 text-lg"> Profile </Link>
     <Link to={"/patient/appointments"} className="font-bold text-blue-600 mx-2 text-lg"> Appointments </Link>
-    <Link to={"/patient/reviews"} className="font-bold text-blue-600 mx-2 text-lg"> Reviews </Link>
     </div>
     </>
   }
@@ -128,7 +127,7 @@ function Navbar() {
 
     <div className='hidden md:inline-block'>
       <Link to={"/hospital"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Profile </Link>
-      <Link to={"/applications"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Applications </Link>
+      <Link to={"/application"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Applications </Link>
     </div>
     </>
   }
@@ -160,7 +159,12 @@ function Navbar() {
     </div>
   </div>
   }
-    
+
+  {
+    !loggedUser || loggedUser?.role === 'patient' &&
+    <Link to={"/icu"} className="font-bold mx-4">Book ICU</Link>
+  }
+
   { loggedUser?.name && <p>{loggedUser.name}</p> }
     
   { loggedUser?.user?.name && <p>{loggedUser.user.name}</p>}

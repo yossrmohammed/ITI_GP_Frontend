@@ -2,11 +2,13 @@ import { Fragment, useEffect, useState } from "react"
 import { getReadPrescriptions } from "/src/axios/Prescriptions.jsx";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPhone, faUser } from '@fortawesome/free-solid-svg-icons'
-
+import { useSelector } from "react-redux";
 import "/src/App.css";
 function ReadPrescriptions() {  
+    
+    const loggedUser = useSelector((state) => state.auth.user);
+    const doctorId = loggedUser.id;
 
-    const doctorId = 1;
     const [prescriptions, setPrescriptions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
