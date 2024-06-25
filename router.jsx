@@ -23,7 +23,9 @@ import Applications from "./src/pages/Hospital/Applications";
 import PatientProfile from "./src/pages/Patient/PatientProfile";
 import PayPal from "./src/pages/PayPal/PayPal";
 import PatientAppointments from "./src/pages/Patient/PatientAppointments";
-import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import NotFound from "./src/pages/NotFound/NotFound";
+import NotAuthorized from "./src/pages/NotAuthorized/NotAuthorized";
 
 function Styled() 
 {
@@ -34,6 +36,96 @@ function Styled()
         <Footer/>
         </>
     );
+}
+
+function PatientLayout()
+{
+    const loggedUser = useSelector((state) => state.auth.user);
+
+    if (!loggedUser || loggedUser.role !== 'doctor')
+    {
+        return <NotAuthorized/>
+    }
+
+    return (
+        <>
+        <Navbar/>
+        <Outlet/>
+        <Footer/>
+        </>
+    );
+}
+
+function DoctorLayout()
+{
+    const loggedUser = useSelector((state) => state.auth.user);
+
+    if (!loggedUser || loggedUser.role !== 'doctor')
+    {
+        return <NotAuthorized/>;     
+    }
+
+    return (
+        <>
+        <Navbar />
+        <Outlet />
+        <Footer />
+        </>       
+    );
+}
+
+function NurseLayout()
+{
+    const loggedUser = useSelector((state) => state.auth.user);
+
+    if (!loggedUser || loggedUser.role !== 'nurse')
+    {
+        return <NotAuthorized/>;     
+    }
+
+    return (
+        <>
+        <Navbar />
+        <Outlet />
+        <Footer />
+        </>       
+    );
+}
+
+function HospitalLayout()
+{
+    const loggedUser = useSelector((state) => state.auth.user);
+
+    if (!loggedUser || loggedUser.role !== 'hospital')
+    {
+        return <NotAuthorized/>;     
+    }
+
+    return (
+        <>
+        <Navbar />
+        <Outlet />
+        <Footer />
+        </>       
+    );
+}
+
+function MedicLayout()
+{
+    const loggedUser = useSelector((state) => state.auth.user);
+
+    if (!loggedUser || loggedUser.role !== 'hospital')
+    {
+        return <NotAuthorized/>;     
+    }
+
+    return (
+        <>
+        <Navbar />
+        <Outlet />
+        <Footer />
+        </>       
+    );   
 }
 
 
@@ -70,26 +162,6 @@ export const router = createBrowserRouter([
                 element: <MedicPage/>,
             },
             {
-                path: '/doctor/profile',
-                element: <DoctorProfile/>,
-            },
-            {
-                path: '/doctor/prescriptions/read',
-                element: <ReadPrescriptions/>,
-            },
-            {
-                path: '/doctor/prescriptions/unread',
-                element: <UnReadPrescriptions/>,
-            },
-            {
-                path: '/doctor/appointments',
-                element: <DoctorAppointments/>,
-            },
-            {
-                path: '/nurse/profile',
-                element: <NurseProfile/>,
-            },
-            {
                 path: '/register',
                 element: <Register/>
             },
@@ -109,6 +181,54 @@ export const router = createBrowserRouter([
                 path: '/reset',
                 element: <ResetPassword/>
             },
+        ]
+    },
+    {
+        element: <PatientLayout/>,
+        children: [
+            {
+                path: '/patient/profile',
+                element: <PatientProfile/>
+            },
+            {
+                path: '/patient/appointments',
+                element: <PatientAppointments/>
+            }
+        ]
+    },
+    {
+        element: <DoctorLayout/>,
+        children: [
+            {
+                path: '/doctor/profile',
+                element: <DoctorProfile/>,
+            },
+            {
+                path: '/doctor/prescriptions/read',
+                element: <ReadPrescriptions/>,
+            },
+            {
+                path: '/doctor/prescriptions/unread',
+                element: <UnReadPrescriptions/>,
+            },
+            {
+                path: '/doctor/appointments',
+                element: <DoctorAppointments/>,
+            },
+        ]
+    }, 
+    {
+        element: <NurseLayout/>,
+        children: [
+            {
+                path: '/nurse/profile',
+                element: <NurseProfile/>,
+            },
+        ]
+    },
+    {
+        element: <HospitalLayout/>,
+        children: [
             {
                 path:'/hospital',
                 element: <HospitalICUs/>
@@ -117,27 +237,17 @@ export const router = createBrowserRouter([
                 path:'/application',
                 element:<Applications/>
             },
-            {
-                path: '/patient/profile',
-                element: <PatientProfile/>
-            },
-            {
-                path: '/patient/appointments',
-                element: <PatientAppointments/>
-            },
+        ]
+    },
+    {
+        element: <MedicLayout/>,
+        children: [
+            
         ]
     },
     {
         path: '*',
-        element:  <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 text-gray-800">
-        <div className="text-center">
-            <p className="text-3xl font-bold mb-4">404</p>
-            <p className="text-2xl mb-8">Page Not Found</p>
-            <Link to={"/"} className="px-4 py-2 rounded-md btn btn-info ">
-                Go Home
-            </Link>
-        </div>
-    </div>
+        element:  <NotFound/>
     }
 ])
 
