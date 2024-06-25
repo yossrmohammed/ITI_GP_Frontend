@@ -71,10 +71,8 @@ const HospitalICUs = () => {
                 </div>
                 <div className="w-full md:w-2/3 px-4 mb-4">
                     <div className="mb-4 flex justify-between items-center">
-                        <Link to={'/application'} className="btn btn-secondary">
-                            Get All Applications
-                        </Link>
-                        <button onClick={handleAddICU} className="btn btn-primary">
+                        <div></div>
+                        <button onClick={handleAddICU} className="btn btn-primary ">
                             Add New ICU
                         </button>
                     </div>
