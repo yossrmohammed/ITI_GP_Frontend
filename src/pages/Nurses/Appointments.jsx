@@ -220,7 +220,7 @@ function NurseAppointments () {
             </div>
         {loading ? renderSkeletonTable() : (
             <div className="table-container overflow-x-auto grow ml-5">
-                <table className="table ">
+                <table className="table text-base ">
                     <thead className="text-base">
                         <tr className="text-center"> 
                             <th>Patient</th>
@@ -255,16 +255,16 @@ function NurseAppointments () {
                                 </td>
                                 <th>
                                    
-                                    <button className="btn btn-outline btn-success btn-xs"   
+                                    <button className="btn btn-circle btn-outline btn-success btn-sm"  
                                     onClick={() => handleApprove(appointment.id , "accepted")}>
-                                        Accept <FontAwesomeIcon icon={faCheck} /> 
+                                         <FontAwesomeIcon icon={faCheck} /> 
                                     </button>
                                     
                                 </th>
                                 <th>
-                                        <button className="btn btn-outline btn-error btn-xs"
+                                        <button className=" btn btn-circle btn-outline btn-error btn-sm"
                                         onClick={() => handleApprove(appointment.id , "cancelled")}>
-                                        Decline <FontAwesomeIcon icon={faXmark} /> </button>
+                                         <FontAwesomeIcon icon={faXmark} /> </button>
                                     
                               
                               </th>
