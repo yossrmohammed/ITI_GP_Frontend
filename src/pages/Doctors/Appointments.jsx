@@ -16,6 +16,9 @@ function DoctorAppointments () {
    
     const [selectedkindOfVisitFilter, setSelectedkindOfVisitFilter] = useState('all'); 
 
+    const [currPage,setCurrPage] = useState(1);
+    const [totalPages,setTotalPages] = useState(1);
+
     const [date, setDate] = useState(null);
 
     useEffect(() => {
@@ -23,14 +26,17 @@ function DoctorAppointments () {
           setLoading(true);
           CallDoctorAppointmentsFunction(doctorId);
         }
-      }, []);
+      }, [currPage]);
       const CallDoctorAppointmentsFunction = (doctorId ) => {
         const params = {};
         params.kind_of_visit = selectedkindOfVisitFilter;
         params.date = date;
+        params.page = currPage;
+
         getDoctorAppointments(doctorId , params)
         .then(response => {
          setAppointments(response.data.data);
+         setTotalPages(response.data.pagination.total_pages);
           console.log("getDoctorAppointments response date : ",response.data.data)
           setLoading(false);
         })
@@ -39,12 +45,16 @@ function DoctorAppointments () {
           setLoading(false);
         });
       };
+      const handlePageChange = (page) => {
+        setCurrPage(page);
+    }
       const handlekindOfVisitFilter = (event) => {
         setSelectedkindOfVisitFilter(event.target.value);
         console.log("selectedkindOfVisitFilter : ",event.target.value)
       };
     
       const handleFilterButtonClick = () => {
+        setCurrPage(1);
         CallDoctorAppointmentsFunction(doctorId);
       };
       const handleDateFilter =(event)=>{
@@ -266,6 +276,33 @@ function DoctorAppointments () {
                     </tbody>
 
                 </table>
+                <div className="text-center">
+                    <div className="join my-5">
+                    <button
+                        className="join-item btn"
+                        onClick={() => handlePageChange(currPage - 1)}
+                        disabled={currPage === 1}
+                    >
+                        «
+                    </button>
+                    {[...Array(totalPages).keys()].map((page) => (
+                        <button
+                        key={page + 1}
+                        className={`join-item btn btn-md ${currPage === page + 1 ? 'btn-active' : ''}`}
+                        onClick={() => handlePageChange(page + 1)}
+                        >
+                        {page + 1}
+                        </button>
+                    ))}
+                    <button
+                        className="join-item btn"
+                        onClick={() => handlePageChange(currPage + 1)}
+                        disabled={currPage === totalPages}
+                    >
+                        »
+                    </button>
+                    </div>
+                </div>
             </div>
         )}
             <dialog id="note_modal" className="modal" >
