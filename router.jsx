@@ -15,6 +15,7 @@ import UnReadPrescriptions from "/src/pages/Doctors/Prescriptions/UnReadPrescrip
 import DoctorAppointments from "/src/pages/Doctors/Appointments"
 
 import NurseProfile from "/src/pages/Nurses/NurseProfile"
+import NurseAppointments from "/src/pages/Nurses/Appointments"
 
 import Verify from "./src/pages/Verify/Verify";
 import ResetPassword from "./src/pages/ResetPassword/ResetPassword";
@@ -26,6 +27,7 @@ import PatientAppointments from "./src/pages/Patient/PatientAppointments";
 import { useSelector } from "react-redux";
 import NotFound from "./src/pages/NotFound/NotFound";
 import NotAuthorized from "./src/pages/NotAuthorized/NotAuthorized";
+
 
 function Styled() 
 {
@@ -223,6 +225,10 @@ export const router = createBrowserRouter([
             {
                 path: '/nurse/profile',
                 element: <NurseProfile/>,
+            },
+            {
+                path: '/nurse/appointments',
+                element: <NurseAppointments/>,
             },
         ]
     },
