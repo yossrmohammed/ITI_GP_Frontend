@@ -26,6 +26,7 @@ function Nurses() {
         if (filters.available) obj['available'] = filters.available; 
         if (filters.name) obj['name'] = filters.name; 
         obj.page = currPage;
+        obj.status = 'accepted';
 
         axiosInstance.get('/nurses',
             { params: obj }

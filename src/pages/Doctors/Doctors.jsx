@@ -28,6 +28,7 @@ function Doctors(props) {
         if (filters.available) obj['available'] = filters.available; 
         if (filters.name) obj['name'] = filters.name; 
         obj.page = currPage;
+        obj.status = 'accepted';
 
         if (props.home) 
         {

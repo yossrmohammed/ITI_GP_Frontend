@@ -2,16 +2,16 @@ import { useState } from 'react';
 
 const SpecializationSlider = () => {
   const specializations = [
-    { name: 'Cardiology', img: 'path-to-your-image/cardiology.jpg' },
-    { name: 'Neurology', img: 'path-to-your-image/neurology.jpg' },
-    { name: 'Pediatrics', img: 'path-to-your-image/pediatrics.jpg' },
-    { name: 'Dermatology', img: 'path-to-your-image/dermatology.jpg' },
-    { name: 'Oncology', img: 'path-to-your-image/oncology.jpg' },
-    { name: 'Gynecology', img: 'path-to-your-image/gynecology.jpg' },
-    { name: 'Orthopedics', img: 'path-to-your-image/orthopedics.jpg' },
-    { name: 'Psychiatry', img: 'path-to-your-image/psychiatry.jpg' },
-    { name: 'Radiology', img: 'path-to-your-image/radiology.jpg' },
-    { name: 'Urology', img: 'path-to-your-image/urology.jpg' },
+    { name: 'Cardiology', img: '/slider/cardiology.jpeg' },
+    { name: 'Neurology', img: '/slider/neurology.jpeg' },
+    { name: 'Pediatrics', img: '/slider/pediatrics.jpeg' },
+    { name: 'Dermatology', img: '/slider/dermatology.jpeg' },
+    { name: 'Oncology', img: '/slider/oncology.jpg' },
+    { name: 'Gynecology', img: '/slider/gynecology.jpeg' },
+    { name: 'Orthopedics', img: '/slider/orthopedics.jpeg' },
+    { name: 'Psychiatry', img: '/slider/psychiatry.jpeg' },
+    { name: 'Radiology', img: '/slider/radiology.webp' },
+    { name: 'Urology', img: '/slider/urology.jpeg' },
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
