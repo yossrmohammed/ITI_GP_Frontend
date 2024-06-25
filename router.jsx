@@ -30,6 +30,7 @@ import HospitalsApproval from "./src/components/Dashboard/HospitalsApproval";
 import NursesApproval from "./src/components/Dashboard/NursesApproval";
 import DoctorsApproval from "./src/components/Approvals/Approvals";
 import  Dashboard from "./src/components/Dashboard/Dashboard";
+import PatientPage from "./src/pages/Patient/PatientPage";
 
 function Styled() 
 {
@@ -138,6 +139,10 @@ export const router = createBrowserRouter([
             {
                 path: '/dashboard',
                 element: <Dashboard/>
+            },
+            {
+                path: '/patient/:id',
+                element: <PatientPage/>
             },
         ]
     },
