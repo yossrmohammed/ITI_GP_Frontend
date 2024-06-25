@@ -1,11 +1,11 @@
 import {axiosInstance} from "/src/axios";
 
-export const getReadPrescriptions = (doctorId) => {
-    return axiosInstance.get(`doctors/${doctorId}/prescriptions/read`);
+export const getReadPrescriptions = (doctorId , params) => {
+    return axiosInstance.get(`doctors/${doctorId}/prescriptions/read` , {params});
 };
 
-export const getUnReadPrescriptions = (doctorId) => {
-    return axiosInstance.get(`doctors/${doctorId}/prescriptions/unread`);
+export const getUnReadPrescriptions = (doctorId , params) => {
+    return axiosInstance.get(`doctors/${doctorId}/prescriptions/unread`, {params});
   };
 
 export const replyToPrescription = (prescriptionId, description) => {

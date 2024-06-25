@@ -9,21 +9,34 @@ function ReadPrescriptions() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const [currPage,setCurrPage] = useState(1);
+    const [totalPages,setTotalPages] = useState(1);
+
     useEffect(() => {
         if (doctorId) {
           setLoading(true);
-          getReadPrescriptions(doctorId)
-            .then(response => {
-              setPrescriptions(response.data.data);
-              console.log("getReadPrescriptions response date : ",response.data.data)
-              setLoading(false);
-            })
-            .catch(error => {
-              setError(error);
-              setLoading(false);
-            });
+          callReadPrescriptionsFunction(doctorId);
         }
-      }, []);
+      }, [currPage]);
+
+    function callReadPrescriptionsFunction(doctorId){
+      const params = {};
+      params.page = currPage;
+      getReadPrescriptions(doctorId, params)
+      .then(response => {
+        setPrescriptions(response.data.data);
+        setTotalPages(response.data.pagination.total_pages);
+        console.log("getReadPrescriptions response date : ",response.data.data)
+        setLoading(false);
+      })
+      .catch(error => {
+        setError(error);
+        setLoading(false);
+      });
+    }
+    const handlePageChange = (page) => {
+      setCurrPage(page);
+    }
     const calculateAge = (birthDateString) => {
         const birthDate = new Date(birthDateString);
         const today = new Date();
@@ -65,33 +78,60 @@ function ReadPrescriptions() {
     return (
     <>
         <div className="userprofile-container container mx-auto px-8 pt-6 pb-6 rounded-lg flex flex-col md:flex-row my-4">
-        <div className="grid grid-cols-2 gap-4 w-full">
-        {prescriptions.map((prescription) => (
-          <div key={prescription.id} className="card lg:card-side bg-base-100 shadow-xl">
-            <div  style={{width: "40%"}}>
-                    <figure style={{width: "100%"}}>
-                    {/* <img src={prescription.prescription_image} alt="Album" /> */}
-                            <a href={prescription.prescription_image} target="_blank" rel="noopener noreferrer">
-                                <img src={prescription.prescription_image} alt="Album" className="w-full" />
-                            </a>
-                    </figure>
-            </div>
-            
-            <div className="card-body" style={{width: "60%"}}>
-              <div className="card-title mb-2">
-                    <p> <FontAwesomeIcon icon={faUser} /> {prescription.patient_name}</p>
-                    {prescription.patient_DOB && <span className="badge badge-outline">{calculateAge(prescription.patient_DOB)} Years</span>}
-                    {prescription.patient_gender == "f" ? <span className="badge badge-secondary">Female</span> : <span className="badge badge-info">Male</span>}
+          <div className="grid grid-cols-2 gap-4 w-full">
+          {prescriptions.map((prescription) => (
+            <div key={prescription.id} className="card lg:card-side bg-base-100 shadow-xl">
+              <div  style={{width: "40%"}}>
+                      <figure style={{width: "100%"}}>
+                      {/* <img src={prescription.prescription_image} alt="Album" /> */}
+                              <a href={prescription.prescription_image} target="_blank" rel="noopener noreferrer">
+                                  <img src={prescription.prescription_image} alt="Album" className="w-full" />
+                              </a>
+                      </figure>
               </div>
-              <div className="card-title  mb-2">
-                    <p> <FontAwesomeIcon icon={faPhone} />  {prescription.patient_phone} </p>
-              </div>
-              <p>{prescription.prescription_description}.</p>
               
+              <div className="card-body" style={{width: "60%"}}>
+                <div className="card-title mb-2">
+                      <p> <FontAwesomeIcon icon={faUser} /> {prescription.patient_name}</p>
+                      {prescription.patient_DOB && <span className="badge badge-outline">{calculateAge(prescription.patient_DOB)} Years</span>}
+                      {prescription.patient_gender == "f" ? <span className="badge badge-secondary">Female</span> : <span className="badge badge-info">Male</span>}
+                </div>
+                <div className="card-title  mb-2">
+                      <p> <FontAwesomeIcon icon={faPhone} />  {prescription.patient_phone} </p>
+                </div>
+                <p>{prescription.prescription_description}.</p>
+                
+              </div>
             </div>
+          ))}
           </div>
-        ))}
-      </div>
+          <div className="text-center">
+            <div className="join my-5">
+            <button
+                className="join-item btn"
+                onClick={() => handlePageChange(currPage - 1)}
+                disabled={currPage === 1}
+            >
+                «
+            </button>
+            {[...Array(totalPages).keys()].map((page) => (
+                <button
+                key={page + 1}
+                className={`join-item btn btn-md ${currPage === page + 1 ? 'btn-active' : ''}`}
+                onClick={() => handlePageChange(page + 1)}
+                >
+                {page + 1}
+                </button>
+            ))}
+            <button
+                className="join-item btn"
+                onClick={() => handlePageChange(currPage + 1)}
+                disabled={currPage === totalPages}
+            >
+                »
+            </button>
+            </div>
+        </div>
             
         </div>
     </>

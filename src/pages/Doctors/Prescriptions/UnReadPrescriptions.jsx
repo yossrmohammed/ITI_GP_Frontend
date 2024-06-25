@@ -13,13 +13,15 @@ function UnReadPrescriptions() {
     const [description, setDescription] = useState('');
     const [currentPrescriptionId, setCurrentPrescriptionId] = useState(null);
 
+    const [currPage,setCurrPage] = useState(1);
+    const [totalPages,setTotalPages] = useState(1);
 
     useEffect(() => {
         if (doctorId) {
           setLoading(true);
           callUnReadPrescriptionsFunction(doctorId)
         }
-      }, []);
+      }, [currPage]);
   const calculateAge = (birthDateString) => {
       const birthDate = new Date(birthDateString);
       const today = new Date();
@@ -33,9 +35,12 @@ function UnReadPrescriptions() {
       return age;
     };
   function callUnReadPrescriptionsFunction(doctorId){
-      getUnReadPrescriptions(doctorId)
+      const params = {};
+      params.page = currPage;
+      getUnReadPrescriptions(doctorId, params)
       .then(response => {
         setPrescriptions(response.data.data);
+        setTotalPages(response.data.pagination.total_pages);
         console.log("getUnReadPrescriptions response date : ",response.data.data)
         setLoading(false);
       })
@@ -45,29 +50,32 @@ function UnReadPrescriptions() {
       });
     }
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const formData = new FormData();
-    formData.append("_method","patch");
-    formData.append("description",description);
-    replyToPrescription(currentPrescriptionId, formData)
-            .then(response => {
-              console.log('Reply submitted successfully');
-              document.getElementById('my_modal_1').close();
-              setDescription('');
-              setCurrentPrescriptionId(null);
-              callUnReadPrescriptionsFunction(doctorId)
-              Swal.fire({
-                icon: "success",
-                text: "Your reply submitted successfully",
-                showConfirmButton: false,
-                timer: 1500
+    const handlePageChange = (page) => {
+      setCurrPage(page);
+    }
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      const formData = new FormData();
+      formData.append("_method","patch");
+      formData.append("description",description);
+      replyToPrescription(currentPrescriptionId, formData)
+              .then(response => {
+                console.log('Reply submitted successfully');
+                document.getElementById('my_modal_1').close();
+                setDescription('');
+                setCurrentPrescriptionId(null);
+                callUnReadPrescriptionsFunction(doctorId)
+                Swal.fire({
+                  icon: "success",
+                  text: "Your reply submitted successfully",
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+              })
+              .catch(error => {
+                console.error('Error submitting reply:', error);
               });
-            })
-            .catch(error => {
-              console.error('Error submitting reply:', error);
-            });
-  };
+    };
     if (loading) {
         return <>
         <div className="userprofile-container container mx-auto px-8 pt-6 pb-6 rounded-lg flex flex-col md:flex-row my-4">
@@ -128,6 +136,33 @@ function UnReadPrescriptions() {
             </div>
         ))}
       </div>
+      <div className="text-center">
+            <div className="join my-5">
+            <button
+                className="join-item btn"
+                onClick={() => handlePageChange(currPage - 1)}
+                disabled={currPage === 1}
+            >
+                «
+            </button>
+            {[...Array(totalPages).keys()].map((page) => (
+                <button
+                key={page + 1}
+                className={`join-item btn btn-md ${currPage === page + 1 ? 'btn-active' : ''}`}
+                onClick={() => handlePageChange(page + 1)}
+                >
+                {page + 1}
+                </button>
+            ))}
+            <button
+                className="join-item btn"
+                onClick={() => handlePageChange(currPage + 1)}
+                disabled={currPage === totalPages}
+            >
+                »
+            </button>
+            </div>
+        </div>
     </div>
 
     <dialog id="my_modal_1" className="modal" >
