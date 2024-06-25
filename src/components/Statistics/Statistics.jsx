@@ -13,14 +13,16 @@ const Statistics = () => {
 
     const fetchDoctorData = axiosInstance.get('/doctors?page=1');
     const fetchNurseData = axiosInstance.get('/nurses?page=1');
+    const fetchTopActiveDoctor = axiosInstance.get('/doctors?topActiveUser=true');
 
-    Promise.all([fetchDoctorData, fetchNurseData])
-      .then(([doctorResponse, nurseResponse]) => {
+    Promise.all([fetchDoctorData, fetchNurseData, fetchTopActiveDoctor])
+      .then(([doctorResponse, nurseResponse, topDoctorsResponse]) => {
         const doctors = doctorResponse.data.data;
         const nurses = nurseResponse.data.data;
+        const topDoctorsActive = topDoctorsResponse.data.data;
 
         const doctorStates = [...new Set(doctors.map(doc => doc.user.name || 'Unknown'))];
-        const doctorRatings = doctorStates.map((doctor)=> doctor.average_rating);
+        const doctorRatings = doctors.map((doctor) => doctor.average_rating);
 
         const doctorChartData = {
           labels: doctorStates,
@@ -37,7 +39,7 @@ const Statistics = () => {
         setDoctorData(doctorChartData);
 
         const nurseStates = [...new Set(nurses.map(nurse => nurse.user.name || 'Unknown'))];
-        const nurseRatings = nurseStates.map(nurse => nurse.average_rating);
+        const nurseRatings = nurses.map(nurse => nurse.average_rating);
         const nurseChartData = {
           labels: nurseStates,
           datasets: [
@@ -52,16 +54,12 @@ const Statistics = () => {
         };
         setNurseData(nurseChartData);
 
-        const topActiveDoctors = doctors.map(doc => ({
-          name: doc.user.name,
-          prescriptions: doc.visit, 
-        }));
         const activeDoctorsChartData = {
-          labels: topActiveDoctors.map(doc => doc.name),
+          labels: topDoctorsActive.map(doc => doc.doctor_name),
           datasets: [
             {
               label: 'Prescriptions',
-              data: topActiveDoctors.map(doc => doc.prescriptions),
+              data: topDoctorsActive.map(doc => doc.prescriptions_count),
               backgroundColor: 'rgba(75, 192, 192, 0.6)',
               borderColor: 'rgba(75, 192, 192, 1)',
               borderWidth: 1,
