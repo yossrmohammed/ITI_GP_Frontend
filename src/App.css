@@ -37,7 +37,7 @@ top:0px;
 right: 10px;
 }
 
-.note-text {
+.note-text , .description-text {
 word-wrap: break-word;
 white-space: normal;
 }

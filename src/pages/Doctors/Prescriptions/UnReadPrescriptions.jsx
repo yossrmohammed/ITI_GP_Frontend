@@ -171,7 +171,7 @@ function UnReadPrescriptions() {
             <h2 className="font-bold mb-3 text-lg">Write Your description</h2>
             <form className="flex flex-col justify-center items-center w-full" onSubmit={handleSubmit}>
               <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" type="button" onClick={() => document.getElementById('my_modal_1').close()}>X</button>
-              <textarea
+              <textarea maxlength="700"
                 className="textarea textarea-bordered textarea-lg w-full max-w-xs w-full"
                 placeholder="Write Your description"
                 value={description}
