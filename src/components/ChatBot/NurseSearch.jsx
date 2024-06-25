@@ -1,14 +1,13 @@
 // NurseSearch.js
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { axiosInstance } from '../../axios'; // Import your axios instance
+import { axiosInstance } from '../../axios'; 
 
 const NurseSearch = ({ steps, triggerNextStep }) => {
   const { nurse_city_name, nurse_name } = steps;
   const [loading, setLoading] = useState(true);
   const [nurses, setNurses] = useState([]);
-  const baseUrl = import.meta.env.VITE_FRONT_URL; // Use VITE_FRONT_URL
-
+  const baseUrl = import.meta.env.VITE_FRONT_URL; 
   useEffect(() => {
     const fetchNurses = async (city, name) => {
       try {
@@ -51,9 +50,6 @@ const NurseSearch = ({ steps, triggerNextStep }) => {
   );
 };
 
-NurseSearch.propTypes = {
-  steps: PropTypes.object.isRequired,
-  triggerNextStep: PropTypes.func.isRequired,
-};
+
 
 export default NurseSearch;

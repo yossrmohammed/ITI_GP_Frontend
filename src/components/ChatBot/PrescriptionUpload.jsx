@@ -16,6 +16,7 @@ const PrescriptionUpload = ({ triggerNextStep }) => {
   const [success, setSuccess] = useState('');
   const user = useSelector(selectUser);
 
+
   const fetchDoctors = async (name, city, specialization) => {
     setLoading(true);
     try {
@@ -25,7 +26,6 @@ const PrescriptionUpload = ({ triggerNextStep }) => {
       setDoctors(response.data.data);
       setError('');
     } catch (error) {
-      console.error('Error fetching doctors:', error);
       setError('Error fetching doctors. Please try again.');
       setDoctors([]);
     } finally {
@@ -33,38 +33,35 @@ const PrescriptionUpload = ({ triggerNextStep }) => {
     }
   };
 
-
   const debouncedFetchDoctors = useCallback(debounce(fetchDoctors, 500), []);
 
   useEffect(() => {
     if (doctorName.trim() || city.trim() || specialization.trim()) {
       debouncedFetchDoctors(doctorName.trim(), city.trim(), specialization.trim());
     } else {
-      setDoctors([]); 
+      setDoctors([]);
     }
   }, [doctorName, city, specialization, debouncedFetchDoctors]);
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     setPrescriptionImage(file);
+    setError(''); 
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-   
-    if (!user) {
-      setError('Please log in to upload your prescription.');
+    if (user?.role !== 'patient') {
+      setError('Please log in as patient to upload your prescription.');
       return;
     }
 
-    
     if (!prescriptionImage) {
       setError('Please upload a prescription image.');
       return;
     }
 
-  
     if (doctors.length !== 1 && (!doctorName.trim() || !city.trim() || !specialization.trim())) {
       setError('Please provide the doctor\'s name, city, and specialization.');
       return;
@@ -75,24 +72,19 @@ const PrescriptionUpload = ({ triggerNextStep }) => {
       return;
     }
 
-   
     const formData = new FormData();
     formData.append('prescription_image', prescriptionImage);
     formData.append('doctor_id', doctors[0].id);
-    formData.append('doctorName', doctors[0].name); 
+    formData.append('doctorName', doctors[0].name);
 
     try {
- 
       const response = await axiosInstance.post(`/patients/${user.id}/prescription`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-
-      console.log('Prescription uploaded successfully:', response.data);
       setSuccess('Prescription uploaded successfully!');
 
-      // Trigger next step in the chatbot flow
       triggerNextStep();
     } catch (error) {
       console.error('Error uploading prescription:', error);
@@ -107,60 +99,64 @@ const PrescriptionUpload = ({ triggerNextStep }) => {
     }
   };
 
+  if (!user) {
+    return <p>Please log in to upload your prescription.</p>;
+  }
+
+  if (user?.role !== 'patient') {
+    return <p>Please log in as a patient to upload your prescription.</p>;
+  }
+
   return (
     <div>
-      {!user ? (
-        <p>Please log in to upload your prescription.</p>
-      ) : (
-        <form onSubmit={handleSubmit}>
-          <label>
-            Upload Prescription Image:
-            <input type="file" accept="image/*" onChange={handleFileUpload} />
-          </label>
-          <br />
-          <label>
-            Doctor's Name:
-            <input
-              type="text"
-              value={doctors.length === 1 ? doctors[0].name : doctorName}
-              onChange={(e) => setDoctorName(e.target.value)}
-              disabled={doctors.length === 1} 
-            />
-          </label>
-          <br />
-          <label>
-            City:
-            <input
-              type="text"
-              value={doctors.length === 1 ? doctors[0].city : city}
-              onChange={(e) => setCity(e.target.value)}
-              disabled={doctors.length === 1} 
-            />
-          </label>
-          <br />
-          <label>
-            Specialization:
-            <input
-              type="text"
-              value={specialization}
-              onChange={(e) => setSpecialization(e.target.value)}
-              disabled={doctors.length === 1} 
-            />
-          </label>
-          <br />
-          {loading ? (
-            <p>Loading doctors...</p>
-          ) : (
-            <>
-              {error && <p style={{ color: 'red' }}>{error}</p>}
-              {success && <p style={{ color: 'green' }}>{success}</p>}
-              {doctors.length === 1 && <button type="submit">Upload Prescription</button>}
-              {doctors.length === 0 && !error && <p>No doctors found. Please try again.</p>}
-              {doctors.length > 1 && !error && <p>Multiple doctors found. Please refine your search.</p>}
-            </>
-          )}
-        </form>
-      )}
+      <form onSubmit={handleSubmit}>
+        <label>
+          Upload Prescription Image:
+          <input type="file" accept="image/*" onChange={handleFileUpload} />
+        </label>
+        <br />
+        <label>
+          Doctor's Name:
+          <input
+            type="text"
+            value={doctors.length === 1 ? doctors[0].name : doctorName}
+            onChange={(e) => setDoctorName(e.target.value)}
+            disabled={doctors.length === 1}
+          />
+        </label>
+        <br />
+        <label>
+          City:
+          <input
+            type="text"
+            value={doctors.length === 1 ? doctors[0].city : city}
+            onChange={(e) => setCity(e.target.value)}
+            disabled={doctors.length === 1}
+          />
+        </label>
+        <br />
+        <label>
+          Specialization:
+          <input
+            type="text"
+            value={specialization}
+            onChange={(e) => setSpecialization(e.target.value)}
+            disabled={doctors.length === 1}
+          />
+        </label>
+        <br />
+        {loading ? (
+          <p>Loading doctors...</p>
+        ) : (
+          <>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {success && <p style={{ color: 'green' }}>{success}</p>}
+            {doctors.length === 1 && <button type="submit">Upload Prescription</button>}
+            {doctors.length === 0 && !error && <p>No doctors found. Please try again.</p>}
+            {doctors.length > 1 && !error && <p>Multiple doctors found. Please refine your search.</p>}
+          </>
+        )}
+      </form>
     </div>
   );
 };
