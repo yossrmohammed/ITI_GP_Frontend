@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { axiosInstance } from '../../axios'; // Import your axios instance
+import { axiosInstance } from '../../axios'; 
 
 const DoctorSearch = ({ steps, triggerNextStep }) => {
   const { city_name, doctor_name } = steps;
   const [loading, setLoading] = useState(true);
   const [doctors, setDoctors] = useState([]);
-  const baseUrl = import.meta.env.VITE_FRONT_URL; // Use VITE_FRONT_URL
+  const baseUrl = import.meta.env.VITE_FRONT_URL; 
 
   useEffect(() => {
     const fetchDoctors = async (city, name) => {
@@ -50,9 +50,6 @@ const DoctorSearch = ({ steps, triggerNextStep }) => {
   );
 };
 
-DoctorSearch.propTypes = {
-  steps: PropTypes.object.isRequired,
-  triggerNextStep: PropTypes.func.isRequired,
-};
+
 
 export default DoctorSearch;
