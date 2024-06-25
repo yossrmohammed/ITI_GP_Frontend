@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
 import { getNurseAppointments, ApproveNurseAppointments, AddNoteToNurseAppointments} from "/src/axios/NurseAppointments.jsx";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck , faXmark ,faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faCheck , faXmark ,faPlus , faPen } from '@fortawesome/free-solid-svg-icons'
+import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2'
 
 import {calculateAge} from "/src/helperFunctions"
@@ -219,8 +220,8 @@ function NurseAppointments () {
             </div>
         {loading ? renderSkeletonTable() : (
             <div className="table-container overflow-x-auto grow ml-5">
-                <table className="table">
-                    <thead>
+                <table className="table text-base ">
+                    <thead className="text-base">
                         <tr className="text-center"> 
                             <th>Patient</th>
                             <th>Date</th>
@@ -235,10 +236,12 @@ function NurseAppointments () {
                             <tr className="text-center">
                                
                                 <td>
-                                     {appointment.patient_name} - {calculateAge(appointment.patient_DOB)} Years
-                                         <br />
-                                        < br />
-                                    {appointment.patient_phone}                                    
+                                    <Link to={`/patient/${appointment.patient_id}`} className="text-blue-500 hover:underline">
+                                        {appointment.patient_name}
+                                    </Link> - {calculateAge(appointment.patient_DOB)} Years
+                                         {/* <br /> */}
+                                        {/* < br /> */}
+                                    {/* {appointment.patient_phone}                                     */}
                                 </td>
                                 <td>
                                     {appointment.day} - {appointment.date}
@@ -252,29 +255,29 @@ function NurseAppointments () {
                                 </td>
                                 <th>
                                    
-                                    <button className="btn btn-outline btn-success btn-xs"   
+                                    <button className="btn btn-circle btn-outline btn-success btn-sm"  
                                     onClick={() => handleApprove(appointment.id , "accepted")}>
-                                        Accept <FontAwesomeIcon icon={faCheck} /> 
+                                         <FontAwesomeIcon icon={faCheck} /> 
                                     </button>
                                     
                                 </th>
                                 <th>
-                                        <button className="btn btn-outline btn-error btn-xs"
+                                        <button className=" btn btn-circle btn-outline btn-error btn-sm"
                                         onClick={() => handleApprove(appointment.id , "cancelled")}>
-                                        Decline <FontAwesomeIcon icon={faXmark} /> </button>
+                                         <FontAwesomeIcon icon={faXmark} /> </button>
                                     
                               
                               </th>
-                                <th>
-                                {appointment.notes} 
-                                <button className="ml-2 btn btn-circle btn-outline btn-info btn-xs"
+                                <th style={{ maxWidth: '200px' }} >
+                                <p className="note-text">{appointment.notes} </p>
+                                <button className="ml-2 btn-info btn-xs"
                                         onClick={() => 
                                             {
                                                 setCurrentAppointmentId(appointment.id);
                                                 document.getElementById('note_modal').showModal()
                                             }
                                         }>
-                                         <FontAwesomeIcon icon={faPlus} /> </button>
+                                         <FontAwesomeIcon icon={faPen} className="text-info text-base" /> </button>
                                 </th>
                             </tr>
                         ))}
