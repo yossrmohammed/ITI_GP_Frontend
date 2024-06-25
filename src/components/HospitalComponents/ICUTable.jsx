@@ -25,22 +25,22 @@ const ICUTable = ({ icu, onUpdate, hospitalId }) => {
             <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm">{icu.equipments.map(e => e.name).join(', ')}</div>
             </td>
-            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+            <td className="px-6 py-4 whitespace-nowrap  text-sm font-medium">
                 <button onClick={handleUpdate} className="text-indigo-600 hover:text-indigo-900 mr-4">
                     <FontAwesomeIcon icon={faEdit} /> Update
                 </button>
                 <button onClick={() => document.getElementById('my_modal_1').showModal()} className="text-red-600 hover:text-red-900">
                     <FontAwesomeIcon icon={faTrash} /> Delete
                 </button>
-                <dialog id="my_modal_1" className="modal">
-                    <div className="modal-box">
+                <dialog id="my_modal_1" className="modal ">
+                    <div className="modal-box  max-w-sm">
                         <h3 className="font-bold text-lg">Delete ICU</h3>
                         <p className="py-4">Are you sure you want to delete ICU {icu.id}?</p>
                         <div className="modal-action">
-                            <button onClick={() => handleDelete(icu.id)} className="btn btn-danger">
+                            <button onClick={() => handleDelete(icu.id)} className="btn btn-outline btn-error">
                                 <FontAwesomeIcon icon={faTrash} /> Yes
                             </button>
-                            <button onClick={() => document.getElementById('my_modal_1').close()} className="btn">No</button>
+                            <button onClick={() => document.getElementById('my_modal_1').close()} className="btn btn-outline btn-info">No</button>
                         </div>
                     </div>
                 </dialog>
