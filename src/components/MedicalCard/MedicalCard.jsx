@@ -27,12 +27,11 @@ function DoctorCard(props) {
             <p>{props.average_rating}</p>
             <div className="my-2">
               
-              { props.proffession === 'Doctor' &&
               <p>
               <FontAwesomeIcon className="mr-3 text-xl text-blue-600" icon={faUserDoctor} />
               <span className="font-bold">Specialization: </span>
               {props.specialization} 
-              </p>}
+              </p>
               
               <p> 
               <FontAwesomeIcon className="ml-1 mr-4 text-xl text-blue-600" icon={faLocationDot} />

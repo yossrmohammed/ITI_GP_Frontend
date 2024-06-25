@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { medicalSpecialties } from '../../data/specalities';
+import { nurseSpecialties } from '../../data/nurseSpecialties';
 import { egyptianCities } from '../../data/egyptCities';
 import { useState } from 'react';
 
@@ -121,6 +122,22 @@ function Filters(props) {
             ))}
           </optgroup>
         ))}
+      </select>
+    </div>    
+    </div>
+    }
+
+    { props.proffession === 'Nurse' &&
+      <div>
+    <div className="form-control">
+      <label htmlFor="specialty" className="label">
+        <span className="label-text font-bold text-lg">Select Specialty</span>
+      </label>
+      <select id="specialty" className="select select-bordered w-full max-w-xs" value={specialization} onChange={handleSpecializationChange}>
+        <option selected>Choose specialty</option>
+        {nurseSpecialties.map((specialty) => (
+              <option key={specialty} value={specialty}>{specialty}</option>
+            ))}
       </select>
     </div>    
     </div>
