@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Select from 'react-select';
 import Swal from 'sweetalert2'
+import { MdVerified ,MdOutlineVerified ,MdVerifiedUser } from "react-icons/md";
 
 
 import TextInput from '/src/components/Form/TextInput.jsx';
@@ -202,9 +203,26 @@ function NurseProfile() {
       <div className="left flex flex-col items-center mb-6 md:mb-0">
         <div className="image-div mb-4">
           <div className="avatar">
-            <div className="w-40 h-40 rounded-full overflow-hidden ring-2 ring-info ring-offset-base-100 ring-offset-2">
+            {/* <div className="w-40 h-40 rounded-full overflow-hidden ring-2 ring-info ring-offset-base-100 ring-offset-2"> */}
+            <div className={`w-40 h-40 rounded-full overflow-hidden ring-2 ring-offset-base-100 ring-offset-2 ${
+              nurse.verification_status === "accepted" ? 'ring-info' :
+              nurse.verification_status === "rejected" ? 'ring-error' :
+              'ring-neutral'}`}>
               <img src={`${nurse.image}`} />
             </div>
+          </div>
+          <div className="tooltip absolute verified-icon" data-tip={ `${
+            nurse.verification_status === "accepted" ? 'Verified' :
+            nurse.verification_status === "rejected" ? 'Rejected' :
+            'Pending'
+          }`}>
+
+          <MdVerifiedUser className={` text-4xl text-info ${
+            nurse.verification_status === "accepted" ? 'text-info' :
+            nurse.verification_status === "rejected" ? 'text-error' :
+            'text-neutral'
+          }`}/>
+
           </div>
         </div>
         <form onSubmit={handleFileSubmit} className="w-full px-4">

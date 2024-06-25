@@ -3,13 +3,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const ApplicationCard = ({ application, updateApplicationStatus }) => (
-    <div className="card bg-white shadow-lg rounded-lg p-6 mb-4 hover:shadow-xl transition-shadow duration-300 ease-in-out">
+    <div className="card  shadow-lg rounded-lg p-6 mb-4 hover:shadow-xl transition-shadow duration-300 ease-in-out">
         <div className="card-body">
-            <h2 className="card-title text-xl font-bold mb-2">Patient Name: {application.patient_name}</h2>
-            <p className="text-gray-700 mb-1">Patient Phone: {application.patient_phone}</p>
+            <h2 className="card-title text-xl font-bold mb-2" 
+            style={{ wordWrap: 'break-word', whiteSpace: 'normal' }}
+            >Patient Name: {application.patient_name}</h2>
+            <p className=" mb-1">Patient Phone: {application.patient_phone}</p>
             <p className={`status-label ${application.status} mb-1`}>Status: {application.status}</p>
-            <p className="text-gray-700 mb-1">Description: {application.description}</p>
-            <p className="text-gray-700 mb-2">Created At: {new Date(application.created_at).toLocaleString()}</p>
+            <p className="mb-1" 
+            style={{ wordWrap: 'break-word', whiteSpace: 'normal' }}
+            >Description: {application.description}</p>
+            <p className=" mb-2"
+            style={{ wordWrap: 'break-word', whiteSpace: 'normal' }}
+            >Created At: {new Date(application.created_at).toLocaleString()}</p>
             <h3 className="text-lg font-semibold mb-2">ICU Equipments:</h3>
             <ul className="list-disc list-inside ml-4 mb-4">
                 {application.intensive_care_unit.equipments.map((equipment) => (

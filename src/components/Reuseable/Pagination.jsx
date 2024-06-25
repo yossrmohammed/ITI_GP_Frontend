@@ -30,7 +30,7 @@ const Pagination = ({ currentPage, totalItems, itemsPerPage, onPageChange, onIte
                     <button
                         key={index}
                         onClick={() => handlePageChange(index + 1)}
-                        className={`btn btn-xs ${currentPage === index + 1 ? 'btn-primary' : 'btn-secondary'}`}
+                        className={`btn btn-xs ${currentPage === index + 1 ? 'btn-info' : 'btn-secondary'}`}
                     >
                         {index + 1}
                     </button>
