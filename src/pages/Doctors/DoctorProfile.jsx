@@ -117,6 +117,12 @@ function DoctorProfile() {
         updateDoctorById(doctorId, formData)
         .then(response => {
           console.log("update doctor response : ",response)
+          Swal.fire({
+            icon: "success",
+            text: "Your Profile have been updated successfully!",
+            showConfirmButton: false,
+            timer: 1500
+          });
         })
         .catch(error => {
           console.log("error : ",error)

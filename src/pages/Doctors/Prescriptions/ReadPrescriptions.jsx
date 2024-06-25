@@ -77,7 +77,7 @@ function ReadPrescriptions() {
 
     return (
     <>
-        <div className="userprofile-container container mx-auto px-8 pt-6 pb-6 rounded-lg flex flex-col md:flex-row my-4">
+        <div className="userprofile-container container mx-auto px-8 pt-6 pb-6 rounded-lg flex flex-col my-4">
           <div className="grid grid-cols-2 gap-4 w-full">
           {prescriptions.map((prescription) => (
             <div key={prescription.id} className="card lg:card-side bg-base-100 shadow-xl">
