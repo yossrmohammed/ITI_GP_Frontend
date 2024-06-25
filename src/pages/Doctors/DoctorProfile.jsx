@@ -59,8 +59,8 @@ function DoctorProfile() {
         qualifications: "",
         city: "",
         address: "",
-        clinic_fees: "",
-        home_fees: "",
+        clinic_fees: 1,
+        home_fees:1,
         online: 0,
         specialization: "",
         visit: 0,
@@ -88,7 +88,15 @@ function DoctorProfile() {
         work_days: Yup.string()
           .required("Work Days are required"),
         home_fees:
-        Yup.number().required("Home Fees is required").min(1,"Home Fees must be greater than 0"),
+        Yup.number().min(1,"Home Fees must be greater than 0"),
+        // Yup.number()
+        // .when('visit', {
+        //   is: () => 1,
+        //   then: () => Yup.number()
+        //     .required("Home Fees is required")
+        //     .min(1, "Home Fees must be greater than 0"),
+        //   otherwise: Yup.number(),
+        // }),
         clinic_fees:
         Yup.number().required("Clinic Fees is required").min(1,"Clinic Fees must be greater than 0"),
       }),
@@ -157,6 +165,7 @@ function DoctorProfile() {
     }, [doctor]);
 
     const handleHomeVisitChange = (event) => {
+      console.log(event.target.checked)
       setIsHomeVisitChecked(event.target.checked);
       formik.setFieldValue("visit", event.target.checked ? 1 : 0);
     };
