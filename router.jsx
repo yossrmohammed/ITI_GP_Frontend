@@ -14,6 +14,10 @@ import ReadPrescriptions from "/src/pages/Doctors/Prescriptions/ReadPrescription
 import UnReadPrescriptions from "/src/pages/Doctors/Prescriptions/UnReadPrescriptions"
 import DoctorAppointments from "/src/pages/Doctors/Appointments"
 
+import NurseProfile from "/src/pages/Nurses/NurseProfile"
+import NurseAppointments from "/src/pages/Nurses/Appointments"
+
+
 import Verify from "./src/pages/Verify/Verify";
 import ResetPassword from "./src/pages/ResetPassword/ResetPassword";
 import HospitalICUs from "./src/pages/Hospital/HospitalICUs";
@@ -21,7 +25,12 @@ import Applications from "./src/pages/Hospital/Applications";
 import PatientProfile from "./src/pages/Patient/PatientProfile";
 import PayPal from "./src/pages/PayPal/PayPal";
 import PatientAppointments from "./src/pages/Patient/PatientAppointments";
-
+import { Link } from "react-router-dom";
+import HospitalsApproval from "./src/components/Dashboard/HospitalsApproval";
+import NursesApproval from "./src/components/Dashboard/NursesApproval";
+import DoctorsApproval from "./src/components/Approvals/Approvals";
+import  Dashboard from "./src/components/Dashboard/Dashboard";
+import PatientPage from "./src/pages/Patient/PatientPage";
 
 function Styled() 
 {
@@ -46,6 +55,14 @@ export const router = createBrowserRouter([
             {
                 path: '/doctors',
                 element: <Doctors/>,
+            },
+            {
+                path: '/doctors/home-visit',
+                element: <Doctors home={true}/>,
+            },
+            {
+                path: '/icu/:id',
+                element: <div>test</div>
             },
             {
                 path: '/icu',
@@ -74,6 +91,14 @@ export const router = createBrowserRouter([
             {
                 path: '/doctor/appointments',
                 element: <DoctorAppointments/>,
+            },
+            {
+                path: '/nurse/profile',
+                element: <NurseProfile/>,
+            },
+            {
+                path: '/nurse/appointments',
+                element: <NurseAppointments/>,
             },
             {
                 path: '/register',
@@ -111,11 +136,27 @@ export const router = createBrowserRouter([
                 path: '/patient/appointments',
                 element: <PatientAppointments/>
             },
+            {
+                path: '/dashboard',
+                element: <Dashboard/>
+            },
+            {
+                path: '/patient/:id',
+                element: <PatientPage/>
+            },
         ]
     },
     {
         path: '*',
-        element: <div>Not Found</div>
+        element:  <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 text-gray-800">
+        <div className="text-center">
+            <p className="text-3xl font-bold mb-4">404</p>
+            <p className="text-2xl mb-8">Page Not Found</p>
+            <Link to={"/"} className="px-4 py-2 rounded-md btn btn-info ">
+                Go Home
+            </Link>
+        </div>
+    </div>
     }
 ])
 

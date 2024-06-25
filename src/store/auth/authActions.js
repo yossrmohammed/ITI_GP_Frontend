@@ -1,5 +1,6 @@
 import { registerStart, registerSuccess, registerFailure, loginStart, loginSuccess, loginFailure, fetchUserStart, fetchUserSuccess, fetchUserFailure } from './authSlice';
 import { doctorRegister, patientRegister, nurseRegister,hospitalRegister , login, getUserData ,verifyEmail, forgetPassword,resetPassword, editPatient} from './authApi';
+import Swal from 'sweetalert2';
 
 export const register = (formData, role, setFormErrors) => async (dispatch) => {
   dispatch(registerStart());
@@ -46,7 +47,7 @@ export const fetchUserData = () => async (dispatch) => {
   dispatch(fetchUserStart());
   try{
     const response =await getUserData();
-    console.log(response.data);
+
     dispatch(fetchUserSuccess(response.data));
     return response;
   } catch (error) {
@@ -81,7 +82,7 @@ export const resetPsswordUser = (formData) => async () => {
     const response = await resetPassword(formData);
     return response;
   } catch (error) {
-    console.log("catch error in action ");
+
    throw new Error(error.response.data.message || error.message);
   }
 };
@@ -89,6 +90,12 @@ export const resetPsswordUser = (formData) => async () => {
 export const editPatientAction = (formData, patientID) => async () => {
   try {
     const response = await editPatient(formData, patientID);
+    Swal.fire({
+      icon: "success",
+      text: "Profile updated successfully",
+      showConfirmButton: true,
+      timer: 1500
+    });
     return response;
   } catch (error) {
     throw new Error(error.response.data.message || error.message)

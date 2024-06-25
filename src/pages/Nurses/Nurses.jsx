@@ -88,7 +88,8 @@ function Nurses() {
         </div>
     </div>
 
-    <div className="text-center">
+    {totalPages > 1 &&
+    <div className="text-centernurses">
             <div className="join my-5">
             <button
                 className="join-item btn"
@@ -115,6 +116,7 @@ function Nurses() {
             </button>
             </div>
         </div>
+        }
         </>
   )
 }

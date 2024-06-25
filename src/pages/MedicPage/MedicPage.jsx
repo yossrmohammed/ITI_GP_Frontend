@@ -6,30 +6,30 @@ import ReviewCard from "../../components/ReviewCard/ReviewCard";
 function MedicPage() {
     const params = useParams();
     const [medic,setMedic] = useState({});
-    const [page,setPage] = useState(1);
+    const [currPage,setCurrPage] = useState(1);
+    const [totalPages,setTotalPages] = useState(0);
     const [reviews,setReviews] = useState([]);
 
     useEffect(()=> {
         axiosInstance.get(`/${params.role}s/${params.id}'`)
         .then((res) => {
           setMedic(res.data.data);
-          console.log(res.data.data)
         })
         .catch((err) => console.log(err))
     },[])
 
     useEffect(()=> {
-      axiosInstance.get(`${params.role}s/${params.id}/reviews`)
+      axiosInstance.get(`${params.role}s/${params.id}/reviews`, {params: {page:currPage}})
       .then(res => {
         setReviews(res.data.data.data)
-        console.log(res.data.data.data)
+        setTotalPages(res.data.data.last_page)
       })
       .catch( err => console.log(err)  )
-    },[page])
+    },[currPage])
 
     function handlePageChange(page)
     {
-      setPage(page);
+      setCurrPage(page);
     }
 
   return (
@@ -71,7 +71,9 @@ function MedicPage() {
     }
     
 
-    <h2 className="text-2xl font-bold mb-5 ml-28 mt-10">Doctor Reviews</h2>
+    <h2 className="text-2xl font-bold mb-5 ml-28 mt-10">
+      {params.role === 'doctor' ? 'Doctor ' : 'Nurse '}
+      Reviews</h2>
       {reviews.length === 0 && <p className="text-xl my-10 text-center">No Reviews Yet</p>}
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 px-28">
         {reviews.map((review) => (
@@ -80,6 +82,35 @@ function MedicPage() {
       </div>
     </div>
 
+          {totalPages > 1 &&
+    <div className="text-centernurses">
+            <div className="join my-5">
+            <button
+                className="join-item btn"
+                onClick={() => handlePageChange(currPage - 1)}
+                disabled={currPage === 1}
+            >
+                «
+            </button>
+            {[...Array(totalPages).keys()].map((page) => (
+                <button
+                key={page + 1}
+                className={`join-item btn btn-md ${currPage === page + 1 ? 'btn-active' : ''}`}
+                onClick={() => handlePageChange(page + 1)}
+                >
+                {page + 1}
+                </button>
+            ))}
+            <button
+                className="join-item btn"
+                onClick={() => handlePageChange(currPage + 1)}
+                disabled={currPage === totalPages}
+            >
+                »
+            </button>
+            </div>
+        </div>
+        }
     </>
   )
 }

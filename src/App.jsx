@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchUserData } from './store/auth/authActions';
 import { setCookie, getCookie, removeCookie } from './cookies';
+import ChatBotButton from './components/ChatBot/ChatBot';
 
 function App() {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ function App() {
   return (
     <>
       <RouterProvider router={ router }/>
+      <ChatBotButton />
     </>
   )
 }
