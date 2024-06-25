@@ -54,7 +54,7 @@ const ChatBotButton = () => {
           style={{
             position: 'fixed',
             bottom: '80px',
-            right: '20px',
+            right: '70px',
             width: '300px',
             boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
           }}
