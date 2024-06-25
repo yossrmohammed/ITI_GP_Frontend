@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { getNurseAppointments, ApproveNurseAppointments, AddNoteToNurseAppointments} from "/src/axios/NurseAppointments.jsx";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck , faXmark ,faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faCheck , faXmark ,faPlus , faPen } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2'
 
@@ -270,14 +270,14 @@ function NurseAppointments () {
                               </th>
                                 <th>
                                 {appointment.notes} 
-                                <button className="ml-2 btn btn-circle btn-outline btn-info btn-xs"
+                                <button className="ml-2 btn-info btn-xs"
                                         onClick={() => 
                                             {
                                                 setCurrentAppointmentId(appointment.id);
                                                 document.getElementById('note_modal').showModal()
                                             }
                                         }>
-                                         <FontAwesomeIcon icon={faPlus} /> </button>
+                                         <FontAwesomeIcon icon={faPen} className="text-info text-base" /> </button>
                                 </th>
                             </tr>
                         ))}
