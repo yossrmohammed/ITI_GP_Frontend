@@ -5,7 +5,7 @@ import { faCheck , faXmark ,faPlus, faPen} from '@fortawesome/free-solid-svg-ico
 import Swal from 'sweetalert2'
 import { Link } from 'react-router-dom';
 
-
+import "/src/App.css";
 import {calculateAge} from "/src/helperFunctions"
 function DoctorAppointments () {  
 
@@ -210,8 +210,8 @@ function DoctorAppointments () {
             </div>
         {loading ? renderSkeletonTable() : (
             <div className="table-container overflow-x-auto grow ml-5">
-                <table className="table">
-                    <thead>
+                <table className="table text-base">
+                    <thead  className="text-base font-bold">
                         <tr className="text-center"> 
                             <th >Type</th>
                             <th>Patient</th>
@@ -250,22 +250,22 @@ function DoctorAppointments () {
                                 <th>
                                    {
                                     appointment.kind_of_visit === "clinic" ? " --" :
-                                    <button className="btn btn-outline btn-success btn-xs"   
+                                    <button className="btn btn-circle btn-outline btn-success btn-sm"   
                                     onClick={() => handleApprove(appointment.id , "accepted")}>
-                                        Accept <FontAwesomeIcon icon={faCheck} /> 
+                                         <FontAwesomeIcon icon={faCheck} /> 
                                     </button>
                                     }    
                                 </th>
                                 <th>
                                     {appointment.kind_of_visit === "clinic" ? " --" :
-                                        <button className="btn btn-outline btn-error btn-xs"
+                                        <button className=" btn btn-circle btn-outline btn-error btn-sm"
                                         onClick={() => handleApprove(appointment.id , "cancelled")}>
-                                        Decline <FontAwesomeIcon icon={faXmark} /> </button>
+                                         <FontAwesomeIcon icon={faXmark} /> </button>
                                     }
                               
                               </th>
-                                <th>
-                                {appointment.notes} 
+                                <th style={{ maxWidth: '200px' }} >
+                                <p className="note-text">{appointment.notes} </p>
                                 <button className="ml-2 btn-xs"
                                         onClick={() => 
                                             {

@@ -17,7 +17,7 @@ import { workdaysOptions } from '/src/data/workDays';
 import { qualifications } from '/src/data/qualifications'; 
 
 
-import "./Profile.css";
+import "/src/App.css";
 
 function DoctorProfile() {
 
