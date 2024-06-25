@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getICUs, setItemsPerPage } from '../../store/slices/ICUSlice';
 import ICUBookCard from '../../components/ICUComponents/ICUBookCard';
 import ICUApplication from '../../components/ICUComponents/ICUApplication';
-import Toast from '../../components/ICUComponents/Toast';
+import Swal from 'sweetalert2';
 import { addApplication } from '../../store/slices/ApplicationSlice';
 const ICUs = () => {
     const dispatch = useDispatch();
@@ -18,8 +18,7 @@ const ICUs = () => {
     });
     const [errors, setErrors] = useState({});
     const [address, setAddress] = useState('');
-    const [showToast, setShowToast] = useState(false);
-    const [toastType, setToastType] = useState('success'); // 'success' or 'error'
+
     const [toastMessage, setToastMessage] = useState('');
 
     // Define options for items per page dropdown
@@ -79,23 +78,31 @@ const ICUs = () => {
         } else {
             dispatch(addApplication(formData))
                 .then(() => {
-                    setToastType('success');
-                    setToastMessage('ICU booked successfully!');
-                    setShowToast(true);
                     handleCloseModal();
+                   
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'ICU booked successfully!',
+                    });
                 })
                 .catch((error) => {
                     console.log("Error:", error.response.data);
                     if (error.response && error.response.data.errors) {
                         setErrors(error.response.data.errors);
                     } else {
-                        setToastType('error');
                         setToastMessage('Error booking ICU. Please try again.');
-                        setShowToast(true);
+                        
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'Error booking ICU. Please try again.',
+                        });
                     }
                 });
         }
     };
+    
 
     const handleAddressChange = (e) => {
         setAddress(e.target.value);
@@ -129,9 +136,11 @@ const ICUs = () => {
                 </div>
             ) : (
                 <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {ICUs.map((icu, index) => (
                         <ICUBookCard key={index} icu={icu} onBookICU={handleBookICU} />
                     ))}
+                </div>
                     <div className="flex justify-between items-center mt-4">
                         <div>
                             <span>Show:</span>
@@ -151,7 +160,7 @@ const ICUs = () => {
                                 <button
                                     key={index}
                                     onClick={() => handlePageChange(index + 1)}
-                                    className={`btn btn-xs ${currentPage === index + 1 ? 'btn-primary' : 'btn-secondary'}`}
+                                    className={`btn btn-xs ${currentPage === index + 1 ? 'btn-info' : 'btn-secondary'}`}
                                 >
                                     {index + 1}
                                 </button>
@@ -169,8 +178,6 @@ const ICUs = () => {
                 formData={formData}
                 errors={errors}
             />
-
-            <Toast showToast={showToast} toastType={toastType} toastMessage={toastMessage} />
         </div>
     );
 };

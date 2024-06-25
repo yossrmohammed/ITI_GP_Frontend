@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getHospitalICUs, setCurrentPage } from '../../store/slices/HospitalSlice';
-import ICUCard from '../../components/HospitalComponents/ICUCard';
+import ICUTable from '../../components/HospitalComponents/ICUTable';
 import { Link } from 'react-router-dom';
 import AddICUModal from '../../components/HospitalComponents/AddICUModel';
 import HospitalDetails from '../../components/HospitalComponents/HospitalDetails';
+import Swal from 'sweetalert2';
 
 const HospitalICUs = () => {
     const dispatch = useDispatch();
@@ -33,6 +34,23 @@ const HospitalICUs = () => {
         setShowModal(true);
     };
 
+    const handleDeleteICU = (icu) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `You won't be able to revert this!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                dispatch(deleteICU({ id: icu.id, hospitalId }));
+                Swal.fire('Deleted!', 'ICU has been deleted.', 'success');
+            }
+        });
+    };
+
     const handlePageChange = (page) => {
         dispatch(setCurrentPage(page));
     };
@@ -53,10 +71,8 @@ const HospitalICUs = () => {
                 </div>
                 <div className="w-full md:w-2/3 px-4 mb-4">
                     <div className="mb-4 flex justify-between items-center">
-                        <Link to={'/application'} className="btn btn-secondary">
-                            Get All Applications
-                        </Link>
-                        <button onClick={handleAddICU} className="btn btn-primary">
+                        <div></div>
+                        <button onClick={handleAddICU} className="btn btn-info ">
                             Add New ICU
                         </button>
                     </div>
@@ -71,15 +87,28 @@ const HospitalICUs = () => {
                                     No ICUs found.
                                 </div>
                             ) : (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {hICUs.map((icu, index) => (
-                                        <ICUCard
-                                            key={index}
-                                            icu={icu}
-                                            onUpdate={handleUpdateICU}
-                                            hospitalId={hospitalId}
-                                        />
-                                    ))}
+                                <div className="overflow-x-auto">
+                                    <table className="min-w-full bg-white">
+                                        <thead>
+                                            <tr>
+                                                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 uppercase tracking-wider">ID</th>
+                                                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 uppercase tracking-wider">Capacity</th>
+                                                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 uppercase tracking-wider">Equipments</th>
+                                                <th className="px-6 py-3 border-b-2 border-gray-300"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="bg-white">
+                                            {hICUs.map((icu, index) => (
+                                                <ICUTable
+                                                    key={index}
+                                                    icu={icu}
+                                                    onUpdate={handleUpdateICU}
+                                                    onDelete={handleDeleteICU}
+                                                    hospitalId={hospitalId}
+                                                />
+                                            ))}
+                                        </tbody>
+                                    </table>
                                 </div>
                             )}
                             <div className="flex justify-between items-center mt-4">
@@ -102,7 +131,7 @@ const HospitalICUs = () => {
                                         <button
                                             key={index}
                                             onClick={() => handlePageChange(index + 1)}
-                                            className={`btn btn-xs ${currentPage === index + 1 ? 'btn-primary' : 'btn-secondary'}`}
+                                            className={`btn btn-xs ${currentPage === index + 1 ? 'btn-info' : 'btn-secondary'}`}
                                         >
                                             {index + 1}
                                         </button>

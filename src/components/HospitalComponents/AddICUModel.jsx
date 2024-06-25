@@ -62,6 +62,12 @@ const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selected
                 await dispatch(updateICU({ id: selectedICU.id, data: formDataWithEquipments, hospitalId }));
             } else {
                 await dispatch(addICU(formDataWithEquipments));
+                setFormData({
+                    hospital_id: hospitalId,
+                    capacity: '',
+                    equipments: [],
+                });
+                setSelectedEquipments([]);
             }
             console.log('ICU saved successfully:', formDataWithEquipments);
             
@@ -108,7 +114,7 @@ const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selected
                             )}
                         </div>
                         <div className="modal-action">
-                            <button type="submit" className="btn btn-primary">
+                            <button type="submit" className="btn btn-info">
                                 <FontAwesomeIcon icon={faSave} /> {selectedICU ? 'Save Changes' : 'Save'}
                             </button>
                             <button type="button" onClick={handleCloseModal} className="btn btn-secondary">
