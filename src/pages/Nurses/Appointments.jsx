@@ -220,8 +220,8 @@ function NurseAppointments () {
             </div>
         {loading ? renderSkeletonTable() : (
             <div className="table-container overflow-x-auto grow ml-5">
-                <table className="table">
-                    <thead>
+                <table className="table ">
+                    <thead className="text-base">
                         <tr className="text-center"> 
                             <th>Patient</th>
                             <th>Date</th>
@@ -268,8 +268,8 @@ function NurseAppointments () {
                                     
                               
                               </th>
-                                <th>
-                                {appointment.notes} 
+                                <th style={{ maxWidth: '200px' }} >
+                                <p className="note-text">{appointment.notes} </p>
                                 <button className="ml-2 btn-info btn-xs"
                                         onClick={() => 
                                             {

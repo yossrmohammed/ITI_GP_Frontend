@@ -36,3 +36,9 @@
   top:0px;
   right: 10px;
 }
+
+.note-text {
+  word-wrap: break-word;
+  white-space: normal;
+}
+
