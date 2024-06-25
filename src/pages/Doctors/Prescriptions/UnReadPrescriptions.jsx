@@ -102,7 +102,7 @@ function UnReadPrescriptions() {
 
     return (
     <>
-    <div className="userprofile-container container mx-auto px-8 pt-6 pb-6 rounded-lg flex flex-col md:flex-row my-4">
+    <div className="userprofile-container container mx-auto px-8 pt-6 pb-6 rounded-lg flex flex-col  my-4">
         <div className="grid grid-cols-3 gap-3 w-full">
         {prescriptions.map((prescription) => (
             <div className="card card-compact bg-base-100 w-97 shadow-xl">
@@ -171,7 +171,7 @@ function UnReadPrescriptions() {
             <h2 className="font-bold mb-3 text-lg">Write Your description</h2>
             <form className="flex flex-col justify-center items-center w-full" onSubmit={handleSubmit}>
               <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" type="button" onClick={() => document.getElementById('my_modal_1').close()}>X</button>
-              <textarea
+              <textarea maxlength="700"
                 className="textarea textarea-bordered textarea-lg w-full max-w-xs w-full"
                 placeholder="Write Your description"
                 value={description}

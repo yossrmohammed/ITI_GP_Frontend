@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Select from 'react-select';
 import Swal from 'sweetalert2'
+import { MdVerified ,MdOutlineVerified ,MdVerifiedUser } from "react-icons/md";
 
 
 import TextInput from '/src/components/Form/TextInput.jsx';
@@ -16,7 +17,7 @@ import { workdaysOptions } from '/src/data/workDays';
 import { qualifications } from '/src/data/qualifications'; 
 
 
-import "./Profile.css";
+import "/src/App.css";
 
 function DoctorProfile() {
 
@@ -59,8 +60,8 @@ function DoctorProfile() {
         qualifications: "",
         city: "",
         address: "",
-        clinic_fees: "",
-        home_fees: "",
+        clinic_fees: 1,
+        home_fees:1,
         online: 0,
         specialization: "",
         visit: 0,
@@ -88,7 +89,15 @@ function DoctorProfile() {
         work_days: Yup.string()
           .required("Work Days are required"),
         home_fees:
-        Yup.number().required("Home Fees is required").min(1,"Home Fees must be greater than 0"),
+        Yup.number().min(1,"Home Fees must be greater than 0"),
+        // Yup.number()
+        // .when('visit', {
+        //   is: () => 1,
+        //   then: () => Yup.number()
+        //     .required("Home Fees is required")
+        //     .min(1, "Home Fees must be greater than 0"),
+        //   otherwise: Yup.number(),
+        // }),
         clinic_fees:
         Yup.number().required("Clinic Fees is required").min(1,"Clinic Fees must be greater than 0"),
       }),
@@ -117,6 +126,12 @@ function DoctorProfile() {
         updateDoctorById(doctorId, formData)
         .then(response => {
           console.log("update doctor response : ",response)
+          Swal.fire({
+            icon: "success",
+            text: "Your Profile have been updated successfully!",
+            showConfirmButton: false,
+            timer: 1500
+          });
         })
         .catch(error => {
           console.log("error : ",error)
@@ -151,6 +166,7 @@ function DoctorProfile() {
     }, [doctor]);
 
     const handleHomeVisitChange = (event) => {
+      console.log(event.target.checked)
       setIsHomeVisitChecked(event.target.checked);
       formik.setFieldValue("visit", event.target.checked ? 1 : 0);
     };
@@ -220,9 +236,25 @@ function DoctorProfile() {
       <div className="left flex flex-col items-center mb-6 md:mb-0">
         <div className="image-div mb-4">
           <div className="avatar">
-            <div className="w-40 h-40 rounded-full overflow-hidden ring-2 ring-info ring-offset-base-100 ring-offset-2">
-              <img src={`${doctor.image}`} />
+            <div className={`w-40 h-40 rounded-full overflow-hidden ring-2 ring-offset-base-100 ring-offset-2 ${
+              doctor.verification_status === "accepted" ? 'ring-info' :
+              doctor.verification_status === "rejected" ? 'ring-error' :
+              'ring-neutral'}`}>
+                <img src={`${doctor.image}`} />
             </div>
+          </div>
+          <div className="tooltip absolute verified-icon" data-tip={ `${
+            doctor.verification_status === "accepted" ? 'Verified' :
+            doctor.verification_status === "rejected" ? 'Rejected' :
+            'Pending'
+          }`}>
+
+          <MdVerifiedUser className={` text-4xl text-info ${
+            doctor.verification_status === "accepted" ? 'text-info' :
+            doctor.verification_status === "rejected" ? 'text-error' :
+            'text-neutral'
+          }`}/>
+
           </div>
         </div>
         <form onSubmit={handleFileSubmit} className="w-full px-4">
@@ -239,6 +271,7 @@ function DoctorProfile() {
       <form onSubmit={formik.handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="col-span-3">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
+          {/* <MdVerifiedUser className="text-2xl text-info"/> */}
               <TextInput
                 label="Name"
                 name="name"
@@ -246,7 +279,7 @@ function DoctorProfile() {
                 onChange={formik.handleChange}
                 error={formik.errors.name}
                 placeholder="Name"
-              />
+              /> 
               <TextInput
                 label="Email"
                 name="email"

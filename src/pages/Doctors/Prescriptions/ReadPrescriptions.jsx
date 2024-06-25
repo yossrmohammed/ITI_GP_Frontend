@@ -2,6 +2,8 @@ import { Fragment, useEffect, useState } from "react"
 import { getReadPrescriptions } from "/src/axios/Prescriptions.jsx";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPhone, faUser } from '@fortawesome/free-solid-svg-icons'
+
+import "/src/App.css";
 function ReadPrescriptions() {  
 
     const doctorId = 1;
@@ -77,7 +79,7 @@ function ReadPrescriptions() {
 
     return (
     <>
-        <div className="userprofile-container container mx-auto px-8 pt-6 pb-6 rounded-lg flex flex-col md:flex-row my-4">
+        <div className="userprofile-container container mx-auto px-8 pt-6 pb-6 rounded-lg flex flex-col my-4">
           <div className="grid grid-cols-2 gap-4 w-full">
           {prescriptions.map((prescription) => (
             <div key={prescription.id} className="card lg:card-side bg-base-100 shadow-xl">
@@ -99,7 +101,7 @@ function ReadPrescriptions() {
                 <div className="card-title  mb-2">
                       <p> <FontAwesomeIcon icon={faPhone} />  {prescription.patient_phone} </p>
                 </div>
-                <p>{prescription.prescription_description}.</p>
+                <p className="description-text">{prescription.prescription_description}.</p>
                 
               </div>
             </div>
