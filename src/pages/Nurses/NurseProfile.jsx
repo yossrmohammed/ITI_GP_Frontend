@@ -14,7 +14,7 @@ import { nurseSpecialties } from '/src/data/nurseSpecialties';
 import { nurseUniversities } from '/src/data/nurseUniversities'; 
 import { workdaysOptions } from '/src/data/workDays'; 
 import { nurseQualifications } from '/src/data/nurseQualifications'; 
-
+import { useSelector } from "react-redux";
 
 import "/src/App.css";
 
@@ -24,8 +24,8 @@ function NurseProfile() {
     const nameRegExp = /^[a-zA-Z ]+$/;
     const nurseQualificationsOptions = nurseQualifications.map(q => ({ value: q, label: q }));
 
-
-    const nurseId = 1;
+    const loggedUser = useSelector((state) => state.auth.user);
+    const nurseId = loggedUser.id;
     const [nurse, setNurse] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -245,7 +245,6 @@ function NurseProfile() {
                 error={formik.errors.phone}
                 placeholder="Phone"
               />
-             
           
             </div>
           </div>
@@ -345,6 +344,15 @@ function NurseProfile() {
                   onChange={option => {
                     const selectedValues = option ? option.map(item => item.value).join(',') : '';
                     formik.setFieldValue('work_days', selectedValues);
+                    // if (nurse.work_days === '')
+                    //   {
+                        
+                    //     nurse.work_days += option;
+                    //   }
+                    // else
+                    //   {
+                    //     nurse.work_days += ','+option;
+                    //   }
                   }}
                   value={workdaysOptions.filter(option => formik.values.work_days.split(',').includes(option.value))}
                 />

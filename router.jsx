@@ -50,7 +50,7 @@ function PatientLayout()
 {
     const loggedUser = useSelector((state) => state.auth.user);
 
-    if (!loggedUser || loggedUser.role !== 'doctor')
+    if (!loggedUser || loggedUser.role !== 'patient')
     {
         return <NotAuthorized/>
     }
@@ -104,7 +104,7 @@ function HospitalLayout()
 {
     const loggedUser = useSelector((state) => state.auth.user);
 
-    if (!loggedUser || loggedUser.role !== 'hospital')
+    if (!loggedUser || loggedUser?.user?.role !== 'hospital')
     {
         return <NotAuthorized/>;     
     }
@@ -122,7 +122,7 @@ function MedicLayout()
 {
     const loggedUser = useSelector((state) => state.auth.user);
 
-    if (!loggedUser || loggedUser.role !== 'hospital')
+    if (!loggedUser || loggedUser.role !== 'doctor' || loggedUser.role !== 'nurse')
     {
         return <NotAuthorized/>;     
     }
@@ -153,10 +153,6 @@ export const router = createBrowserRouter([
             {
                 path: '/doctors/home-visit',
                 element: <Doctors home={true}/>,
-            },
-            {
-                path: '/icu/:id',
-                element: <div>test</div>
             },
             {
                 path: '/icu',
@@ -193,10 +189,6 @@ export const router = createBrowserRouter([
             {
                 path: '/dashboard',
                 element: <Dashboard/>
-            },
-            {
-                path: '/patient/:id',
-                element: <PatientPage/>
             },
         ]
     },
@@ -263,7 +255,10 @@ export const router = createBrowserRouter([
     {
         element: <MedicLayout/>,
         children: [
-            
+            {
+                path: '/patient/:id',
+                element: <PatientPage/>
+            },           
         ]
     },
     {

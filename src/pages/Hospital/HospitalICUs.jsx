@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getHospitalICUs, setCurrentPage } from '../../store/slices/HospitalSlice';
-import ICUCard from '../../components/HospitalComponents/ICUCard';
-import { Link } from 'react-router-dom';
+import ICUTable from '../../components/HospitalComponents/ICUTable';
 import AddICUModal from '../../components/HospitalComponents/AddICUModel';
 import HospitalDetails from '../../components/HospitalComponents/HospitalDetails';
+import Swal from 'sweetalert2';
+
 
 const HospitalICUs = () => {
+                
+    const loggedUser = useSelector((state) => state.auth.user);
+    const hospitalId = loggedUser.id;
     const dispatch = useDispatch();
     const { hICUs, currentPage, totalPages, isLoading } = useSelector((state) => state.hospitals);
-    const [hospitalId, setHospitalId] = useState(1);
     const [showModal, setShowModal] = useState(false);
     const [selectedICU, setSelectedICU] = useState(null);
     const [itemsPerPage, setItemsPerPage] = useState(5);

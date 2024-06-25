@@ -2,11 +2,14 @@ import { Fragment, useEffect, useState } from "react"
 import { getUnReadPrescriptions ,replyToPrescription } from "/src/axios/Prescriptions.jsx";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendar, faCalendarDays, faPhone, faUser } from '@fortawesome/free-solid-svg-icons'
+import { useSelector } from "react-redux";
 import Swal from 'sweetalert2'
 
 function UnReadPrescriptions() {  
 
-    const doctorId = 1;
+    const loggedUser = useSelector((state) => state.auth.user);
+    const doctorId = loggedUser.id;
+    
     const [prescriptions, setPrescriptions] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
