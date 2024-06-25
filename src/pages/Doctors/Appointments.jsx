@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react"
 import { getDoctorAppointments, ApproveDoctorAppointments, AddNoteToDoctorAppointments} from "/src/axios/DoctorAppointments.jsx";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck , faXmark ,faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faCheck , faXmark ,faPlus, faPen} from '@fortawesome/free-solid-svg-icons'
 import Swal from 'sweetalert2'
+import { Link } from 'react-router-dom';
+
 
 import {calculateAge} from "/src/helperFunctions"
 function DoctorAppointments () {  
@@ -227,10 +229,12 @@ function DoctorAppointments () {
                                     {appointment.kind_of_visit}
                                 </td>
                                 <td>
-                                     {appointment.patient_name} - {calculateAge(appointment.patient_DOB)} Years
-                                         <br />
-                                        < br />
-                                    {appointment.patient_phone}                                    
+                                    <Link to={`/patient/${appointment.patient_id}`} className="text-blue-500 hover:underline">
+                                        {appointment.patient_name}
+                                    </Link> - {calculateAge(appointment.patient_DOB)} Years
+                                         {/* <br /> */}
+                                        {/* < br /> */}
+                                    {/* {appointment.patient_phone}                                     */}
                                 </td>
                                 <td>
                                     {appointment.day} - {appointment.date}
@@ -262,14 +266,14 @@ function DoctorAppointments () {
                               </th>
                                 <th>
                                 {appointment.notes} 
-                                <button className="ml-2 btn btn-circle btn-outline btn-info btn-xs"
+                                <button className="ml-2 btn-xs"
                                         onClick={() => 
                                             {
                                                 setCurrentAppointmentId(appointment.id);
                                                 document.getElementById('note_modal').showModal()
                                             }
                                         }>
-                                         <FontAwesomeIcon icon={faPlus} /> </button>
+                                         <FontAwesomeIcon icon={faPen} className="text-info text-base" /> </button>
                                 </th>
                             </tr>
                         ))}
