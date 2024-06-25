@@ -17,7 +17,6 @@ import DoctorAppointments from "/src/pages/Doctors/Appointments"
 import NurseProfile from "/src/pages/Nurses/NurseProfile"
 import NurseAppointments from "/src/pages/Nurses/Appointments"
 
-
 import Verify from "./src/pages/Verify/Verify";
 import ResetPassword from "./src/pages/ResetPassword/ResetPassword";
 import HospitalICUs from "./src/pages/Hospital/HospitalICUs";
@@ -31,6 +30,10 @@ import NursesApproval from "./src/components/Dashboard/NursesApproval";
 import DoctorsApproval from "./src/components/Approvals/Approvals";
 import  Dashboard from "./src/components/Dashboard/Dashboard";
 import PatientPage from "./src/pages/Patient/PatientPage";
+import { useSelector } from "react-redux";
+import NotFound from "./src/pages/NotFound/NotFound";
+import NotAuthorized from "./src/pages/NotAuthorized/NotAuthorized";
+
 
 function Styled() 
 {
@@ -42,6 +45,97 @@ function Styled()
         </>
     );
 }
+
+function PatientLayout()
+{
+    const loggedUser = useSelector((state) => state.auth.user);
+
+    if (!loggedUser || loggedUser.role !== 'doctor')
+    {
+        return <NotAuthorized/>
+    }
+
+    return (
+        <>
+        <Navbar/>
+        <Outlet/>
+        <Footer/>
+        </>
+    );
+}
+
+function DoctorLayout()
+{
+    const loggedUser = useSelector((state) => state.auth.user);
+
+    if (!loggedUser || loggedUser.role !== 'doctor')
+    {
+        return <NotAuthorized/>;     
+    }
+
+    return (
+        <>
+        <Navbar />
+        <Outlet />
+        <Footer />
+        </>       
+    );
+}
+
+function NurseLayout()
+{
+    const loggedUser = useSelector((state) => state.auth.user);
+
+    if (!loggedUser || loggedUser.role !== 'nurse')
+    {
+        return <NotAuthorized/>;     
+    }
+
+    return (
+        <>
+        <Navbar />
+        <Outlet />
+        <Footer />
+        </>       
+    );
+}
+
+function HospitalLayout()
+{
+    const loggedUser = useSelector((state) => state.auth.user);
+
+    if (!loggedUser || loggedUser.role !== 'hospital')
+    {
+        return <NotAuthorized/>;     
+    }
+
+    return (
+        <>
+        <Navbar />
+        <Outlet />
+        <Footer />
+        </>       
+    );
+}
+
+function MedicLayout()
+{
+    const loggedUser = useSelector((state) => state.auth.user);
+
+    if (!loggedUser || loggedUser.role !== 'hospital')
+    {
+        return <NotAuthorized/>;     
+    }
+
+    return (
+        <>
+        <Navbar />
+        <Outlet />
+        <Footer />
+        </>       
+    );   
+}
+
 
 
 export const router = createBrowserRouter([
@@ -77,30 +171,6 @@ export const router = createBrowserRouter([
                 element: <MedicPage/>,
             },
             {
-                path: '/doctor/profile',
-                element: <DoctorProfile/>,
-            },
-            {
-                path: '/doctor/prescriptions/read',
-                element: <ReadPrescriptions/>,
-            },
-            {
-                path: '/doctor/prescriptions/unread',
-                element: <UnReadPrescriptions/>,
-            },
-            {
-                path: '/doctor/appointments',
-                element: <DoctorAppointments/>,
-            },
-            {
-                path: '/nurse/profile',
-                element: <NurseProfile/>,
-            },
-            {
-                path: '/nurse/appointments',
-                element: <NurseAppointments/>,
-            },
-            {
                 path: '/register',
                 element: <Register/>
             },
@@ -121,22 +191,6 @@ export const router = createBrowserRouter([
                 element: <ResetPassword/>
             },
             {
-                path:'/hospital',
-                element: <HospitalICUs/>
-            },
-            {
-                path:'/application',
-                element:<Applications/>
-            },
-            {
-                path: '/patient/profile',
-                element: <PatientProfile/>
-            },
-            {
-                path: '/patient/appointments',
-                element: <PatientAppointments/>
-            },
-            {
                 path: '/dashboard',
                 element: <Dashboard/>
             },
@@ -147,16 +201,74 @@ export const router = createBrowserRouter([
         ]
     },
     {
+        element: <PatientLayout/>,
+        children: [
+            {
+                path: '/patient/profile',
+                element: <PatientProfile/>
+            },
+            {
+                path: '/patient/appointments',
+                element: <PatientAppointments/>
+            }
+        ]
+    },
+    {
+        element: <DoctorLayout/>,
+        children: [
+            {
+                path: '/doctor/profile',
+                element: <DoctorProfile/>,
+            },
+            {
+                path: '/doctor/prescriptions/read',
+                element: <ReadPrescriptions/>,
+            },
+            {
+                path: '/doctor/prescriptions/unread',
+                element: <UnReadPrescriptions/>,
+            },
+            {
+                path: '/doctor/appointments',
+                element: <DoctorAppointments/>,
+            },
+        ]
+    }, 
+    {
+        element: <NurseLayout/>,
+        children: [
+            {
+                path: '/nurse/profile',
+                element: <NurseProfile/>,
+            },
+            {
+                path: '/nurse/appointments',
+                element: <NurseAppointments/>,
+            },
+        ]
+    },
+    {
+        element: <HospitalLayout/>,
+        children: [
+            {
+                path:'/hospital',
+                element: <HospitalICUs/>
+            },
+            {
+                path:'/application',
+                element:<Applications/>
+            },
+        ]
+    },
+    {
+        element: <MedicLayout/>,
+        children: [
+            
+        ]
+    },
+    {
         path: '*',
-        element:  <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 text-gray-800">
-        <div className="text-center">
-            <p className="text-3xl font-bold mb-4">404</p>
-            <p className="text-2xl mb-8">Page Not Found</p>
-            <Link to={"/"} className="px-4 py-2 rounded-md btn btn-info ">
-                Go Home
-            </Link>
-        </div>
-    </div>
+        element:  <NotFound/>
     }
 ])
 

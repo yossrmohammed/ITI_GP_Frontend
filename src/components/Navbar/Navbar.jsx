@@ -42,7 +42,7 @@ function Navbar() {
             <li><Link to={"/doctor/profile"} className="font-normal text-blue-600 mx-2 text-lg"> Profile </Link></li>
             <li><Link to={"/doctor/prescriptions/read"} className="font-normal text-blue-600 mx-2 text-lg"> Prescriptions </Link></li>
             <li><Link to={"/doctor/prescriptions/unread"} className="font-normal text-blue-600 mx-2 text-lg"> Unread </Link></li>
-            <li><Link to={"/doctor/appointments"} className="font-normal text-blue-600 mx-2 text-lg"> Appointments </Link></li>
+            <li><Link to={"/doctor/appointment"} className="font-normal text-blue-600 mx-2 text-lg"> Appointments </Link></li>
             </>
           }
 
@@ -52,7 +52,7 @@ function Navbar() {
             loggedUser?.role === 'nurse' &&
             <>
             <li><Link to={"/nurse/profile"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Profile </Link></li>
-            <li><Link to={"/nurse/appointments"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Appointments </Link></li>
+            <li><Link to={"/nurse/appointment"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Appointments </Link></li>
             </>
           }
 
