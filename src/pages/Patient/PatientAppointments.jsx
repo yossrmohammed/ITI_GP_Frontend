@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import TablePagination from "@mui/material/TablePagination";
 import { CircularProgress } from "@mui/material";
 import { FaCalendarAlt } from "react-icons/fa"; // Example icon
+import { useNavigate } from "react-router-dom";
 
 
 export default function PatientAppointments() {
@@ -14,6 +15,7 @@ export default function PatientAppointments() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [type, setType] = useState("Doctor");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -58,7 +60,7 @@ export default function PatientAppointments() {
         <FaCalendarAlt size={60} className="text-gray-500 mb-4" />
         <h2 className="text-2xl font-bold mb-2">No Appointments</h2>
         <p className="text-gray-600 mb-4">You currently have no appointments scheduled.</p>
-        <button className="btn btn-primary" onClick={() => alert('Redirect to scheduling page')}>Schedule Appointment</button>
+        <button className="btn btn-primary" onClick={() => navigate('/doctors')}>Schedule Appointment</button>
       </div>
     );
   }
