@@ -13,6 +13,7 @@ const HospitalDetails = ({ hospitalId }) => {
     const [hospitalData, setHospitalData] = useState({ user: {} });
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [formErrors, setFormErrors] = useState({});
 
     useEffect(() => {
         const fetchHospital = async () => {
@@ -46,31 +47,52 @@ const HospitalDetails = ({ hospitalId }) => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevState) => ({ ...prevState, [name]: value }));
+        setFormErrors((prevState) => ({ ...prevState, [name]: '' })); // Clear the error when the user starts typing
+    };
+
+    const validateForm = () => {
+        const errors = {};
+        if (!formData.name) errors.name = 'Name is required';
+        if (!formData.address) errors.address = 'Address is required';
+        if (!formData.phone) {
+            errors.phone = 'Phone number is required';
+        } else if (!/^(01[0-2,5]{1}[0-9]{8}|0[2-3]{1}[0-9]{7,8}|[0-9]{3,7})$/.test(formData.phone)) {
+            errors.phone = 'Phone number must be a valid Egyptian mobile, landline, or hotline number';
+        }
+        if (!formData.email) {
+            errors.email = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            errors.email = 'Email is invalid';
+        }
+        setFormErrors(errors);
+        return Object.keys(errors).length === 0;
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axiosInstance
-            .put(`/hospital/${hospitalId}`, formData)
-            .then((response) => {
-                console.log(response.data);
-                Swal.fire({
-                    title: 'Success!',
-                    text: 'Hospital details updated successfully.',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
+        if (validateForm()) {
+            axiosInstance
+                .put(`/hospital/${hospitalId}`, formData)
+                .then((response) => {
+                    console.log(response.data);
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Hospital details updated successfully.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                })
+                .catch((error) => {
+                    console.error('Failed to update hospital:', error);
+                    setError('Failed to update hospital.');
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to update hospital details.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
                 });
-            })
-            .catch((error) => {
-                console.error('Failed to update hospital:', error);
-                setError('Failed to update hospital.');
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Failed to update hospital details.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-            });
+        }
     };
 
     if (isLoading) {
@@ -98,6 +120,7 @@ const HospitalDetails = ({ hospitalId }) => {
                         onChange={handleChange}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
                     />
+                    {formErrors.name && <p className="text-red-500 text-xs mt-1">{formErrors.name}</p>}
                 </div>
                 <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">Address</label>
@@ -108,6 +131,7 @@ const HospitalDetails = ({ hospitalId }) => {
                         onChange={handleChange}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
                     />
+                    {formErrors.address && <p className="text-red-500 text-xs mt-1">{formErrors.address}</p>}
                 </div>
                 <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">Phone</label>
@@ -118,6 +142,7 @@ const HospitalDetails = ({ hospitalId }) => {
                         onChange={handleChange}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
                     />
+                    {formErrors.phone && <p className="text-red-500 text-xs mt-1">{formErrors.phone}</p>}
                 </div>
                 <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">Email</label>
@@ -128,6 +153,7 @@ const HospitalDetails = ({ hospitalId }) => {
                         onChange={handleChange}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
                     />
+                    {formErrors.email && <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>}
                 </div>
                 <button type="submit" className="bg-primary text-white py-2 px-4 rounded-md shadow-md hover:bg-primary-dark focus:outline-none">
                     Save Changes
