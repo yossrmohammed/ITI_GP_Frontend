@@ -25,6 +25,10 @@ function Nurses() {
         if (filters.fees) obj['fees'] = filters.fees;
         if (filters.available) obj['available'] = filters.available; 
         if (filters.name) obj['name'] = filters.name; 
+        if (filters.specialization) obj['specialization'] = filters.specialization;
+
+        console.log(obj);
+
         obj.page = currPage;
         obj.status = 'accepted';
 
@@ -45,6 +49,7 @@ function Nurses() {
         ...prevFilters,
         ...newFilters
     }));
+        setCurrPage(1);
     };
 
     const handlePageChange = (page) => {
@@ -59,7 +64,7 @@ function Nurses() {
         
         <div className="grid grid-rows-2 grid-flow-col gap-4">
             <div className="row-span-3">
-                <Filters onFilterChange={ handleFilterChange }/>
+                <Filters proffession='Nurse' onFilterChange={ handleFilterChange }/>
         </div>
 
 
@@ -80,6 +85,7 @@ function Nurses() {
                 work_days={el.work_days}
                 work_start={el.work_start}
                 work_end={el.work_end}
+                specialization={el.specialization}
                 rating={Number(el.average_rating)}
                 online={el.online}
                 />

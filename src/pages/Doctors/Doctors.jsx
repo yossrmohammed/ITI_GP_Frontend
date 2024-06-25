@@ -53,6 +53,7 @@ function Doctors(props) {
         ...prevFilters,
         ...newFilters
     }));
+        setCurrPage(1);
     };
 
     const handlePageChange = (page) => {

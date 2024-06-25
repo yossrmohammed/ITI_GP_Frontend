@@ -32,6 +32,7 @@ export default function Home() {
         title='Expert Nurses'
         content='Choose the speciality, and book an appointment with the Nurse.'
         book='Book a Nurse'
+        link='/nurses'
       />
 
       <HomeCard
@@ -39,6 +40,7 @@ export default function Home() {
         title='ICU Availability'
         content='Choose the ICU, and the hospital will contact you.'
         book='Book an ICU'
+        link='/icu'
       />
     </div>
 
