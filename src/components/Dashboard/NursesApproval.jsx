@@ -4,6 +4,7 @@ import { axiosInstance } from '../../axios';
 import moment from 'moment';
 import { RiDeleteBinLine, RiCheckLine, RiCloseLine } from 'react-icons/ri';
 import Skeleton from '../Skeleton';
+const baseUrl = import.meta.env.VITE_FRONT_URL; 
 
 const NursesApproval = () => {
   const [nurses, setNurses] = useState([]);
@@ -98,7 +99,9 @@ const NursesApproval = () => {
                         </div>
                       </div>
                       <div>
-                        <div className="font-bold">{nurse?.user?.name}</div>
+                      <a href={`${baseUrl}/user/nurse/${nurse.id}`} target="_blank" rel="noopener noreferrer">
+                        {nurse?.user?.name}
+                      </a>
                       </div>
                     </div>
                   </td>
