@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { getNurseAppointments, ApproveNurseAppointments, AddNoteToNurseAppointments} from "/src/axios/NurseAppointments.jsx";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck , faXmark ,faPlus } from '@fortawesome/free-solid-svg-icons'
+import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2'
 
 import {calculateAge} from "/src/helperFunctions"
@@ -235,10 +236,12 @@ function NurseAppointments () {
                             <tr className="text-center">
                                
                                 <td>
-                                     {appointment.patient_name} - {calculateAge(appointment.patient_DOB)} Years
-                                         <br />
-                                        < br />
-                                    {appointment.patient_phone}                                    
+                                    <Link to={`/patient/${appointment.patient_id}`} className="text-blue-500 hover:underline">
+                                        {appointment.patient_name}
+                                    </Link> - {calculateAge(appointment.patient_DOB)} Years
+                                         {/* <br /> */}
+                                        {/* < br /> */}
+                                    {/* {appointment.patient_phone}                                     */}
                                 </td>
                                 <td>
                                     {appointment.day} - {appointment.date}
