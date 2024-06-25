@@ -7,6 +7,8 @@ function Navbar() {
   const dispatch = useDispatch();
   const loggedUser = useSelector((state) => state.auth.user);
 
+  console.log(loggedUser);
+
   const handleLogout = () => {
     dispatch(logout());
     navigate('/');
@@ -54,6 +56,16 @@ function Navbar() {
             </>
           }
 
+          {/* hospital links */}
+    
+          {
+            loggedUser?.user?.role === 'hospital' &&
+            <>
+            <Link to={"/hospital"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Profile </Link>
+            <Link to={"/applications"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Applications </Link>
+            </>
+          }
+
       </ul>
     </div>
   
@@ -62,16 +74,6 @@ function Navbar() {
   
   {/* patient links */}
   
-  {(loggedUser?.role === 'patient' || !loggedUser) &&
-  <>
-    <div className='hidden md:inline-block'>
-    <Link to={"/doctors"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Doctors </Link>
-    <Link to={"/nurses"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Nurses </Link>
-    <Link to={"/doctors/home-visit"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Home visit </Link>
-    </div>
-  </>
-  }
-
   { loggedUser?.role === 'patient' &&
     <>
     <div className='hidden md:inline-block'> 
@@ -88,8 +90,17 @@ function Navbar() {
     <>
     <div className='hidden md:inline-block'>
     <Link to={"/doctor/profile"} className="font-normal text-blue-600 mx-2 text-lg"> Profile </Link>
-    <Link to={"/doctor/prescriptions/read"} className="font-normal text-blue-600 mx-2 text-lg"> Prescriptions </Link>
-    <Link to={"/doctor/prescriptions/unread"} className="font-normal text-blue-600 mx-2 text-lg"> Unread </Link>
+
+    <div className="dropdown">
+        <div tabIndex={0} role="button" className="font-normal text-blue-600 mx-2 text-lg">Prescriptions</div>
+        <ul
+          tabIndex={0}
+          className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+          <li><Link to={"/doctor/prescriptions/read"} className="font-normal text-blue-600 mx-2 text-lg"> Read </Link></li>
+          <li><Link to={"/doctor/prescriptions/unread"} className="font-normal text-blue-600 mx-2 text-lg"> Unread </Link></li>
+        </ul>
+      </div>
+    
     <Link to={"/doctor/appointments"} className="font-normal text-blue-600 mx-2 text-lg"> Appointments </Link>
     </div>
     </>
@@ -101,23 +112,32 @@ function Navbar() {
   {
     loggedUser?.role === 'nurse' &&
     <>
-    <Link to={"/nurse/profile"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Profile </Link>
-    <Link to={"/nurse/appointments"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Appointments </Link>
+
+    <div className='hidden md:inline-block'>
+      <Link to={"/nurse/profile"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Profile </Link>
+      <Link to={"/nurse/appointments"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Appointments </Link>
+    </div>
     </>
   }
 
   {/* hospital links */}
+    
+  {
+    loggedUser?.user?.role === 'hospital' &&
+    <>
+
+    <div className='hidden md:inline-block'>
+      <Link to={"/hospital"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Profile </Link>
+      <Link to={"/applications"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Applications </Link>
+    </div>
+    </>
+  }
 
   </div>
   </div>
 
   <div className="navbar-end">
 
-
-    { loggedUser?.role === 'patient' || !loggedUser &&
-      <Link to={"/icu"} className="font-normal text-blue-600 mx-2 p-2 text-lg btn btn-ghost"> Book ICU </Link>
-    }
- 
   {loggedUser &&
   <div className="avatar mx-3">
     <div className="w-12 rounded-full">
@@ -143,7 +163,7 @@ function Navbar() {
     
   { loggedUser?.name && <p>{loggedUser.name}</p> }
     
-
+  { loggedUser?.user?.name && <p>{loggedUser.user.name}</p>}
   { !loggedUser &&
   <>
   <Link to={"/login"} className="btn btn-outline mx-2">
