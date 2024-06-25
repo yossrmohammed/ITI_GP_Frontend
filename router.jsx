@@ -171,26 +171,6 @@ export const router = createBrowserRouter([
                 element: <MedicPage/>,
             },
             {
-                path: '/doctor/profile',
-                element: <DoctorProfile/>,
-            },
-            {
-                path: '/doctor/prescriptions/read',
-                element: <ReadPrescriptions/>,
-            },
-            {
-                path: '/doctor/prescriptions/unread',
-                element: <UnReadPrescriptions/>,
-            },
-            {
-                path: '/doctor/appointments',
-                element: <DoctorAppointments/>,
-            },
-            {
-                path: '/nurse/profile',
-                element: <NurseProfile/>,
-            },
-            {
                 path: '/register',
                 element: <Register/>
             },
