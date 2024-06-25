@@ -64,7 +64,7 @@ const ICUApplication = ({
                         )}
                     </div>
                     <div className="modal-action">
-                        <button type="submit" className="btn btn-primary">Submit</button>
+                        <button type="submit" className="btn btn-info">Submit</button>
                         <button type="button" onClick={handleCloseModal} className="btn">Cancel</button>
                     </div>
                 </form>

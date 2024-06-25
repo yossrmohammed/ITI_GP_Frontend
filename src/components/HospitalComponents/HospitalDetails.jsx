@@ -155,7 +155,7 @@ const HospitalDetails = ({ hospitalId }) => {
                     />
                     {formErrors.email && <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>}
                 </div>
-                <button type="submit" className="bg-primary text-white py-2 px-4 rounded-md shadow-md hover:bg-primary-dark focus:outline-none">
+                <button type="submit" className="bg-info text-white py-2 px-4 rounded-md shadow-md hover:bg-primary-dark focus:outline-none">
                     Save Changes
                 </button>
             </form>

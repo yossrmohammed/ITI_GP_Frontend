@@ -26,7 +26,7 @@ const ICUBookCard = ({ icu, onBookICU }) => {
                 </div>
 
                 <div className="mt-4">
-                    <button onClick={() => onBookICU(icu)} className="btn btn-primary">
+                    <button onClick={() => onBookICU(icu)} className="btn btn-info">
                         Book ICU
                     </button>
                 </div>

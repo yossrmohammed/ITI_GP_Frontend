@@ -72,7 +72,7 @@ const HospitalICUs = () => {
                 <div className="w-full md:w-2/3 px-4 mb-4">
                     <div className="mb-4 flex justify-between items-center">
                         <div></div>
-                        <button onClick={handleAddICU} className="btn btn-primary ">
+                        <button onClick={handleAddICU} className="btn btn-info ">
                             Add New ICU
                         </button>
                     </div>
@@ -131,7 +131,7 @@ const HospitalICUs = () => {
                                         <button
                                             key={index}
                                             onClick={() => handlePageChange(index + 1)}
-                                            className={`btn btn-xs ${currentPage === index + 1 ? 'btn-primary' : 'btn-secondary'}`}
+                                            className={`btn btn-xs ${currentPage === index + 1 ? 'btn-info' : 'btn-secondary'}`}
                                         >
                                             {index + 1}
                                         </button>
