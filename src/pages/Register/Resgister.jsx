@@ -123,7 +123,7 @@ const RegistrationForm = () => {
     if (!formData.phone.trim()) {
       errors.phone = 'Phone is required';
       valid = false;
-    } else if (!/^\d{11}$/.test(formData.phone.trim())) {
+    } else if (!/^(010|011|012|015)[0-9]{8}$/.test(formData.phone.trim())) {
       errors.phone = 'Phone must be exactly 11 digits';
       valid = false;
     }

@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import Select from 'react-select';
 import Swal from 'sweetalert2'
 import { MdVerified ,MdOutlineVerified ,MdVerifiedUser } from "react-icons/md";
-
+import { useSelector } from "react-redux";
 
 import TextInput from '/src/components/Form/TextInput.jsx';
 import NumberInput from '/src/components/Form/NumberInput.jsx';
@@ -25,8 +25,8 @@ function DoctorProfile() {
     const nameRegExp = /^[a-zA-Z ]+$/;
     const qualificationsOptions = qualifications.map(q => ({ value: q, label: q }));
 
-
-    const doctorId = 1;
+    const loggedUser = useSelector((state) => state.auth.user);
+    const doctorId = loggedUser.id;
     const [doctor, setDoctor] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);

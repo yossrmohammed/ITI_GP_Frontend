@@ -24,8 +24,7 @@ const ChatBotButton = () => {
   };
 
   const handleTriggerNextStep = (trigger) => {
-    // This function should handle triggering the next step in the chatbot
-    // It could be implemented to perform specific actions based on the trigger value
+
     console.log('Triggering next step:', trigger);
   };
 
@@ -55,7 +54,7 @@ const ChatBotButton = () => {
           style={{
             position: 'fixed',
             bottom: '80px',
-            right: '20px',
+            right: '70px',
             width: '300px',
             boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
           }}
@@ -159,7 +158,7 @@ const ChatBotButton = () => {
                 },
                 {
                   id: 'prescription_upload',
-                  component: <PrescriptionUpload triggerNextStep={handleTriggerNextStep} />, // Pass triggerNextStep function here
+                  component: <PrescriptionUpload triggerNextStep={handleTriggerNextStep} />, 
                   waitAction: true,
                   trigger: 'options',
                 },

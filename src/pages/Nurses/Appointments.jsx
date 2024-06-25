@@ -3,12 +3,15 @@ import { getNurseAppointments, ApproveNurseAppointments, AddNoteToNurseAppointme
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck , faXmark ,faPlus , faPen } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom';
+import { useSelector } from "react-redux";
 import Swal from 'sweetalert2'
 
 import {calculateAge} from "/src/helperFunctions"
 function NurseAppointments () {  
 
-    const nurseId = 1;
+    const loggedUser = useSelector((state) => state.auth.user);
+    const nurseId = loggedUser.id;
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [appointments, setAppointments] = useState([]);
