@@ -24,6 +24,12 @@ import Applications from "./src/pages/Hospital/Applications";
 import PatientProfile from "./src/pages/Patient/PatientProfile";
 import PayPal from "./src/pages/PayPal/PayPal";
 import PatientAppointments from "./src/pages/Patient/PatientAppointments";
+import { Link } from "react-router-dom";
+import HospitalsApproval from "./src/components/Dashboard/HospitalsApproval";
+import NursesApproval from "./src/components/Dashboard/NursesApproval";
+import DoctorsApproval from "./src/components/Approvals/Approvals";
+import  Dashboard from "./src/components/Dashboard/Dashboard";
+import PatientPage from "./src/pages/Patient/PatientPage";
 import { useSelector } from "react-redux";
 import NotFound from "./src/pages/NotFound/NotFound";
 import NotAuthorized from "./src/pages/NotAuthorized/NotAuthorized";
@@ -131,6 +137,7 @@ function MedicLayout()
 }
 
 
+
 export const router = createBrowserRouter([
     {
         element: <Styled/>,
@@ -164,6 +171,26 @@ export const router = createBrowserRouter([
                 element: <MedicPage/>,
             },
             {
+                path: '/doctor/profile',
+                element: <DoctorProfile/>,
+            },
+            {
+                path: '/doctor/prescriptions/read',
+                element: <ReadPrescriptions/>,
+            },
+            {
+                path: '/doctor/prescriptions/unread',
+                element: <UnReadPrescriptions/>,
+            },
+            {
+                path: '/doctor/appointments',
+                element: <DoctorAppointments/>,
+            },
+            {
+                path: '/nurse/profile',
+                element: <NurseProfile/>,
+            },
+            {
                 path: '/register',
                 element: <Register/>
             },
@@ -182,6 +209,14 @@ export const router = createBrowserRouter([
             {
                 path: '/reset',
                 element: <ResetPassword/>
+            },
+            {
+                path: '/dashboard',
+                element: <Dashboard/>
+            },
+            {
+                path: '/patient/:id',
+                element: <PatientPage/>
             },
         ]
     },
