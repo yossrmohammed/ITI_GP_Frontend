@@ -31,6 +31,8 @@ function NurseProfile() {
     const [error, setError] = useState(null);
     const [file, setFile] = useState(null);
 
+
+
     useEffect(() => {
       if (nurseId) {
         setLoading(true);
@@ -136,6 +138,7 @@ function NurseProfile() {
 
     // console.log(formik.values)
     console.log(formik.errors)
+
 
 
     const handleFileChange = (event) => {
@@ -385,6 +388,7 @@ function NurseProfile() {
           </div>
         </form>
       </div>
+
     </div>
 
    
