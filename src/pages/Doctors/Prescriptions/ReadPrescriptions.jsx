@@ -3,6 +3,8 @@ import { getReadPrescriptions } from "/src/axios/Prescriptions.jsx";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPhone, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from "react-redux";
+import { Link } from 'react-router-dom';
+
 import "/src/App.css";
 function ReadPrescriptions() {  
     
@@ -96,7 +98,10 @@ function ReadPrescriptions() {
               
               <div className="card-body" style={{width: "60%"}}>
                 <div className="card-title mb-2">
-                      <p> <FontAwesomeIcon icon={faUser} /> {prescription.patient_name}</p>
+                       <FontAwesomeIcon icon={faUser} /> 
+                        <Link to={`/patient/${prescription.patient_id}`} className="text-blue-500 hover:underline"> 
+                            <p>  {prescription.patient_name}</p>
+                        </Link>
                       {prescription.patient_DOB && <span className="badge badge-outline">{calculateAge(prescription.patient_DOB)} Years</span>}
                       {prescription.patient_gender == "f" ? <span className="badge badge-secondary">Female</span> : <span className="badge badge-info">Male</span>}
                 </div>
