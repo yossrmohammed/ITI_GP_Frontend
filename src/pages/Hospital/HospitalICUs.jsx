@@ -26,9 +26,7 @@ const HospitalICUs = () => {
         setShowModal(true);
     };
 
-    const handleCloseModal = () => {
-        setShowModal(false);
-    };
+
 
     const handleUpdateICU = (icu) => {
         setSelectedICU(icu);
@@ -147,7 +145,7 @@ const HospitalICUs = () => {
                     )}
                     <AddICUModal
                         showModal={showModal}
-                        handleCloseModal={handleCloseModal}
+                        setColseModel={setShowModal}
                         hospitalId={hospitalId}
                         errors={errors}
                         selectedICU={selectedICU}

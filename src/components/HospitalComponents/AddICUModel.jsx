@@ -4,10 +4,11 @@ import { addICU, updateICU } from '../../store/slices/HospitalSlice';
 import EquipmentAutocomplete from './EquipmentAutocomplete';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { axiosInstance } from '../../axios';
 
-const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selectedICU }) => {
+const AddICUModal = ({ showModal, setColseModel, hospitalId, selectedICU }) => {
     const dispatch = useDispatch();
-    const [selectedEquipments, setSelectedEquipments] = useState([]);
+    const [selectedEquipments, setSelectedEquipments] = useState({});
     const [formData, setFormData] = useState({
         hospital_id: hospitalId,
         capacity: '',
@@ -35,7 +36,17 @@ const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selected
             setSelectedEquipments([]);
         }
     }, [selectedICU, hospitalId]);
-
+    const handleCloseModal = () => {
+        setFormData({
+            hospital_id: hospitalId,
+            capacity: '',
+            code: '',
+            equipments: [],
+        });
+        setValidationErrors({});
+        setSelectedEquipments([]);
+        setColseModel(false);
+    };
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevState) => ({ ...prevState, [name]: value }));
@@ -43,46 +54,54 @@ const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selected
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-
-        // Validation logic
-        const errors = {};
-        if (formData.capacity < 0) {
-            errors.capacity = 'Capacity must be a positive number or zero.';
-        }
-        if (selectedEquipments.length === 0) {
-            errors.equipments = 'At least one equipment must be selected.';
-        }
-        if (!formData.code) {
-            errors.code = 'Code is required.';
-        }
-
-        if (Object.keys(errors).length > 0) {
-            setValidationErrors(errors);
-            return;
-        }
-
+        setValidationErrors({}); 
+        let response
         const formDataWithEquipments = { ...formData, equipments: selectedEquipments };
-        try {
+       
             if (selectedICU) {
-                await dispatch(updateICU({ id: selectedICU.id, data: formDataWithEquipments, hospitalId }));
+              response= await dispatch(updateICU({ id: selectedICU.id, data: formDataWithEquipments, hospitalId }));
+              console.log(response)
+                if(response.error){
+                    setValidationErrors(response.payload.errors);
+                }
+                else{
+                    setFormData({
+                        hospital_id: hospitalId,
+                        capacity: '',
+                        code: '',
+                        equipments: [],
+                    });
+                    setSelectedEquipments([]);
+                    
+                    setValidationErrors({});
+                    handleCloseModal();
+                }
             } else {
-                await dispatch(addICU(formDataWithEquipments));
-                setFormData({
-                    hospital_id: hospitalId,
-                    capacity: '',
-                    code: '',
-                    equipments: [],
-                });
-                setSelectedEquipments([]);
+                response = await dispatch(addICU(formDataWithEquipments));
+                if(response.error){
+                    setValidationErrors(response.payload.errors);
+                }
+                else{
+                    setFormData({
+                        hospital_id: hospitalId,
+                        capacity: '',
+                        code: '',
+                        equipments: [],
+                    });
+                    setSelectedEquipments([]);
+                    
+                    setValidationErrors({});
+                    handleCloseModal();
+                }
+                
+  
+                
             }
-            console.log('ICU saved successfully:', formDataWithEquipments);
             
-            handleCloseModal();
-            
-        } catch (error) {
-            console.error('Failed to save ICU:', error);
-        }
+        
     };
+
+
 
     return (
         showModal && (
