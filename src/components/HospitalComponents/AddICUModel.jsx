@@ -140,7 +140,7 @@ const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selected
                             <button type="submit" className="btn btn-info">
                                 <FontAwesomeIcon icon={faSave} /> {selectedICU ? 'Save Changes' : 'Save'}
                             </button>
-                            <button type="button" onClick={handleCloseModal} className="btn btn-secondary">
+                            <button type="button" onClick={handleCloseModal} className="btn btn-natural">
                                 <FontAwesomeIcon icon={faTimes} /> Cancel
                             </button>
                         </div>
