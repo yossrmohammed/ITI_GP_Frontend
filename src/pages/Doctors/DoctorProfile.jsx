@@ -88,8 +88,10 @@ function DoctorProfile() {
           .required("Address is required"),
         work_days: Yup.string()
           .required("Work Days are required"),
-        home_fees:
-        Yup.number().min(1,"Home Fees must be greater than 0"),
+        // home_fees:
+        // Yup.number().min(1,"Home Fees must be greater than 0"),
+        // home_fees: Yup.number()
+        // .nullable().test('is-null-or-greater-than-zero', 'Home Fees must be greater than 0 or null', value => value === null || value >= 0),
         // Yup.number()
         // .when('visit', {
         //   is: () => 1,
@@ -100,6 +102,7 @@ function DoctorProfile() {
         // }),
         clinic_fees:
         Yup.number().required("Clinic Fees is required").min(1,"Clinic Fees must be greater than 0"),
+        
       }),
       onSubmit:(values)=>{
         console.log("Submit===>",values)

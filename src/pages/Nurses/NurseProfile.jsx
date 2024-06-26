@@ -80,7 +80,7 @@ function NurseProfile() {
           .email("Invalid email address"),
         work_days: Yup.string()
           .required("Work Days are required"),
-        fees: Yup.number().required("Clinic Fees is required").min(1,"Clinic Fees must be greater than 0"),
+        fees: Yup.number().required("Fees is required").min(0,"Fees must be greater than or equal 0"),
       }),
       onSubmit:(values)=>{
         console.log("Submit===>",values)
