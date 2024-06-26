@@ -90,7 +90,7 @@ export default function PatientProfile() {
               </Field>
               <ErrorMessage name="gender" component="div" className="text-red-600" />
 
-              <button type="submit" className="btn btn-primary w-full mt-4" disabled={isSubmitting}>Update</button>
+              <button type="submit" className="btn btn-info w-full mt-4" disabled={isSubmitting}>Update</button>
             </Form>
           )}
         </Formik>

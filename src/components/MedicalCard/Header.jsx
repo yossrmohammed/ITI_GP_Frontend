@@ -176,7 +176,7 @@ function Header(props) {
           </div>
 
           <div className="card-actions justify-end mt-4">
-            <button className="btn btn-primary" onClick={handleBooking}>Book Appointment</button>
+            <button className="btn btn-info" onClick={handleBooking}>Book Appointment</button>
             <button className="btn btn-outline">Contact</button>
           </div>
         </div>
