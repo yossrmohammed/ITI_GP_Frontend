@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { axiosInstance } from '../../axios';
 import SkeletonCard from '../Reuseable/SkeletonCard';
 import Swal from 'sweetalert2';
+import { useSelector } from 'react-redux';
 
 const HospitalDetails = ({ hospitalId }) => {
     const [formData, setFormData] = useState({
@@ -14,6 +15,8 @@ const HospitalDetails = ({ hospitalId }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [formErrors, setFormErrors] = useState({});
+    const loggedUser = useSelector((state) => state.auth.user);
+    const verificationStatus = loggedUser.verification_status; 
 
     useEffect(() => {
         const fetchHospital = async () => {
@@ -27,7 +30,7 @@ const HospitalDetails = ({ hospitalId }) => {
                 setIsLoading(false);
             }
         };
-        
+
         if (hospitalId) {
             fetchHospital();
         }
@@ -47,7 +50,7 @@ const HospitalDetails = ({ hospitalId }) => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevState) => ({ ...prevState, [name]: value }));
-        setFormErrors((prevState) => ({ ...prevState, [name]: '' })); // Clear the error when the user starts typing
+        setFormErrors((prevState) => ({ ...prevState, [name]: '' })); 
     };
 
     const validateForm = () => {
@@ -107,8 +110,25 @@ const HospitalDetails = ({ hospitalId }) => {
         return <div className="text-red-500">Error: {error}</div>;
     }
 
+    
+    const getStatusTagColor = (status) => {
+        switch (status) {
+            case 'accepted':
+                return 'bg-green-500';
+            case 'pending':
+                return 'bg-yellow-500';
+            case 'rejected':
+                return 'bg-red-500';
+            default:
+                return 'bg-gray-500';
+        }
+    };
+
     return (
-        <div className="p-4 bg-white shadow-lg rounded-lg">
+        <div className="relative p-4 shadow-lg rounded-lg">
+            <div className={`absolute top-2 right-2 px-3 py-1 text-white rounded ${getStatusTagColor(verificationStatus)}`}>
+                {verificationStatus}
+            </div>
             <h2 className="text-2xl font-bold mb-4">Hospital Details</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
