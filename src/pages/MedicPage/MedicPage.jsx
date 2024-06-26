@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import { axiosInstance } from "../../axios";
 import Header from "../../components/MedicalCard/Header";
 import ReviewCard from "../../components/ReviewCard/ReviewCard";
+import { CircularProgress } from "@mui/material";
 function MedicPage() {
     const params = useParams();
     const [medic,setMedic] = useState(null);
@@ -36,9 +37,12 @@ function MedicPage() {
   
   if (!medic) {
     return (
-      <div>Loading..</div>
-    )
+      <div className="flex items-center justify-center h-screen">
+        <CircularProgress />
+      </div>
+    );
   }
+  
   return (
     <>
     <div className="">
@@ -78,6 +82,7 @@ function MedicPage() {
       &&
       <Header
       medic_id={medic.id}
+      rating={medic.average_rating}
       role={params.role}
       image={medic.image}
       name={medic.name}

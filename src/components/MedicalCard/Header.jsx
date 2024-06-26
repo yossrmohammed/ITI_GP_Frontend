@@ -54,7 +54,7 @@ function Header(props) {
   }, [props.work_days]);
 
   const handleBooking = () => {
-    if (props.role == "Doctor") {
+    if (props.role == "doctor") {
       setIsModalOpen(true);
     }
     else {
@@ -137,20 +137,32 @@ function Header(props) {
               </h3>
             </div>
           )}
+          {props.role === 'doctor' && (
+            <>
+              <div className="mt-4">
+                <h3 className={headerClass}>
+                  <FontAwesomeIcon className={iconClass} icon={faMoneyBillWave} />
+                  Clinic Fees: <span className="font-normal">{props.clinic_fees} EGP</span>
+                </h3>
+              </div>
 
-          <div className="mt-4">
-            <h3 className={headerClass}>
-              <FontAwesomeIcon className={iconClass} icon={faMoneyBillWave} />
-              Clinic Fees: <span className="font-normal">{props.clinic_fees} EGP</span>
-            </h3>
-          </div>
-
-          <div className="mt-4">
-            <h3 className={headerClass}>
-              <FontAwesomeIcon className={iconClass} icon={faMoneyBillWave} />
-              Home Visit Fees: <span className="font-normal">{props.home_fees} EGP</span>
-            </h3>
-          </div>
+              <div className="mt-4">
+                <h3 className={headerClass}>
+                  <FontAwesomeIcon className={iconClass} icon={faMoneyBillWave} />
+                  Home Visit Fees: <span className="font-normal">{props.home_fees} EGP</span>
+                </h3>
+              </div>
+            </>
+          )}
+          
+          {props.role === 'nurse' && (
+            <div className="mt-4">
+              <h3 className={headerClass}>
+                <FontAwesomeIcon className={iconClass} icon={faMoneyBillWave} />
+                Fees: <span className="font-normal">{props.fees} EGP</span>
+              </h3>
+            </div>
+          )}
 
           {props.role === 'doctor' && (
             <div className="mt-4">
