@@ -136,7 +136,23 @@ function MedicLayout()
     );   
 }
 
+function AdminLayout()
+{
+    const loggedUser = useSelector((state) => state.auth.user);
 
+    if (!loggedUser || loggedUser.role !== 'admin')
+    {
+        return <NotAuthorized/>;     
+    }
+
+    return (
+        <>
+        <Navbar />
+        <Outlet />
+        <Footer />
+        </>       
+    );      
+}
 
 export const router = createBrowserRouter([
     {
@@ -185,10 +201,6 @@ export const router = createBrowserRouter([
             {
                 path: '/reset',
                 element: <ResetPassword/>
-            },
-            {
-                path: '/dashboard',
-                element: <Dashboard/>
             },
         ]
     },
@@ -259,6 +271,15 @@ export const router = createBrowserRouter([
                 path: '/patient/:id',
                 element: <PatientPage/>
             },           
+        ]
+    },
+    {
+        element: <AdminLayout/>,
+        children: [
+            {
+                path: '/dashboard',
+                element: <Dashboard/>
+            },
         ]
     },
     {
