@@ -24,6 +24,7 @@
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
+    "dayjs": "^1.11.11",
     "formik": "^2.4.6",
     "jwt-decode": "^4.0.0",
     "lodash.debounce": "^4.0.8",

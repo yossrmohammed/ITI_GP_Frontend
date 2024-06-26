@@ -1,8 +1,19 @@
-import React, { useEffect, useRef } from 'react';
+/* eslint-disable react/prop-types */
 
-const PayPal = ({ amount, description, patientId, doctorId, nurseId }) => {
+import { useEffect, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { axiosInstance } from '../../axios';
+import dayjs from 'dayjs';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../store/auth/authSlice';
+import Swal from 'sweetalert2';
+
+function PayPal() {
   const paypal = useRef();
-
+  const location = useLocation();
+  const user = useSelector(selectUser);
+  const navigate = useNavigate();
+  console.log(location.state);
   useEffect(() => {
     const script = document.createElement("script");
     script.src = `https://www.paypal.com/sdk/js?client-id=AcpEjxCCKONOsrJMDOwQvFipq9QP48bXHRx0-AA3j6Qqftb_fJSN6EGy8SvKtl8BFiFXBNCrw8z5qaz3&currency=CAD`;
@@ -13,10 +24,10 @@ const PayPal = ({ amount, description, patientId, doctorId, nurseId }) => {
             return actions.order.create({
               purchase_units: [
                 {
-                  description:  description || "Payment description",
+                  description:  location.state.description || "Payment description",
                   amount: {
                     currency_code: "CAD",
-                    value:  parseFloat(amount) || 4000,
+                    value:  parseFloat(location.state.amount) || 4000,
                   },
                 },
               ],
@@ -27,9 +38,29 @@ const PayPal = ({ amount, description, patientId, doctorId, nurseId }) => {
           },
           onApprove: async (data, actions) => {
             try {
+              const dateWithoutDayOfWeek = location.state.full_date.date.split(', ').slice(1).join(', ');
+              const parsedDate = dayjs(dateWithoutDayOfWeek, 'MMMM D, YYYY');
+              const formattedDate = parsedDate.format('YYYY/MM/DD');
+              console.log(formattedDate);
               const order = await actions.order.capture();
               console.log('Order approved:', order);
-              alert('Transaction completed by ' + order.payer.name.given_name);
+              const response = await axiosInstance.post('/payments', {
+                patient_id : user.id,
+                medic_id : location.state.medic_id,
+                medic_role : location.state.medic_role,
+                kind_of_visit : location.state.kind_of_visit,
+                day : location.state.full_date.day.substring(0,3),
+                date : formattedDate,
+                amount : location.state.amount,
+                order_id : order.id,
+              });
+              Swal.fire({
+                icon: "success",
+                text: "Payment finished successfully",
+                showConfirmButton: true,
+                timer: 1500
+              });
+              navigate('/');
             } catch (err) {
               console.error('Error capturing order:', err);
               alert('An error occurred during order capture. Please try again.');
@@ -77,6 +108,6 @@ const PayPal = ({ amount, description, patientId, doctorId, nurseId }) => {
    
     </div>
   );
-};
+}
 
 export default PayPal;
