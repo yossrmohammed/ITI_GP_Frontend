@@ -87,8 +87,9 @@ export default function PatientAppointments() {
               <th className="w-1/6">{type == "Doctor" ? "Doctor" : "Nurse"}</th>
               <th className="w-1/6">Kind of Visit</th>
               <th className="w-1/6">Day</th>
+              <th className="w-1/6">Date</th>
               <th className="w-1/6">Status</th>
-              <th className="w-2/6">Notes</th>
+              <th className="w-1/6">Notes</th>
             </tr>
           </thead>
           <tbody>
@@ -97,6 +98,7 @@ export default function PatientAppointments() {
                 <td>{appointment.name}</td>
                 <td>{appointment.kind_of_visit ? appointment.kind_of_visit : "clinic"}</td>
                 <td>{appointment.day}</td>
+                <td>{appointment.date}</td>
                 <td>{appointment.status}</td>
                 <td>{appointment.notes}</td>
               </tr>

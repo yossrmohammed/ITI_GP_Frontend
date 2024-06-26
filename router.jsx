@@ -122,7 +122,7 @@ function MedicLayout()
 {
     const loggedUser = useSelector((state) => state.auth.user);
 
-    if (!loggedUser || loggedUser.role !== 'doctor' || loggedUser.role !== 'nurse')
+    if (!loggedUser || (loggedUser.role !== 'doctor' && loggedUser.role !== 'nurse'))
     {
         return <NotAuthorized/>;     
     }

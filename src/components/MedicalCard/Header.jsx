@@ -7,15 +7,17 @@ import { faBuildingColumns, faEnvelope, faLocationDot, faMoneyBillWave, faPhone,
 import { Dialog, DialogContent, DialogTitle, IconButton, Card, CardContent, Typography, Grid } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import dayjs from "dayjs"; // Library for date manipulation
+import { useNavigate } from "react-router-dom";
 
 function Header(props) {
   const headerClass = "text-lg font-semibold card-title";
   const iconClass = "text-blue-600 text-3xl";
   const rate = Number(props.rating) || 0;
+  const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDayModalOpen, setIsDayModalOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null); // Track selected option
+  const [selectedPlace, setSelectedPlace] = useState(null); // Track selected option
   const [upcomingDates, setUpcomingDates] = useState([]); // Track upcoming dates for work days
 
   // Define all days of the week
@@ -53,19 +55,40 @@ function Header(props) {
   }, [props.work_days]);
 
   const handleBooking = () => {
-    setIsModalOpen(true);
+    if (props.role == "Doctor") {
+      setIsModalOpen(true);
+    }
+    else {
+      setIsDayModalOpen(true);
+    }
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setIsDayModalOpen(false); // Close both modals if needed
-    setSelectedOption(null); // Reset the selected option
+    setSelectedPlace(null); // Reset the selected option
   };
 
-  const handleOptionClick = (option) => {
-    setSelectedOption(option);
+  const handlePlaceClick = (option) => {
+    setSelectedPlace(option);
     setIsModalOpen(false); // Close the initial modal
     setIsDayModalOpen(true); // Open the day selection modal
+    console.log(option);
+  };
+
+  const handleDateClick = (day, nextDate) => {
+    setIsDayModalOpen(false); // Close the day selection modal
+
+    navigate('/checkout', { state: {
+      amount: props.clinic_fees ?? props.home_fees,
+      full_date: {
+        day, 
+        date: nextDate.date
+      },
+      kind_of_visit: selectedPlace,
+      medic_role: props.role,
+      medic_id: props.medic_id,
+    }})
   };
 
   return (
@@ -173,7 +196,7 @@ function Header(props) {
             <Grid item xs={12} sm={6}>
               <Card
                 className="hover:shadow-lg cursor-pointer"
-                onClick={() => handleOptionClick('Clinic')}
+                onClick={() => handlePlaceClick('Clinic')}
               >
                 <CardContent className="text-center">
                   <FontAwesomeIcon icon={faClinicMedical} size="2x" className="text-blue-600 mb-2" />
@@ -187,7 +210,7 @@ function Header(props) {
             <Grid item xs={12} sm={6}>
               <Card
                 className="hover:shadow-lg cursor-pointer"
-                onClick={() => handleOptionClick('Home')}
+                onClick={() => handlePlaceClick('Home')}
               >
                 <CardContent className="text-center">
                   <FontAwesomeIcon icon={faHome} size="2x" className="text-blue-600 mb-2" />
@@ -204,19 +227,22 @@ function Header(props) {
       {/* Day Selection Modal */}
       <Dialog open={isDayModalOpen} onClose={closeModal} fullWidth maxWidth="md">
         <DialogTitle className="flex justify-between items-center">
-          <span className="text-lg font-semibold">Select a Day for {selectedOption} Appointment</span>
+          <span className="text-lg font-semibold">Select a Day for {selectedPlace} Appointment</span>
           <IconButton onClick={closeModal}>
             <Close />
           </IconButton>
         </DialogTitle>
         <DialogContent>
           <Grid container spacing={2}>
-          {daysOfWeek.map((day) => {
+            {daysOfWeek.map((day) => {
               const nextDate = upcomingDates.find(d => d.day === day);
               const isDisabled = !nextDate; // Disable if no next date for this day
               return (
                 <Grid item xs={12} sm={6} md={4} key={day}>
-                  <Card className={`hover:shadow-lg ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`} disabled={isDisabled}>
+                  <Card
+                    className={`hover:shadow-lg ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                    onClick={() => handleDateClick(day, nextDate)}
+                  >
                     <CardContent className="text-center">
                       <FontAwesomeIcon icon={faCalendarAlt} size="2x" className={`text-blue-600 mb-2 ${isDisabled ? 'opacity-50' : ''}`} />
                       <Typography variant="h6">{day}</Typography>
@@ -226,10 +252,10 @@ function Header(props) {
                 </Grid>
               );
             })}
-          </Grid>
-        </DialogContent>
-      </Dialog>
-    </div>
+        </Grid>
+      </DialogContent>
+    </Dialog>
+  </div>
   );
 }
 

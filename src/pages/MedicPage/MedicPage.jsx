@@ -45,6 +45,7 @@ function MedicPage() {
       params.role === 'doctor'
       &&
     <Header
+    medic_id={medic.id}
     role={params.role}
     image={medic.image}
     name={medic.name}
