@@ -60,13 +60,13 @@ export default function PatientAppointments() {
         <FaCalendarAlt size={60} className="text-gray-500 mb-4" />
         <h2 className="text-2xl font-bold mb-2">No Appointments</h2>
         <p className="text-gray-600 mb-4">You currently have no appointments scheduled.</p>
-        <button className="btn btn-primary" onClick={() => navigate('/doctors')}>Schedule Appointment</button>
+        <button className="btn btn-info" onClick={() => navigate('/doctors')}>Schedule Appointment</button>
       </div>
     );
   }
 
   return (
-    <div className="h-auto min-h-96">
+    <div className="h-auto min-h-96 p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold">Appointments</h2>
         <div className="w-48">

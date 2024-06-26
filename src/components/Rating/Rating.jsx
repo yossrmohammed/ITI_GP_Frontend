@@ -1,11 +1,11 @@
 function Rating(props) {
     const arr = [];
-    const rate = Number(props.rate) || 0;
+    const rate = parseInt(Number(props.rate)) || 0;
     for(let i=0 ; i < 5 ; i++)
         {
-            if (rate -1 == i)
+            if (rate -1 < i)
                 {
-                    arr.push(<input type="radio" name="rating-2" className="mask mask-star-2 bg-orange-400" key={i} checked disabled/>)
+                    arr.push(<input type="radio" name="rating-2" className="mask mask-star-2 bg-gray-400" key={i} checked disabled/>)
                 }
             else 
             {

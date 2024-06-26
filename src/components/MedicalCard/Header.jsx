@@ -8,12 +8,15 @@ import { Dialog, DialogContent, DialogTitle, IconButton, Card, CardContent, Typo
 import { Close } from '@mui/icons-material';
 import dayjs from "dayjs"; // Library for date manipulation
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../store/auth/authSlice";
 
 function Header(props) {
   const headerClass = "text-lg font-semibold card-title";
   const iconClass = "text-blue-600 text-3xl";
   const rate = Number(props.rating) || 0;
   const navigate = useNavigate();
+  const user = useSelector(selectUser);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDayModalOpen, setIsDayModalOpen] = useState(false);
@@ -54,7 +57,7 @@ function Header(props) {
   }, [props.work_days]);
 
   const handleBooking = () => {
-    if (props.role == "Doctor") {
+    if (props.role == "doctor") {
       setIsModalOpen(true);
     }
     else {
@@ -72,7 +75,6 @@ function Header(props) {
     setSelectedPlace(option);
     setIsModalOpen(false); // Close the initial modal
     setIsDayModalOpen(true); // Open the day selection modal
-    console.log(option);
   };
 
   const handleDateClick = (day, nextDate) => {
@@ -137,20 +139,32 @@ function Header(props) {
               </h3>
             </div>
           )}
+          {props.role === 'doctor' && (
+            <>
+              <div className="mt-4">
+                <h3 className={headerClass}>
+                  <FontAwesomeIcon className={iconClass} icon={faMoneyBillWave} />
+                  Clinic Fees: <span className="font-normal">{props.clinic_fees} EGP</span>
+                </h3>
+              </div>
 
-          <div className="mt-4">
-            <h3 className={headerClass}>
-              <FontAwesomeIcon className={iconClass} icon={faMoneyBillWave} />
-              Clinic Fees: <span className="font-normal">{props.clinic_fees} EGP</span>
-            </h3>
-          </div>
-
-          <div className="mt-4">
-            <h3 className={headerClass}>
-              <FontAwesomeIcon className={iconClass} icon={faMoneyBillWave} />
-              Home Visit Fees: <span className="font-normal">{props.home_fees} EGP</span>
-            </h3>
-          </div>
+              <div className="mt-4">
+                <h3 className={headerClass}>
+                  <FontAwesomeIcon className={iconClass} icon={faMoneyBillWave} />
+                  Home Visit Fees: <span className="font-normal">{props.home_fees} EGP</span>
+                </h3>
+              </div>
+            </>
+          )}
+          
+          {props.role === 'nurse' && (
+            <div className="mt-4">
+              <h3 className={headerClass}>
+                <FontAwesomeIcon className={iconClass} icon={faMoneyBillWave} />
+                Fees: <span className="font-normal">{props.fees} EGP</span>
+              </h3>
+            </div>
+          )}
 
           {props.role === 'doctor' && (
             <div className="mt-4">
@@ -174,11 +188,13 @@ function Header(props) {
               Phone: <span className="font-normal">{props.phone}</span>
             </h3>
           </div>
-
-          <div className="card-actions justify-end mt-4">
-            <button className="btn btn-primary" onClick={handleBooking}>Book Appointment</button>
-            <button className="btn btn-outline">Contact</button>
-          </div>
+          {
+            user && user.role === 'patient' && (
+              <div className="card-actions justify-end mt-4">
+                <button className="btn btn-info" onClick={handleBooking}>Book Appointment</button>
+              </div>
+            )
+          }
         </div>
       </div>
 
