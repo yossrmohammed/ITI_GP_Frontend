@@ -34,9 +34,9 @@ const EquipmentAutocomplete = ({ selectedEquipments, setSelectedEquipments }) =>
     }, [searchTerm, equipments]);
 
     const handleAddEquipment = async (event) => {
-        event.preventDefault(); // Prevent the form from submitting and closing the modal
-        if (!/^[a-zA-Z]+$/.test(searchTerm)) {
-            setValidationError("Equipment name must contain only alphabetic characters.");
+        event.preventDefault(); 
+        if (!/^[a-zA-Z][a-zA-Z0-9\s\W]*$/.test(searchTerm)) {
+            setValidationError("Equipment name must start with an alphabetic character.");
             return;
         }
         try {
@@ -50,6 +50,7 @@ const EquipmentAutocomplete = ({ selectedEquipments, setSelectedEquipments }) =>
             console.error("Failed to add equipment:", error);
         }
     };
+    
 
     const handleSelectSuggestion = (equipmentId) => {
         if (!selectedEquipments.includes(equipmentId)) {
