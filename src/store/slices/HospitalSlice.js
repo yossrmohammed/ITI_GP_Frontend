@@ -7,15 +7,28 @@ export const getHospitalICUs = createAsyncThunk("ICUs/getICUs", async ({ hospita
     });
     return response.data;
 });
-
-export const addICU = createAsyncThunk("ICUs/addICU", async (data, { dispatch }) => {
-    await axiosInstance.post("/intensive-care-units", data);
-    dispatch(getHospitalICUs({ hospitalId: data.hospital_id, page: 1, itemsPerPage: 5 })); // Dispatch refetch action
+export const addICU = createAsyncThunk('ICUs/addICU', async (data, { dispatch, rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.post('/intensive-care-units', data);
+        dispatch(getHospitalICUs({ hospitalId: data.hospital_id, page: 1, itemsPerPage: 5 })); 
+        return response.data; 
+    } catch (error) {
+        
+        console.log('Failed to add ICU:', error.response.data);
+        return rejectWithValue(error.response.data);
+    }
 });
 
-export const updateICU = createAsyncThunk("ICUs/updateICU", async ({ id, data }, { dispatch }) => {
-    await axiosInstance.put(`/intensive-care-units/${id}`, data);
-    dispatch(getHospitalICUs({ hospitalId: data.hospital_id, page: 1, itemsPerPage: 5 })); // Dispatch refetch action
+export const updateICU = createAsyncThunk("ICUs/updateICU", async ({ id, data }, { dispatch , rejectWithValue }) => {
+    try {
+        const response= await axiosInstance.put(`/intensive-care-units/${id}`, data);
+
+        dispatch(getHospitalICUs({ hospitalId: data.hospital_id, page: 1, itemsPerPage: 5 }));
+        return response.data;
+    } catch (error) {
+        console.log('Failed to update ICU:', error.response.data);
+        return rejectWithValue(error.response.data);
+    }
 });
 
 export const deleteICU = createAsyncThunk("ICUs/deleteICU", async ({ id, hospitalId, itemsPerPage }, { dispatch }) => {
@@ -30,6 +43,7 @@ const HospitalSlice = createSlice({
         currentPage: 1,
         totalPages: 1,
         isLoading: false,
+        errors: {},
     },
     reducers: {
         setCurrentPage: (state, action) => {
@@ -58,6 +72,7 @@ const HospitalSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(addICU.fulfilled, (state) => {
+
                 state.isLoading = false;
             })
             .addCase(addICU.rejected, (state) => {
