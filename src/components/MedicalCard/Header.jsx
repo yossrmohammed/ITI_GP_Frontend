@@ -3,13 +3,15 @@
 import { useState, useEffect } from "react";
 import Rating from "../Rating/Rating";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBuildingColumns, faEnvelope, faLocationDot, faMoneyBillWave, faPhone, faUserDoctor, faCalendarAlt, faClinicMedical, faHome } from '@fortawesome/free-solid-svg-icons';
-import { Dialog, DialogContent, DialogTitle, IconButton, Card, CardContent, Typography, Grid } from '@mui/material';
+import { faBuildingColumns, faEnvelope, faLocationDot, faMoneyBillWave, faPhone, faUserDoctor, faCalendarAlt, faClinicMedical, faHome, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { Dialog, DialogContent, DialogTitle, DialogActions, IconButton, Card, CardContent, Typography, Grid, Button, TextField } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import dayjs from "dayjs"; // Library for date manipulation
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../store/auth/authSlice";
+import Swal from "sweetalert2"; // Sweetalert for alerts
+import { axiosInstance } from "../../axios";
 
 function Header(props) {
   const headerClass = "text-lg font-semibold card-title";
@@ -20,8 +22,11 @@ function Header(props) {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDayModalOpen, setIsDayModalOpen] = useState(false);
+  const [isPrescriptionModalOpen, setIsPrescriptionModalOpen] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState(null); // Track selected option
   const [upcomingDates, setUpcomingDates] = useState([]); // Track upcoming dates for work days
+  const [prescriptionImage, setPrescriptionImage] = useState(null); // Track selected prescription image
+  const [imagePreview, setImagePreview] = useState(""); // Track preview URL of the selected image
 
   // Define all days of the week
   const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -57,10 +62,9 @@ function Header(props) {
   }, [props.work_days]);
 
   const handleBooking = () => {
-    if (props.role == "doctor") {
+    if (props.role === "doctor") {
       setIsModalOpen(true);
-    }
-    else {
+    } else {
       setIsDayModalOpen(true);
     }
   };
@@ -68,6 +72,7 @@ function Header(props) {
   const closeModal = () => {
     setIsModalOpen(false);
     setIsDayModalOpen(false); // Close both modals if needed
+    setIsPrescriptionModalOpen(false);
     setSelectedPlace(null); // Reset the selected option
   };
 
@@ -80,40 +85,94 @@ function Header(props) {
   const handleDateClick = (day, nextDate) => {
     setIsDayModalOpen(false); // Close the day selection modal
 
-    navigate('/checkout', { state: {
-      amount: props.clinic_fees ?? props.home_fees ?? props.fees,
-      full_date: {
-        day, 
-        date: nextDate.date
-      },
-      kind_of_visit: selectedPlace,
-      medic_role: props.role,
-      medic_id: props.medic_id,
-    }})
+    navigate('/checkout', {
+      state: {
+        amount: props.clinic_fees ?? props.home_fees ?? props.fees,
+        full_date: {
+          day,
+          date: nextDate.date
+        },
+        kind_of_visit: selectedPlace,
+        medic_role: props.role,
+        medic_id: props.medic_id,
+      }
+    });
+  };
+
+  const openPrescriptionModal = () => {
+    setIsPrescriptionModalOpen(true);
+  };
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setPrescriptionImage(file);
+      setImagePreview(URL.createObjectURL(file)); // Generate a preview URL for the image
+    }
+  };
+
+  const handleSubmitPrescription = async () => {
+    // Implement the logic for submitting the prescription image
+    // For demonstration, we'll just log the file and show an alert
+    if (prescriptionImage) {
+      // Here, you would typically upload the image to your server
+      try {
+        await axiosInstance.post(`/patients/${user.id}/prescription`, {
+          doctor_id: props.medic_id,
+          prescription_image: prescriptionImage,
+        }, { headers: {
+          'Content-Type': 'multipart/form-data',
+        }});
+        Swal.fire({
+          icon: "success",
+          text: "Prescription uploaded successfully",
+          showConfirmButton: true,
+          timer: 1500,
+        });
+      }
+      catch (error) {
+        Swal.fire({
+          icon: "error",
+          text: "Failed to uploaded the prescription",
+          showConfirmButton: true,
+          timer: 1500,
+        });
+      }
+      // Close the modal and reset the image states
+      closeModal();
+      setPrescriptionImage(null);
+      setImagePreview("");
+    } else {
+      Swal.fire({
+        icon: "error",
+        text: "Please select an image first",
+        showConfirmButton: true,
+        timer: 1500,
+      });
+    }
   };
 
   return (
     <div className="container mx-auto p-5">
       <div className="card lg:card-side bg-base-200 shadow-xl border-2 p-5">
         <div className="lg:w-1/3">
-    {props.image ? (
-      <img
-        src={props.image}
-        alt={props.role}
-        className="m-auto my-10 w-56 h-56 object-cover rounded-full "
-      />
-    ) : (
-      <img
-        src={
-          props.role === 'doctor'
-            ? "https://i.ibb.co/J5XNVjg/default-doctor.webp"
-            : "https://i.ibb.co/7ybQ2T4/default-nurse.png"
-        }
-        alt={props.role}
-        className="m-auto my-10 w-56 h-56 object-cover rounded-full "
-      />
-    )}
-
+          {props.image ? (
+            <img
+              src={props.image}
+              alt={props.role}
+              className="m-auto my-10 w-56 h-56 object-cover rounded-full "
+            />
+          ) : (
+            <img
+              src={
+                props.role === 'doctor'
+                  ? "https://i.ibb.co/J5XNVjg/default-doctor.webp"
+                  : "https://i.ibb.co/7ybQ2T4/default-nurse.png"
+              }
+              alt={props.role}
+              className="m-auto my-10 w-56 h-56 object-cover rounded-full "
+            />
+          )}
         </div>
         <div className="card-body lg:w-2/3">
           <h2 className={`card-title text-2xl font-bold mb-1`}>{props.role === 'doctor' ? 'Dr:' : 'Nurse:'} {props.name}</h2>
@@ -156,7 +215,7 @@ function Header(props) {
               </div>
             </>
           )}
-          
+
           {props.role === 'nurse' && (
             <div className="mt-4">
               <h3 className={headerClass}>
@@ -192,6 +251,11 @@ function Header(props) {
             user && user.role === 'patient' && (
               <div className="card-actions justify-end mt-4">
                 <button className="btn btn-info" onClick={handleBooking}>Book Appointment</button>
+                {
+                  props && props.role === 'doctor' && (
+                    <button className="btn btn-primary" onClick={openPrescriptionModal}>Upload Prescription</button>
+                  )
+                }
               </div>
             )
           }
@@ -268,12 +332,56 @@ function Header(props) {
                 </Grid>
               );
             })}
-        </Grid>
-      </DialogContent>
-    </Dialog>
-  </div>
+          </Grid>
+        </DialogContent>
+      </Dialog>
+
+      {/* Prescription Upload Modal */}
+      <Dialog open={isPrescriptionModalOpen} onClose={closeModal} fullWidth maxWidth="md">
+        <DialogTitle className="flex justify-between items-center">
+          <span className="text-lg font-semibold">Upload Prescription</span>
+          <IconButton onClick={closeModal}>
+            <Close />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            style={{ display: 'none' }}
+            id="prescription-input"
+          />
+          <label htmlFor="prescription-input">
+            <Button
+              variant="outlined"
+              component="span"
+              startIcon={<FontAwesomeIcon icon={faUpload} />}
+            >
+              Select Image
+            </Button>
+          </label>
+          {imagePreview && (
+            <div className="mt-4">
+              <img
+                src={imagePreview}
+                alt="Prescription Preview"
+                className="m-auto w-full h-60 object-contain"
+              />
+            </div>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeModal} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleSubmitPrescription} color="primary" variant="contained">
+            Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
   );
 }
 
 export default Header;
-

@@ -132,7 +132,7 @@ export default function PatientAppointments() {
         <FaCalendarAlt size={60} className="text-gray-500 mb-4" />
         <h2 className="text-2xl font-bold mb-2">No Appointments</h2>
         <p className="text-gray-600 mb-4">You currently have no appointments scheduled.</p>
-        <button className="btn btn-info" onClick={() => navigate('/doctors')}>Schedule Appointment</button>
+        <button className="btn btn-info" onClick={() => type == "Doctor" ? navigate('/doctors') : navigate('/nurses')}>Schedule Appointment</button>
       </div>
     );
   }
