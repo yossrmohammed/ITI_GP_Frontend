@@ -84,10 +84,16 @@ function Header(props) {
 
   const handleDateClick = (day, nextDate) => {
     setIsDayModalOpen(false); // Close the day selection modal
-
+    let amount = 0;
+    if (selectedPlace == "Clinic") {
+      amount = props.clinic_fees;
+    }
+    else {
+      amount = props.home_fees ?? props.fees;
+    }
     navigate('/checkout', {
       state: {
-        amount: props.clinic_fees ?? props.home_fees ?? props.fees,
+        amount,
         full_date: {
           day,
           date: nextDate.date
