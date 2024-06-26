@@ -27,7 +27,6 @@ function Header(props) {
     if (props.work_days) {
       // Parse work days from props
       const workDays = props.work_days.split(", ").map(day => day.trim());
-
       // Calculate the next dates for the work days
       const nextDates = workDays.map(day => {
         // Find the index of the day in the daysOfWeek array
@@ -80,7 +79,7 @@ function Header(props) {
     setIsDayModalOpen(false); // Close the day selection modal
 
     navigate('/checkout', { state: {
-      amount: props.clinic_fees ?? props.home_fees,
+      amount: props.clinic_fees ?? props.home_fees ?? props.fees,
       full_date: {
         day, 
         date: nextDate.date

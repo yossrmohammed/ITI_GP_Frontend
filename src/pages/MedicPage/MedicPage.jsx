@@ -33,6 +33,7 @@ function MedicPage() {
       setCurrPage(page);
     }
   console.log("Medic", medic)
+  
   if (!medic) {
     return (
       <div>Loading..</div>
@@ -61,7 +62,8 @@ function MedicPage() {
     home_fees={medic.home_fees}
     home_work_end={medic.home_work_end}
     home_work_start={medic.home_work_start}
-
+    
+    
     phone={medic.phone}
     email={medic.email}
     address={medic.address}
@@ -75,6 +77,7 @@ function MedicPage() {
       params.role === 'nurse'
       &&
       <Header
+      medic_id={medic.id}
       role={params.role}
       image={medic.image}
       name={medic.name}
@@ -84,6 +87,7 @@ function MedicPage() {
       fees={medic.fees}
       phone={medic.phone}
       email={medic.email}
+      work_days={medic.work_days}
       />
     }
     
