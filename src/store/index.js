@@ -5,6 +5,7 @@ import ICUSlice from "./slices/ICUSlice";
 import ApplicationSlice from "./slices/ApplicationSlice";
 import HospitalSlice from "./slices/HospitalSlice";
 import AppointmentSlice from "./slices/AppointmentSlice";
+import PrescriptionSlice from "./slices/PrescriptionSlice";
 export default configureStore({
     reducer: {
         ICUs: ICUSlice,
@@ -12,6 +13,6 @@ export default configureStore({
         auth: authReducer,
         hospitals: HospitalSlice,
         appointments: AppointmentSlice,
-
+        prescriptions: PrescriptionSlice,
     }
 });

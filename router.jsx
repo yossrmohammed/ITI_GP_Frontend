@@ -29,6 +29,7 @@ import PatientPage from "./src/pages/Patient/PatientPage";
 import { useSelector } from "react-redux";
 import NotFound from "./src/pages/NotFound/NotFound";
 import NotAuthorized from "./src/pages/NotAuthorized/NotAuthorized";
+import PatientPrescriptions from "./src/pages/Patient/PatientPrescriptions";
 
 
 function Styled() 
@@ -209,6 +210,10 @@ export const router = createBrowserRouter([
             {
                 path: '/patient/appointments',
                 element: <PatientAppointments/>
+            },
+            {
+                path: '/patient/prescriptions',
+                element: <PatientPrescriptions/>
             }
         ]
     },

@@ -69,6 +69,7 @@ function Navbar() {
     <div className='hidden md:inline-block'> 
     <Link to={"/patient/profile"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Profile </Link>
     <Link to={"/patient/appointments"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Appointments </Link>
+    <Link to={"/patient/prescriptions"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Prescriptions </Link>
     </div>
     </>
   }
