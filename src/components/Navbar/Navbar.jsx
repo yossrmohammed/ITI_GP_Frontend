@@ -54,6 +54,8 @@ function Navbar() {
             </>
           }
 
+       
+
       </ul>
     </div>
   
@@ -118,6 +120,13 @@ function Navbar() {
       <Link to={"/application"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Applications </Link>
     </div>
     </>
+  }
+
+  {
+        loggedUser?.role === 'admin' &&
+         <>
+          <Link to={"/dashboard"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Dashboard </Link>
+         </>
   }
 
   </div>

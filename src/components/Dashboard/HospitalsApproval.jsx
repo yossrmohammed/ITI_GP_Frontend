@@ -87,7 +87,7 @@ const HospitalsApproval = () => {
             <tbody>
               {hospitals?.map((hospital, index) => (
                 <tr key={index}>
-                  <td>{hospital.user.name}</td>
+                  <td>{hospital?.user?.name}</td>
                   <td>{moment(hospital.created_at).format("DD MMM YY")}</td>
                   <td>{hospital.verification_status}</td>
                   <td>
