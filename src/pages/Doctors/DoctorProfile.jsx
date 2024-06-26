@@ -15,6 +15,7 @@ import { specalitiesNonCategorized } from '/src/data/specalitiesNonCategorized';
 import { universities } from '/src/data/universities'; 
 import { workdaysOptions } from '/src/data/workDays'; 
 import { qualifications } from '/src/data/qualifications'; 
+import {parseTimeString} from "/src/helperFunctions"
 
 
 import "/src/App.css";
@@ -102,7 +103,24 @@ function DoctorProfile() {
         // }),
         clinic_fees:
         Yup.number().required("Clinic Fees is required").min(1,"Clinic Fees must be greater than 0"),
-        
+        clinic_work_start: Yup.string()
+        .required('Start time is required')
+        .matches(/^\d{2}:\d{2}$/, 'Start time must be in the format HH:mm'),
+        clinic_work_end: Yup.string()
+        .required('End time is required')
+        .matches(/^\d{2}:\d{2}$/, 'End time must be in the format HH:mm')
+        .test(
+          'is-after-start',
+          'End time must be after start time',
+          function (value) {
+            const { clinic_work_start } = this.parent;
+            if (!clinic_work_start || !value) {
+              return true; // Skip test if start or end time is missing
+            }
+            const start = parseTimeString(clinic_work_start);
+            const end = parseTimeString(value);
+            return end > start;
+          })
       }),
       onSubmit:(values)=>{
         console.log("Submit===>",values)
