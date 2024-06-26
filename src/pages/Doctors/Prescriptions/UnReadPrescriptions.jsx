@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendar, faCalendarDays, faPhone, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from "react-redux";
 import Swal from 'sweetalert2'
+import { Link } from 'react-router-dom';
 
 function UnReadPrescriptions() {  
 
@@ -118,7 +119,10 @@ function UnReadPrescriptions() {
                 </div>
                 <div className="card-body">
                     <div className="card-title mb-2">
-                            <p> <FontAwesomeIcon icon={faUser} /> {prescription.patient_name}</p>
+                            <FontAwesomeIcon icon={faUser} /> 
+                            <Link to={`/patient/${prescription.patient_id}`} className="text-blue-500 hover:underline"> 
+                            <p>  {prescription.patient_name}</p>
+                            </Link>
                             {/* {prescription.patient_DOB && <span className="badge badge-outline">{calculateAge(prescription.patient_DOB)} Years</span>} */}
                             {prescription.patient_gender == "f" ? <span className="badge badge-secondary">Female</span> : <span className="badge badge-info">Male</span>}
                     </div>
