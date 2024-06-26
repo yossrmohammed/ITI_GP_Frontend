@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getHospitalICUs, setCurrentPage } from '../../store/slices/HospitalSlice';
+import { getHospitalICUs, setCurrentPage, deleteICU } from '../../store/slices/HospitalSlice';
 import ICUTable from '../../components/HospitalComponents/ICUTable';
 import AddICUModal from '../../components/HospitalComponents/AddICUModel';
 import HospitalDetails from '../../components/HospitalComponents/HospitalDetails';
 import Swal from 'sweetalert2';
 
 const HospitalICUs = () => {
-                
     const loggedUser = useSelector((state) => state.auth.user);
     const hospitalId = loggedUser.id;
+    const verificationStatus = loggedUser.verification_status; // Get verification status
     const dispatch = useDispatch();
     const { hICUs, currentPage, totalPages, isLoading } = useSelector((state) => state.hospitals);
     const [showModal, setShowModal] = useState(false);
@@ -73,7 +73,11 @@ const HospitalICUs = () => {
                 <div className="w-full md:w-2/3 px-4 mb-4">
                     <div className="mb-4 flex justify-between items-center">
                         <div></div>
-                        <button onClick={handleAddICU} className="btn btn-info ">
+                        <button
+                            onClick={handleAddICU}
+                            className="btn btn-info"
+                            disabled={verificationStatus !== 'accepted'} 
+                        >
                             Add New ICU
                         </button>
                     </div>
@@ -89,16 +93,16 @@ const HospitalICUs = () => {
                                 </div>
                             ) : (
                                 <div className="overflow-x-auto">
-                                    <table className="min-w-full bg-white">
+                                    <table className="min-w-full ">
                                         <thead>
                                             <tr>
-                                                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 uppercase tracking-wider">ID</th>
-                                                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 uppercase tracking-wider">Capacity</th>
-                                                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 uppercase tracking-wider">Equipments</th>
+                                                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-base-600 uppercase tracking-wider">ID</th>
+                                                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-base-600 uppercase tracking-wider">Capacity</th>
+                                                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-base-600 uppercase tracking-wider">Equipments</th>
                                                 <th className="px-6 py-3 border-b-2 border-gray-300"></th>
                                             </tr>
                                         </thead>
-                                        <tbody className="bg-white">
+                                        <tbody >
                                             {hICUs.map((icu, index) => (
                                                 <ICUTable
                                                     key={index}
