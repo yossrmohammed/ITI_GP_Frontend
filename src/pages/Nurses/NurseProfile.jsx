@@ -16,7 +16,7 @@ import { nurseUniversities } from '/src/data/nurseUniversities';
 import { workdaysOptions } from '/src/data/workDays'; 
 import { nurseQualifications } from '/src/data/nurseQualifications'; 
 import { useSelector } from "react-redux";
-
+import {parseTimeString} from "/src/helperFunctions"
 import "/src/App.css";
 
 function NurseProfile() {
@@ -64,6 +64,8 @@ function NurseProfile() {
         online: 0,
         specialization: "",
         work_days: "",
+        work_start: "",
+        work_end: "",
     },
       validationSchema: Yup.object({
         name: Yup.string()
@@ -81,6 +83,24 @@ function NurseProfile() {
         work_days: Yup.string()
           .required("Work Days are required"),
         fees: Yup.number().required("Fees is required").min(0,"Fees must be greater than or equal 0"),
+        work_start: Yup.string()
+        .required('Start time is required')
+        .matches(/^\d{2}:\d{2}$/, 'Start time must be in the format HH:mm'),
+        work_end: Yup.string()
+        .required('End time is required')
+        .matches(/^\d{2}:\d{2}$/, 'End time must be in the format HH:mm')
+        .test(
+          'is-after-start',
+          'End time must be after start time',
+          function (value) {
+            const { work_start } = this.parent;
+            if (!work_start || !value) {
+              return true; // Skip test if start or end time is missing
+            }
+            const start = parseTimeString(work_start);
+            const end = parseTimeString(value);
+            return end > start;
+          })
       }),
       onSubmit:(values)=>{
         console.log("Submit===>",values)
