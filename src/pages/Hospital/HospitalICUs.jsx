@@ -136,7 +136,7 @@ const HospitalICUs = () => {
                                         <button
                                             key={index}
                                             onClick={() => handlePageChange(index + 1)}
-                                            className={`btn btn-xs ${currentPage === index + 1 ? 'btn-info' : 'btn-secondary'}`}
+                                            className={`btn btn-xs ${currentPage === index + 1 ? 'btn-info' : 'btn-natural'}`}
                                         >
                                             {index + 1}
                                         </button>
