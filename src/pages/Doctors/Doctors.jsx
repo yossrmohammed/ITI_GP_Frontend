@@ -75,7 +75,7 @@ function Doctors(props) {
 
 
                 {loading && <> <Skeleton/> <Skeleton/> <Skeleton/></>}
-
+                {!loading && doctors.length === 0 && <p className=" text-red-500 my-80 mx-80 text-4xl">No results found.</p> }
                 {doctors.map( (el) => {
                     return <MedicalCard
                 key={el.user?.id}

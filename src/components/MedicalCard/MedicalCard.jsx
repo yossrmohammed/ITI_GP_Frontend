@@ -8,7 +8,7 @@ function DoctorCard(props) {
     <div className="px-20">
       <div className="relative border-4 rounded-md h-50 p-3 my-5 w-full flex justify-betwee bg-base-200">
         <div className="flex items-center">
-          <div className={props.online == 1 ? 'avatar mx-10 online' : 'avatar mx-10 offline'}>
+          <div className={'avatar mx-10'}>
             <div className="w-24 rounded-full">
               <img src={props.image} />
             </div>
