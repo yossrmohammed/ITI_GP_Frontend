@@ -36,6 +36,20 @@ export default function PatientAppointments() {
     setType(event.target.value);
   };
 
+  
+  const getStatusStyle = (status) => {
+    switch (status) {
+      case 'cancelled':
+        return { color: 'oklch(var(--er))' };
+      case 'accepted':
+        return { color: 'oklch(var(--su))' };
+      case 'pending':
+        return { color: 'oklch(var(--wa))' };
+      default:
+        return {};
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -96,10 +110,12 @@ export default function PatientAppointments() {
             {appointments.appointments.map((appointment) => (
               <tr key={appointment.id} className="bg-base-200 hover:bg-base-300">
                 <td>{appointment.name}</td>
-                <td>{appointment.kind_of_visit ? appointment.kind_of_visit : "clinic"}</td>
+                <td className="capitalize">{appointment.kind_of_visit ? appointment.kind_of_visit : "clinic"}</td>
                 <td>{appointment.day}</td>
                 <td>{appointment.date}</td>
-                <td>{appointment.status}</td>
+                <td style={{ ...getStatusStyle(appointment.status), textTransform: 'capitalize' }}>
+                  {appointment.status}
+                </td>
                 <td>{appointment.notes}</td>
               </tr>
             ))}
