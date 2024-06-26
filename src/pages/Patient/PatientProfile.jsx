@@ -43,14 +43,14 @@ export default function PatientProfile() {
             phone: user.phone,
           }}
           validationSchema={Yup.object({
-            name: Yup.string().required('Required'),
-            birth_date: Yup.date().required('Required'),
+            name: Yup.string().required('Name is Required'),
+            birth_date: Yup.date().required('Birth Date is Required'),
             phone: Yup.string()
-              .required('Required')
-              .matches(/^[0-9]+$/, "Must be only digits")
-              .min(7, 'Must be more than 7 digits')
-              .max(15, 'Must be less than 15 digits'),
-            history: Yup.string().required('Required'),
+              .required('Phone Number is Required')
+              .matches(/^01[0125][0-9]{8}$/, "Invalid Egyptian mobile number. It should start with 010, 011, 012, or 015 and followed by 8 digits.")
+              .min(11, 'Must be exactly 11 digits')
+              .max(11, 'Must be exactly 11 digits'),
+            history: Yup.string().required('Medical History is Required'),
           })}
           onSubmit={(values, { setSubmitting }) => {
             handleFormSubmit(values);
