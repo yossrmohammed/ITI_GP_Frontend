@@ -23,18 +23,6 @@ function Navbar() {
       </div>
       <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
 
-          {/* patient links */}
-          
-          {(
-            !loggedUser ||
-            loggedUser?.role === 'patient' ) && 
-          <>
-            <li><Link to={"/doctors"} className=""> Doctors </Link></li>
-            <li><Link to={"/nurses"} className=""> Nurses </Link></li>
-            <li><Link to={"/doctors/home-visit"} className=""> Home visit </Link></li>
-          </>
-          }
-
           {/* doctor links */}
 
           { loggedUser?.role === 'doctor' &&
@@ -66,6 +54,8 @@ function Navbar() {
             </>
           }
 
+       
+
       </ul>
     </div>
   
@@ -77,8 +67,8 @@ function Navbar() {
   { loggedUser?.role === 'patient' &&
     <>
     <div className='hidden md:inline-block'> 
-    <Link to={"/patient/profile"} className="font-bold text-blue-600 mx-2 text-lg"> Profile </Link>
-    <Link to={"/patient/appointments"} className="font-bold text-blue-600 mx-2 text-lg"> Appointments </Link>
+    <Link to={"/patient/profile"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Profile </Link>
+    <Link to={"/patient/appointments"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Appointments </Link>
     </div>
     </>
   }
@@ -132,40 +122,23 @@ function Navbar() {
     </>
   }
 
+  {
+        loggedUser?.role === 'admin' &&
+         <>
+          <Link to={"/dashboard"} className="font-normal text-blue-600 mx-2 text-lg btn btn-ghost"> Dashboard </Link>
+         </>
+  }
+
   </div>
   </div>
 
   <div className="navbar-end">
-
-  {loggedUser &&
-  <div className="avatar mx-3">
-    <div className="w-12 rounded-full">
-    
-    {
-    !loggedUser.image && 
-    (loggedUser.role === 'doctor' || loggedUser.role === 'nurse') &&
-    <>
-    <img src={loggedUser.role === 'doctor' ? 'default_doctor.jpg' : 'default_nurse.jpg'} />
-    </>
-    }
-
-    {
-      loggedUser.image &&
-      <>
-      <img src={loggedUser.image} />
-      <p>{loggedUser.name}</p>
-      </>
-    }
-    </div>
-  </div>
-  }
-
   {
-    !loggedUser || loggedUser?.role === 'patient' &&
-    <Link to={"/icu"} className="font-bold mx-4">Book ICU</Link>
+    (!loggedUser || loggedUser?.role === 'patient') &&
+    <Link to={"/icu"} className="font-Bold text-blue-600 mx-2 text-lg btn btn-ghost">Book ICU</Link>
   }
 
-  { loggedUser?.name && <p>{loggedUser.name}</p> }
+  { loggedUser?.name && <p className='mx-4 font-bold'>{loggedUser.name}</p> }
     
   { loggedUser?.user?.name && <p>{loggedUser.user.name}</p>}
   { !loggedUser &&

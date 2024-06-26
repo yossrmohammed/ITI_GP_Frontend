@@ -5,7 +5,7 @@ import Header from "../../components/MedicalCard/Header";
 import ReviewCard from "../../components/ReviewCard/ReviewCard";
 function MedicPage() {
     const params = useParams();
-    const [medic,setMedic] = useState({});
+    const [medic,setMedic] = useState(null);
     const [currPage,setCurrPage] = useState(1);
     const [totalPages,setTotalPages] = useState(0);
     const [reviews,setReviews] = useState([]);
@@ -14,6 +14,7 @@ function MedicPage() {
         axiosInstance.get(`/${params.role}s/${params.id}'`)
         .then((res) => {
           setMedic(res.data.data);
+          console.log(res.data.data);
         })
         .catch((err) => console.log(err))
     },[])
@@ -31,7 +32,13 @@ function MedicPage() {
     {
       setCurrPage(page);
     }
-
+  console.log("Medic", medic)
+  
+  if (!medic) {
+    return (
+      <div>Loading..</div>
+    )
+  }
   return (
     <>
     <div className="">
@@ -39,6 +46,7 @@ function MedicPage() {
       params.role === 'doctor'
       &&
     <Header
+    medic_id={medic.id}
     role={params.role}
     image={medic.image}
     name={medic.name}
@@ -46,11 +54,22 @@ function MedicPage() {
     qualifications={medic.qualifications}
     specialization={medic.specialization}
     city={medic.city}
-    fees={medic.clinic_fees}
+
+    clinic_fees={medic.clinic_fees}
+    clinic_work_end={medic.clinic_work_end}
+    clinic_work_start={medic.clinic_work_start}
+    
+    home_fees={medic.home_fees}
+    home_work_end={medic.home_work_end}
+    home_work_start={medic.home_work_start}
+    
+    
     phone={medic.phone}
     email={medic.email}
     address={medic.address}
     rating={medic.average_rating}
+    work_days={medic.work_days}
+
     />
     }
 
@@ -58,6 +77,7 @@ function MedicPage() {
       params.role === 'nurse'
       &&
       <Header
+      medic_id={medic.id}
       role={params.role}
       image={medic.image}
       name={medic.name}
@@ -67,6 +87,7 @@ function MedicPage() {
       fees={medic.fees}
       phone={medic.phone}
       email={medic.email}
+      work_days={medic.work_days}
       />
     }
     

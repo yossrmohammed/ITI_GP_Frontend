@@ -63,7 +63,7 @@ function Doctors(props) {
     <>
     
 
-    <div className="px-10">
+    <div className="px-10 py-10">
         
         <div className="grid grid-rows-2 grid-flow-col gap-4">
             <div className="row-span-3">
@@ -75,7 +75,7 @@ function Doctors(props) {
 
 
                 {loading && <> <Skeleton/> <Skeleton/> <Skeleton/></>}
-
+                {!loading && doctors.length === 0 && <p className=" text-red-500 my-80 mx-80 text-4xl">No results found.</p> }
                 {doctors.map( (el) => {
                     return <MedicalCard
                 key={el.user?.id}

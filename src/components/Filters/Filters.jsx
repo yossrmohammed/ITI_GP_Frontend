@@ -11,6 +11,7 @@ function Filters(props) {
   const [specialization, setSpecialization] = useState('');
   const [fees, setFees] = useState('');
   const [name, setName] = useState('');
+  const [feeErr, setFeeErr] = useState('');
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -29,6 +30,15 @@ function Filters(props) {
   const handleFeesChange = (e) => setFees(e.target.value);
 
   const handleFilter = () => {
+
+    if (fees < 0) 
+    {
+      setFeeErr('Fee must be more than 0 !');
+      return;
+    }
+
+    setFeeErr('');
+
     const filters = {
       name,
       city,
@@ -147,9 +157,10 @@ function Filters(props) {
         <div className="label">
             <span className="label-text font-bold text-lg">Fees</span>
         </div>
-        <input type="number" placeholder="Type here" className="input input-bordered w-full max-w-xs" value={fees} onChange={handleFeesChange} />
+        <input type="number" placeholder="Type here" className="input input-bordered w-full max-w-xs" value={fees} onChange={handleFeesChange} min={0} />
         <div className="label">
         </div>
+        {feeErr && <p className='text-red-500'>{feeErr}</p>}
     </label>
 
 
