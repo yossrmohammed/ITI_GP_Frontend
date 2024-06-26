@@ -4,7 +4,6 @@ import { addICU, updateICU } from '../../store/slices/HospitalSlice';
 import EquipmentAutocomplete from './EquipmentAutocomplete';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
 
 const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selectedICU }) => {
     const dispatch = useDispatch();
@@ -12,6 +11,7 @@ const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selected
     const [formData, setFormData] = useState({
         hospital_id: hospitalId,
         capacity: '',
+        code: '',
         equipments: [],
     });
     const [validationErrors, setValidationErrors] = useState({});
@@ -21,6 +21,7 @@ const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selected
             setFormData({
                 hospital_id: hospitalId,
                 capacity: selectedICU.capacity,
+                code: selectedICU.code,
                 equipments: selectedICU.equipments.map(e => e.name),
             });
             setSelectedEquipments(selectedICU.equipments.map(e => e.id));
@@ -28,6 +29,7 @@ const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selected
             setFormData({
                 hospital_id: hospitalId,
                 capacity: '',
+                code: '',
                 equipments: [],
             });
             setSelectedEquipments([]);
@@ -50,6 +52,9 @@ const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selected
         if (selectedEquipments.length === 0) {
             errors.equipments = 'At least one equipment must be selected.';
         }
+        if (!formData.code) {
+            errors.code = 'Code is required.';
+        }
 
         if (Object.keys(errors).length > 0) {
             setValidationErrors(errors);
@@ -65,6 +70,7 @@ const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selected
                 setFormData({
                     hospital_id: hospitalId,
                     capacity: '',
+                    code: '',
                     equipments: [],
                 });
                 setSelectedEquipments([]);
@@ -99,6 +105,23 @@ const AddICUModal = ({ showModal, handleCloseModal, hospitalId, errors, selected
                             />
                             {validationErrors.capacity && (
                                 <p className="text-red-500 text-xs mt-1">{validationErrors.capacity}</p>
+                            )}
+                        </div>
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text">Code</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="code"
+                                placeholder="Code"
+                                className="input input-bordered"
+                                value={formData.code}
+                                required
+                                onChange={handleChange}
+                            />
+                            {validationErrors.code && (
+                                <p className="text-red-500 text-xs mt-1">{validationErrors.code}</p>
                             )}
                         </div>
                         <div className="form-control">
