@@ -17,7 +17,7 @@ const ICUTable = ({ icu, onUpdate, hospitalId }) => {
     return (
         <tr className="border-b border-gray-200 hover:bg-gray-100">
             <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-lg font-bold">{icu.id}</div>
+                <div className="text-lg font-bold">{icu.code}</div>
             </td>
             <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-base">{icu.capacity}</div>

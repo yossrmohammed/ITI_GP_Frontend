@@ -96,7 +96,7 @@ const HospitalICUs = () => {
                                     <table className="min-w-full ">
                                         <thead>
                                             <tr>
-                                                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-base-600 uppercase tracking-wider">ID</th>
+                                                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-base-600 uppercase tracking-wider">Code</th>
                                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-base-600 uppercase tracking-wider">Capacity</th>
                                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-base-600 uppercase tracking-wider">Equipments</th>
                                                 <th className="px-6 py-3 border-b-2 border-gray-300"></th>
