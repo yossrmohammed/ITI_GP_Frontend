@@ -60,7 +60,7 @@ function Nurses() {
     <>
     
 
-    <div className="px-10">
+    <div className="px-10 py-10">
         
         <div className="grid grid-rows-2 grid-flow-col gap-4">
             <div className="row-span-3">
@@ -72,6 +72,7 @@ function Nurses() {
 
 
                 {loading && <> <Skeleton/> <Skeleton/> <Skeleton/> <Skeleton/> <Skeleton/> </>}
+                {!loading && nurses.length === 0 && <p className=" text-red-500 my-80 mx-80 text-4xl">No results found.</p> }
                 
                 {nurses.map( (el) => {
                     return <MedicalCard

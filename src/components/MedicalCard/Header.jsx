@@ -95,23 +95,24 @@ function Header(props) {
     <div className="container mx-auto p-5">
       <div className="card lg:card-side bg-base-200 shadow-xl border-2 p-5">
         <div className="lg:w-1/3">
-          {props.image ? (
-            <img
-              src={props.image}
-              alt={props.role}
-              className="m-auto my-10 w-40 rounded-full"
-            />
-          ) : (
-            <img
-              src={
-                props.role === 'doctor'
-                  ? "https://i.ibb.co/J5XNVjg/default-doctor.webp"
-                  : "https://i.ibb.co/7ybQ2T4/default-nurse.png"
-              }
-              alt={props.role}
-              className="mx-auto my-10 w-40 rounded-full ring ring-base-content"
-            />
-          )}
+    {props.image ? (
+      <img
+        src={props.image}
+        alt={props.role}
+        className="m-auto my-10 w-56 h-56 object-cover rounded-full "
+      />
+    ) : (
+      <img
+        src={
+          props.role === 'doctor'
+            ? "https://i.ibb.co/J5XNVjg/default-doctor.webp"
+            : "https://i.ibb.co/7ybQ2T4/default-nurse.png"
+        }
+        alt={props.role}
+        className="m-auto my-10 w-56 h-56 object-cover rounded-full "
+      />
+    )}
+
         </div>
         <div className="card-body lg:w-2/3">
           <h2 className={`card-title text-2xl font-bold mb-1`}>{props.role === 'doctor' ? 'Dr:' : 'Nurse:'} {props.name}</h2>
