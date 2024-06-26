@@ -149,7 +149,6 @@ function AdminLayout()
         <>
         <Navbar />
         <Outlet />
-        <Footer />
         </>       
     );      
 }

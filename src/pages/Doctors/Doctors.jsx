@@ -63,7 +63,7 @@ function Doctors(props) {
     <>
     
 
-    <div className="px-10">
+    <div className="px-10 py-10">
         
         <div className="grid grid-rows-2 grid-flow-col gap-4">
             <div className="row-span-3">
