@@ -4,9 +4,11 @@ import { getAllPatientAppointments } from "../../store/slices/AppointmentSlice";
 import { useEffect, useState } from "react";
 import TablePagination from "@mui/material/TablePagination";
 import { CircularProgress } from "@mui/material";
-import { FaCalendarAlt } from "react-icons/fa"; // Example icon
+import { FaCalendarAlt, FaCheckCircle } from "react-icons/fa"; // Added FaCheckCircle for reviewed state
 import { useNavigate } from "react-router-dom";
-
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Rating } from '@mui/material'; // For modal
+import { axiosInstance } from "../../axios";
+import Swal from "sweetalert2";
 
 export default function PatientAppointments() {
   const dispatch = useDispatch();
@@ -15,6 +17,10 @@ export default function PatientAppointments() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [type, setType] = useState("Doctor");
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [rating, setRating] = useState(0);
+  const [reviewDescription, setReviewDescription] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,7 +42,6 @@ export default function PatientAppointments() {
     setType(event.target.value);
   };
 
-  
   const getStatusStyle = (status) => {
     switch (status) {
       case 'cancelled':
@@ -49,6 +54,59 @@ export default function PatientAppointments() {
         return {};
     }
   };
+
+  const handleOpenReviewModal = (appointment) => {
+    setSelectedAppointment(appointment);
+    setReviewModalOpen(true);
+  };
+
+  const handleCloseReviewModal = () => {
+    setReviewModalOpen(false);
+    setSelectedAppointment(null);
+    setRating(0);
+    setReviewDescription("");
+  };
+
+  const handleSubmitReview = async () => {
+    try {
+      // Determine the endpoint based on whether the appointment is with a doctor or a nurse
+      const reviewEndpoint = selectedAppointment.doctor_id
+        ? `patients/${user.id}/reviews/doctors`
+        : `patients/${user.id}/reviews/nurses`;
+  
+      // Submit the review
+      await axiosInstance.post(reviewEndpoint, {
+        appointment_id: selectedAppointment.id,
+        rating,
+        review: reviewDescription,
+        patient_id: user.id,
+        medic_id: selectedAppointment.doctor_id || selectedAppointment.nurse_id,
+      });
+  
+      // Show a success message
+      Swal.fire({
+        icon: "success",
+        text: "Review submitted successfully",
+        showConfirmButton: true,
+        timer: 1500,
+      });
+  
+      // Close the review modal
+      handleCloseReviewModal();
+  
+      // Refresh the appointments list
+      dispatch(getAllPatientAppointments({ id: user.id, page, rowsPerPage, type }));
+    } catch (error) {
+      // Show an error message
+      Swal.fire({
+        icon: "error",
+        text: "Review submission failed",
+        showConfirmButton: true,
+        timer: 1500,
+      });
+    }
+  };
+  
 
   if (isLoading) {
     return (
@@ -98,12 +156,13 @@ export default function PatientAppointments() {
         <table className="table table-fixed w-full">
           <thead>
             <tr>
-              <th className="w-1/6">{type == "Doctor" ? "Doctor" : "Nurse"}</th>
-              <th className="w-1/6">Kind of Visit</th>
-              <th className="w-1/6">Day</th>
-              <th className="w-1/6">Date</th>
-              <th className="w-1/6">Status</th>
-              <th className="w-1/6">Notes</th>
+              <th className="w-1/7">{type === "Doctor" ? "Doctor" : "Nurse"}</th>
+              <th className="w-1/7">Kind of Visit</th>
+              <th className="w-1/7">Day</th>
+              <th className="w-1/7">Date</th>
+              <th className="w-1/7">Status</th>
+              <th className="w-1/7">Notes</th>
+              <th className="w-1/7">Reviews</th>
             </tr>
           </thead>
           <tbody>
@@ -117,6 +176,17 @@ export default function PatientAppointments() {
                   {appointment.status}
                 </td>
                 <td>{appointment.notes}</td>
+                <td>
+                  {appointment.is_reviewed ? (
+                    <span className="text-green-500 flex items-center">
+                      <FaCheckCircle className="mr-2" /> Reviewed
+                    </span>
+                  ) : (
+                    <button className="btn btn-info" onClick={() => handleOpenReviewModal(appointment)}>
+                      Review
+                    </button>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -156,6 +226,36 @@ export default function PatientAppointments() {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+
+      {/* Modal for reviewing appointment */}
+      <Dialog open={reviewModalOpen} onClose={handleCloseReviewModal} maxWidth="sm" fullWidth>
+        <DialogTitle>Review Appointment</DialogTitle>
+        <DialogContent>
+          <div className="flex flex-col space-y-4">
+            <Rating
+              name="rating"
+              value={rating}
+              onChange={(event, newValue) => setRating(newValue)}
+            />
+            <TextField
+              label="Review Description"
+              multiline
+              rows={4}
+              value={reviewDescription}
+              onChange={(event) => setReviewDescription(event.target.value)}
+              variant="outlined"
+            />
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseReviewModal} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleSubmitReview} color="primary">
+            Submit Review
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
