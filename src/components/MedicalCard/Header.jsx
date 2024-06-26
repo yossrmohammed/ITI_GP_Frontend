@@ -17,7 +17,7 @@ const rate = Number(props.rating) || 0;
       <img
         src={props.image}
         alt={props.role}
-        className="m-auto my-10 w-40 rounded-full"
+        className="m-auto my-10 w-56 h-56 object-cover rounded-full "
       />
     ) : (
       <img
@@ -27,7 +27,7 @@ const rate = Number(props.rating) || 0;
             : "https://i.ibb.co/7ybQ2T4/default-nurse.png"
         }
         alt={props.role}
-        className="mx-auto my-10 w-40 rounded-full ring ring-base-content"
+        className="m-auto my-10 w-56 h-56 object-cover rounded-full "
       />
     )}
 
