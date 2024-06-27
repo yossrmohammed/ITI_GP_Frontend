@@ -182,7 +182,7 @@ export default function PatientAppointments() {
                       <FaCheckCircle className="mr-2" /> Reviewed
                     </span>
                   ) : (
-                    <button className="btn btn-info" onClick={() => handleOpenReviewModal(appointment)}>
+                    <button disabled={Date.now() < new Date(appointment.date).getTime()} className="btn btn-info" onClick={() => handleOpenReviewModal(appointment)}>
                       Review
                     </button>
                   )}
