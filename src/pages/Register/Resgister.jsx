@@ -24,12 +24,12 @@ const RegistrationForm = () => {
     birth_date: '',
     image: null,
     university: '',
-    qualifications: '',
+    qualifications: 'RN',
     city: '',
-    fees: '',
+    fees: '200',
     workStart: '',
     workEnd: '',
-    workDays: [],
+    workDays: ['Saturday'],
     address:''
   });
 

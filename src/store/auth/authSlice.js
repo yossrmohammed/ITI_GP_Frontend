@@ -17,7 +17,6 @@ const authSlice = createSlice({
     },
     registerSuccess(state, action) {
       state.loading = false;
-      state.user = action.payload;
     },
     registerFailure(state, action) {
       state.loading = false;
